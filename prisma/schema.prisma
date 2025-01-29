@@ -1,14 +1,530 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model AIModel {
+  id               String    @id
+  name             String
+  isDeprecated     Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  dateDeprecated   DateTime?
+  isBreakingChange Boolean   @default(false)
+}
+
+model ApiKey {
+  id          Int       @id @default(autoincrement())
+  key         String    @unique
+  description String    @default("No description")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  deletedAt   DateTime?
+}
+
+model CategoryBucket {
+  id                             Int                     @id @default(autoincrement())
+  studentEmail                   String?
+  reflectionId                   String
+  reflectionResponseId           Int?
+  category                       CategoryBucket_category
+  bucket                         CategoryBucket_bucket
+  createdAt                      DateTime                @default(now())
+  studentId                      Int?
+  modelId                        String
+  reflectionResponseTranscriptId Int?
+  notes                          String?                 @db.LongText
+
+  @@index([reflectionId], map: "reflectionId")
+  @@index([reflectionResponseId], map: "reflectionResponseId")
+  @@index([reflectionResponseTranscriptId], map: "reflectionResponseTranscriptId")
+  @@index([studentId], map: "studentId")
+}
+
+model Course {
+  id                    Int       @id @default(autoincrement())
+  externalId            String
+  name                  String
+  period                String
+  schoolId              Int
+  gradingTermName       String
+  gradingTermId         Int?
+  createdAt             DateTime  @default(now())
+  inActiveAt            DateTime?
+  gradingTermExternalId String?
+  oneRosterId           String?
+  schoolExternalId      String?
+  school_Name           String?
+  teacherEmail          String?
+  isPrimaryTeacher      Boolean   @default(true)
+
+  @@unique([externalId, schoolId, teacherEmail])
+}
+
+model InsightTemplates {
+  id          Int      @id @default(autoincrement())
+  stemTitle   String
+  stem1       String
+  insight1    String
+  stem2       String
+  insight2    String
+  category    String
+  subcategory String
+  num         Int
+  type        String
+  createdAt   DateTime @default(now())
+}
+
+model Insights {
+  id           Int      @id @default(autoincrement())
+  classId      Int
+  reflectionId String
+  location     String?
+  stemTitle    String?
+  stem1        String
+  insight1     String
+  stem2        String
+  insight2     String
+  category     String?
+  subcategory  String?
+  average      Float?
+  floor        Int?
+  createdAt    DateTime @default(now())
+
+  @@index([reflectionId, subcategory], map: "reflectionId_subcategory")
+}
+
+model Organization {
+  id         Int       @id @default(autoincrement())
+  name       String
+  externalId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+}
+
+model RawAnalysis {
+  id                             Int                  @id @default(autoincrement())
+  studentId                      Int?
+  studentEmail                   String?
+  reflectionId                   String
+  reflectionResponseId           Int?
+  category                       RawAnalysis_category
+  promptCode                     String
+  response                       String?              @db.Text
+  subcategory                    String
+  createdAt                      DateTime             @default(now())
+  modelId                        String
+  reflectionResponseTranscriptId Int?
+  modelName                      String
+
+  @@index([reflectionId], map: "reflectionId")
+  @@index([reflectionResponseId], map: "reflectionResponseId")
+  @@index([reflectionResponseTranscriptId], map: "reflectionResponseTranscriptId")
+}
+
+model Reflection {
+  id                   String    @id
+  title                String
+  courseId             Int
+  teacherEmail         String?
+  teacherId            Int
+  surveyDueDate        DateTime?
+  createdAt            DateTime  @default(now())
+  deletedAt            DateTime?
+  externalAssignmentId String?
+
+  @@index([courseId], map: "courseId")
+  @@index([teacherEmail], map: "teacherEmail")
+  @@index([teacherId], map: "teacherId")
+}
+
+model ReflectionQuestion {
+  id           Int       @id @default(autoincrement())
+  reflectionId String
+  question     String
+  category     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime?
+  deletedAt    DateTime?
+
+  @@index([reflectionId], map: "reflectionId")
+}
+
+model ReflectionResponse {
+  id               Int       @id @default(autoincrement())
+  studentEmail     String
+  reflectionId     String
+  transcription_q1 String?   @db.LongText
+  transcription_q2 String?   @db.LongText
+  transcription_q3 String?   @db.LongText
+  transcription_q4 String?   @db.LongText
+  transcription_q5 String?   @db.LongText
+  transcription_q6 String?   @db.LongText
+  createdAt        DateTime  @default(now())
+  language         String    @default("English")
+  studentId        Int?
+  notes            String?   @db.LongText
+  isAnalyzed       Boolean   @default(false)
+  lastAnalyzed     DateTime?
+
+  @@unique([studentEmail, reflectionId])
+  @@index([reflectionId], map: "reflectionId")
+  @@index([studentEmail], map: "studentEmail")
+}
+
+model ReflectionResponseTranscript {
+  id             Int       @id @default(autoincrement())
+  studentEmail   String
+  reflectionId   String
+  questionId     Int
+  transcript     String?   @db.LongText
+  createdAt      DateTime  @default(now())
+  language       String    @default("English")
+  notes          String?   @db.LongText
+  studentId      Int?
+  isAnalyzed     Boolean   @default(false)
+  lastAnalyzed   DateTime?
+  topic_id       Int?
+  specific_topic String?   @db.LongText
+
+  @@unique([studentEmail, reflectionId, questionId])
+  @@index([questionId], map: "questionId")
+  @@index([reflectionId], map: "reflectionId")
+  @@index([studentEmail], map: "studentEmail")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ReflectionResponseTranscript_Mar11_Backup {
+  id           Int       @default(0)
+  studentEmail String
+  reflectionId String
+  questionId   Int
+  transcript   String?   @db.LongText
+  createdAt    DateTime  @default(now())
+  language     String    @default("English")
+  notes        String?   @db.LongText
+  studentId    Int?
+  isAnalyzed   Boolean   @default(false)
+  lastAnalyzed DateTime?
+
+  @@ignore
+}
+
+model School {
+  id             Int       @id @default(autoincrement())
+  name           String
+  organizationId String
+  externalId     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime?
+}
+
+model SoftSkills {
+  analysisID      Int      @id @default(autoincrement())
+  studentEmail    String
+  reflectionId    String
+  Comm_Analysis   String?  @db.LongText
+  Comm_Quotes     String?  @db.LongText
+  Comm_Improve    String?  @db.LongText
+  Crea_Analysis   String?  @db.LongText
+  Crea_Quotes     String?  @db.LongText
+  Crea_Improve    String?  @db.LongText
+  Collab_Analysis String?  @db.LongText
+  Collab_Quotes   String?  @db.LongText
+  Collab_Improve  String?  @db.LongText
+  Char_Analysis   String?  @db.LongText
+  Char_Quotes     String?  @db.LongText
+  Char_Improve    String?  @db.LongText
+  Crit_Analysis   String?  @db.LongText
+  Crit_Quotes     String?  @db.LongText
+  Crit_Improve    String?  @db.LongText
+  createdAt       DateTime @default(now())
+
+  @@index([reflectionId], map: "reflectionId")
+  @@index([studentEmail], map: "studentEmail")
+}
+
+model Student {
+  id                  Int     @id @default(autoincrement())
+  externalId          String  @unique
+  email               String? @unique
+  username            String  @unique
+  firstName           String
+  lastName            String?
+  external_student_id String? @unique
+
+  @@index([email], map: "email")
+}
+
+model StudentCourse {
+  id               Int       @id @default(autoincrement())
+  studentEmail     String?
+  createdAt        DateTime  @default(now())
+  inactiveAt       DateTime?
+  courseId         Int?
+  externalCourseId String?
+  nameTemp         String?
+  periodTemp       String?
+  studentId        Int?
+  oneRosterId      String?
+
+  @@index([courseId], map: "courseId")
+  @@index([studentEmail], map: "studentEmail")
+  @@index([studentId], map: "studentId")
+}
+
+model StudentMapId {
+  email   String @id @db.VarChar(41)
+  user_id Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model StudentMapIdEmail {
+  email   String? @db.VarChar(45)
+  user_id Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model StudentMappingIDEmail {
+  email   String? @db.Text
+  user_id Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model StudentTemp {
+  id         Int     @default(0)
+  externalId String
+  email      String?
+  username   String
+  firstName  String
+  lastName   String?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model StudentTemp2 {
+  id         Int     @default(0)
+  externalId String
+  email      String?
+  username   String
+  firstName  String
+  lastName   String?
+
+  @@ignore
+}
+
+model SubcategoryBucket {
+  id                             Int                        @id @default(autoincrement())
+  studentEmail                   String?
+  reflectionId                   String
+  reflectionResponseId           Int?
+  category                       SubcategoryBucket_category
+  subcategory                    String
+  bucket                         SubcategoryBucket_bucket
+  rationale                      String                     @db.LongText
+  createdAt                      DateTime                   @default(now())
+  studentId                      Int?
+  modelId                        String
+  reflectionResponseTranscriptId Int?
+  score                          Float?
+
+  @@index([createdAt], map: "createdAt")
+  @@index([reflectionId], map: "reflectionId")
+  @@index([reflectionResponseId], map: "reflectionResponseId")
+  @@index([reflectionResponseTranscriptId], map: "reflectionResponseTranscriptId")
+  @@index([subcategory], map: "subcategory")
+}
+
+model Teacher {
+  id         Int       @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  clerkId    String?   @unique
+  externalId String    @unique
+  email      String?   @unique
+  username   String    @unique
+
+  @@unique([email, id])
+  @@index([email], map: "email")
+  @@index([username], map: "username")
+}
+
+model TeacherCourse {
+  id               Int       @id @default(autoincrement())
+  courseId         Int
+  createdAt        DateTime  @default(now())
+  inActiveAt       DateTime?
+  teacherId        Int
+  deletedAt        DateTime?
+  externalCourseId String
+  teacherEmail     String?
+
+  @@index([courseId], map: "courseId")
+  @@index([teacherId], map: "teacherId")
+}
+
+model TemplateQuestion {
+  id        String    @id
+  category  String
+  language  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+}
+
+model TopicDictionary {
+  topic_id   Int       @id @default(autoincrement())
+  topic_name String    @db.LongText
+  subtopics  String?   @db.LongText
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+}
+
+model UserFeedback {
+  id           Int                   @id @default(autoincrement())
+  reflectionId String
+  createdAt    DateTime              @default(now())
+  agree        Boolean
+  teacherEmail String
+  studentId    Int
+  category     UserFeedback_category
+
+  @@unique([reflectionId, studentId, category, teacherEmail])
+  @@index([reflectionId], map: "reflectionId")
+  @@index([teacherEmail], map: "teacherEmail")
+}
+
+model incidentLog {
+  id        Int      @id @default(autoincrement())
+  message   String   @db.LongText
+  createdAt DateTime @default(now())
+  type      String?
+}
+
+model ltiCourseRequests {
+  id                               String    @id
+  lis_person_contact_email_primary String
+  lis_person_name_given            String
+  lis_person_name_family           String
+  lis_person_name_full             String
+  oauth_nonce                      String
+  resource_link_id                 String
+  resource_link_description        String?
+  resource_link_title              String
+  roles                            String
+  external_user_id                 String
+  created_at                       DateTime  @default(now())
+  link_used                        DateTime?
+  studentEmails                    Json
+  course_id                        Int
+  user_id                          Int
+  custom_class_ids                 Json?
+  custom_student_ids               Json?
+
+  @@index([oauth_nonce], map: "oauth_nonce")
+  @@index([resource_link_id], map: "resource_link_id")
+}
+
+model ltiNonce {
+  id        Int      @id @default(autoincrement())
+  nonce     String   @unique
+  createdAt DateTime @default(now())
+
+  @@index([nonce], map: "nonce")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ltiRecovery {
+  reflectionId String?
+  assignmentId String?
+  teacherEmail String?
+  title        String?
+  courseId     String?
+  createdAt    DateTime? @db.Date
+  isRecovered  Boolean   @default(false)
+
+  @@index([assignmentId], map: "assignmentId")
+  @@ignore
+}
+
+model ltiRequests {
+  id                               String    @id
+  context_id                       String
+  context_title                    String
+  lis_person_name_given            String
+  lis_person_name_family           String
+  lis_person_name_full             String
+  oauth_nonce                      String
+  resource_link_id                 String
+  resource_link_description        String?
+  resource_link_title              String
+  roles                            String
+  lis_person_contact_email_primary String
+  created_at                       DateTime  @default(now())
+  external_user_id                 String
+  reflection_id                    String?
+  link_used                        DateTime?
+  master_resource_link_id          String?
+
+  @@index([context_id], map: "context_id")
+  @@index([oauth_nonce], map: "oauth_nonce")
+  @@index([reflection_id], map: "reflection_id")
+  @@index([resource_link_id], map: "resource_link_id")
+}
+
+enum CategoryBucket_category {
+  CREATIVITY
+  CRITICALTHINKING
+  COLLABORATION
+  COMMUNICATION
+  CHARACTER
+}
+
+enum SubcategoryBucket_category {
+  CREATIVITY
+  CRITICALTHINKING
+  COLLABORATION
+  COMMUNICATION
+  CHARACTER
+}
+
+enum CategoryBucket_bucket {
+  EMERGING
+  PROGRESSING
+  EXCELLING
+}
+
+enum RawAnalysis_category {
+  CREATIVITY
+  CRITICALTHINKING
+  COLLABORATION
+  COMMUNICATION
+  CHARACTER
+}
+
+enum SubcategoryBucket_bucket {
+  EMERGING
+  PROGRESSING
+  EXCELLING
+}
+
+enum UserFeedback_category {
+  CREATIVITY
+  CRITICALTHINKING
+  COLLABORATION
+  COMMUNICATION
+  CHARACTER
 }

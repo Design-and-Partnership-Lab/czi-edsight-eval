@@ -14,6 +14,7 @@
     "dependencies": {
         "@clerk/nextjs": "^6.10.5",
         "@prisma/client": "^6.3.0",
+        "@remixicon/react": "^4.6.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "dotenv-cli": "^8.0.0",
@@ -23,12 +24,14 @@
         "next": "14.2.16",
         "react": "^18",
         "react-dom": "^18",
-        "tailwind-merge": "^2.5.5",
+        "tailwind-merge": "^2.6.0",
+        "tailwind-variants": "^0.3.1",
         "tailwindcss-animate": "^1.0.7"
     },
     "devDependencies": {
         "@eslint/js": "^9.17.0",
         "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+        "@tailwindcss/forms": "^0.5.10",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",

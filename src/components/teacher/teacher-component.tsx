@@ -1,17 +1,15 @@
 "use client";
 
-import type { Teacher } from "@prisma/client";
-
-interface TeacherProps {
-    teacher: Teacher | null;
+interface TeacherComponentProps {
+    teacherName: { firstName: string; lastName: string } | null;
 }
 
-export function TeacherComponent({ teacher }: TeacherProps) {
-    if (!teacher) {
+export function TeacherComponent({ teacherName }: TeacherComponentProps) {
+    if (!teacherName) {
         return <div>No teacher found</div>;
     }
 
-    const { firstName, lastName } = teacher;
+    const { firstName, lastName } = teacherName;
 
     return (
         <div>

@@ -10,6 +10,10 @@ export default async function Page() {
     const teacher = await db.teacher
         .findUnique({
             where: { id: 123789 },
+            select: {
+                firstName: true,
+                lastName: true,
+            },
         })
         .catch((e: unknown) => {
             console.error("Error fetching teacher:", e);
@@ -19,7 +23,7 @@ export default async function Page() {
 
     return (
         <div>
-            <TeacherComponent teacher={teacher} />
+            <TeacherComponent teacherName={teacher} />
         </div>
     );
 }

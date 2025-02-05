@@ -7,6 +7,7 @@ import { db } from "@/db";
  * @see {@link https://nextjs.org/docs/app/building-your-application/rendering/server-components}
  */
 export default async function Page() {
+    // Fetch data in the Server Component
     const teacher = await db.teacher
         .findUnique({
             where: { id: 123 },

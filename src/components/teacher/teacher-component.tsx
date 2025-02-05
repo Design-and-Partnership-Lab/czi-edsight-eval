@@ -51,7 +51,10 @@ export function TeacherComponent({ teacher }: TeacherComponentProps) {
                 <div>Last Name: {lastName}</div>
             </div>
 
-            <Button onClick={handleClick}>
+            <Button
+                onClick={handleClick}
+                disabled={isPending}
+            >
                 {isPending ? "Updating..." : `Upsert Teacher as ${newName}`}
             </Button>
         </div>

@@ -9,8 +9,9 @@ import { db } from "@/db";
 export default async function Page() {
     const teacher = await db.teacher
         .findUnique({
-            where: { id: 123789 },
+            where: { id: 123 },
             select: {
+                id: true,
                 firstName: true,
                 lastName: true,
             },
@@ -21,9 +22,13 @@ export default async function Page() {
             return null;
         });
 
+    if (!teacher) {
+        return <div>No teacher found</div>;
+    }
+
     return (
         <div>
-            <TeacherComponent teacherName={teacher} />
+            <TeacherComponent teacher={teacher} />
         </div>
     );
 }

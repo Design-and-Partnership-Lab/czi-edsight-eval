@@ -1,12 +1,18 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import { getAnalysesByTranscriptId, writeAnalysisForTranscriptID } from "@/actions/analyses/action";
+import { writeAnalysisForTranscriptId } from "@/actions/analyses/action";
 import { Button } from "@/components/ui/button";
 
 // Define what props your component will receive
-interface TeacherComponentProps {
-    teacher: { id: number; firstName: string; lastName: string };
+interface Analysis {
+    id: number;
+    category: string;
+    bucket: string;
+}
+
+interface AnalysisComponentProps {
+    analysis: Analysis[];
 }
 
 /**
@@ -14,48 +20,52 @@ interface TeacherComponentProps {
  *
  * @see {@link https://nextjs.org/docs/app/building-your-application/rendering/client-components}
  */
-export function AnalysisComponent({ analysis }: somethingidkyet) {
-    // Data is passed via props from the Server Component which calls it
-    const { id, firstName: serverFirstName, lastName } = teacher;
-
-    const [firstName, setFirstName] = useState(serverFirstName);
+export function AnalysisComponent({ analysis }: AnalysisComponentProps) {
+    const [analyses, setAnalyses] = useState<Analysis[]>(analysis);
     const [isPending, startTransition] = useTransition();
 
-    const newName = firstName === "John" ? "Jane" : "John";
+    // Handle adding a new analysis
+    const handleAddAnalysis = useCallback(() => {
+        const newAnalysis = {
+            reflectionResponseTranscriptId: 239868,
+            category: "New Category",
+            bucket: "New Bucket",
+        };
 
-    const handleClick = useCallback(() => {
-        const prevName = firstName;
-        setFirstName(newName);
-
-        /**
-         * Adding an optimistic state is helpful for making the UI feel very snappy and responsive
-         */
+        // Optimistic UI update
         startTransition(async () => {
             try {
-                await upsertTeacher({
-                    id,
-                    firstName: newName,
-                });
+                await writeAnalysisForTranscriptId(newAnalysis);
+
+                // Add the new analysis to the current state
+                setAnalyses((prevAnalyses) => [
+                    ...prevAnalyses,
+                    { id: Date.now(), ...newAnalysis },  // Mock ID for immediate UI display
+                ]);
             } catch (error) {
-                // If there's an error, we should "rollback" to the prior value
-                setFirstName(prevName);
-                console.error("Failed to update teacher:", error);
+                console.error("Failed to add analysis:", error);
             }
         });
-    }, [id, firstName, newName]);
+    }, []);
 
     return (
         <div>
-            <div>
-                <div>First Name: {firstName}</div>
-                <div>Last Name: {lastName}</div>
-            </div>
+            <h2>Analyses List</h2>
 
-            <Button
-                onClick={handleClick}
-                disabled={isPending}
-            >
-                {isPending ? "Updating..." : `Upsert Teacher as ${newName}`}
+            {analyses.length === 0 ? (
+                <div>No analysis found</div>
+            ) : (
+                analyses.map((analysis) => (
+                    <div key={analysis.id}>
+                        <p><strong>Category:</strong> {analysis.category}</p>
+                        <p><strong>Bucket:</strong> {analysis.bucket}</p>
+                        <hr />
+                    </div>
+                ))
+            )}
+
+            <Button onClick={handleAddAnalysis} disabled={isPending}>
+                {isPending ? "Adding..." : "Add New Analysis"}
             </Button>
         </div>
     );

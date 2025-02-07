@@ -14,7 +14,7 @@ interface TeacherComponentProps {
  *
  * @see {@link https://nextjs.org/docs/app/building-your-application/rendering/client-components}
  */
-export function TeacherComponent({ teacher }: TeacherComponentProps) {
+export function AnalysisComponent({ analysis }: somethingidkyet) {
     // Data is passed via props from the Server Component which calls it
     const { id, firstName: serverFirstName, lastName } = teacher;
 

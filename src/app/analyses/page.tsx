@@ -1,5 +1,6 @@
 import { AnalysisComponent } from "@/components/analyses/analysis-component";
 import { db } from "@/db";
+import { getAnalysesByTranscriptId, writeAnalysisForTranscriptId } from "@/actions/analyses/action"
 
 /**
  * Next.js pages are Server Components by default. You should fetch data at the top level in a server component whenever possible.
@@ -8,28 +9,15 @@ import { db } from "@/db";
  */
 export default async function Page() {
     // Fetch data in the Server Component
-    const teacher = await db.teacher
-        .findUnique({
-            where: { id: 123 },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-            },
-        })
-        .catch((e: unknown) => {
-            console.error("Error fetching teacher:", e);
+    const analyses = await getAnalysesByTranscriptId(239867);
 
-            return null;
-        });
-
-    if (!teacher) {
-        return <div>No teacher found</div>;
+    if (!analyses) {
+        return <div>No analysis found</div>;
     }
 
     return (
-        <div>
-            <AnalysisComponent teacher={teacher} />
+        <div>writeAnaysisForTranscriptId
+            <AnalysisComponent analysis={analyses} />
         </div>
     );
 }

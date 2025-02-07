@@ -9,7 +9,7 @@ export async function getAnalysesByTranscriptId(reflectionResponseTranscriptId: 
         },
         select: {
             id: true,
-            category: true, 
+            category: true,
             bucket: true
         },
     });
@@ -18,18 +18,19 @@ export async function getAnalysesByTranscriptId(reflectionResponseTranscriptId: 
 
 
 interface AddAnalysisProps {
-    reflectionResponseTranscriptID: number,
+    reflectionResponseTranscriptId: number,
     category: string;
     bucket: string;
 }
-export async function writeAnalysisForTranscriptID( { reflectionResponseTranscriptID, category, bucket }: AddAnalysisProps ) {
+
+export async function writeAnalysisForTranscriptId({ reflectionResponseTranscriptId, category, bucket }: AddAnalysisProps) {
     await db.categoryBucket.create({
         data: {
-            reflectionResponseTranscriptID: reflectionResponseTranscriptID,
+            reflectionResponseTranscriptId: reflectionResponseTranscriptId,
             category: category,
             bucket: bucket,
             reflectionId: "default-reflection-id",
             modelId: "default-model-id",
-        } 
+        }
     });
 }

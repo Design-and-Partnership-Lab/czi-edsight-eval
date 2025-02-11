@@ -29,10 +29,12 @@ export default async function Page() {
 
     return (
         <div className='m-5'>
-            <h1>Reflections from course ID 38978:</h1>
-            {reflections.map((reflection) => (
-                <div key={reflection.id}>{reflection.title}</div>
-            ))}
+            <div className='mb-10'>
+                <h1 className='font-semibold'>Reflections from course ID 38978:</h1>
+                {reflections.map((reflection) => (
+                    <div key={reflection.id}>{reflection.title}</div>
+                ))}
+                </div>
             <AddReflection />
         </div>
     );

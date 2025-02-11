@@ -1,6 +1,5 @@
 import { AnalysisComponent } from "@/components/analyses/analysis-component";
-import { db } from "@/db";
-import { getAnalysesByTranscriptId, writeAnalysisForTranscriptId } from "@/actions/analyses/action"
+import { getAnalysesByTranscriptId } from "@/actions/analyses/action"
 
 /**
  * Next.js pages are Server Components by default. You should fetch data at the top level in a server component whenever possible.
@@ -9,14 +8,14 @@ import { getAnalysesByTranscriptId, writeAnalysisForTranscriptId } from "@/actio
  */
 export default async function Page() {
     // Fetch data in the Server Component
-    const analyses = await getAnalysesByTranscriptId(239867);
-
+    const analyses = await getAnalysesByTranscriptId(239868);
+    console.log(analyses);
     if (!analyses) {
         return <div>No analysis found</div>;
     }
 
     return (
-        <div>writeAnaysisForTranscriptId
+        <div>
             <AnalysisComponent analysis={analyses} />
         </div>
     );

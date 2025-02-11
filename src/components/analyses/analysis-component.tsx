@@ -3,12 +3,13 @@
 import { useCallback, useState, useTransition } from "react";
 import { writeAnalysisForTranscriptId } from "@/actions/analyses/action";
 import { Button } from "@/components/ui/button";
+import { CategoryBucket_category, CategoryBucket_bucket } from "@prisma/client";
 
 // Define what props your component will receive
 interface Analysis {
     id: number;
-    category: string;
-    bucket: string;
+    category: CategoryBucket_category;
+    bucket: CategoryBucket_bucket;
 }
 
 interface AnalysisComponentProps {
@@ -28,8 +29,8 @@ export function AnalysisComponent({ analysis }: AnalysisComponentProps) {
     const handleAddAnalysis = useCallback(() => {
         const newAnalysis = {
             reflectionResponseTranscriptId: 239868,
-            category: "New Category",
-            bucket: "New Bucket",
+            category: CategoryBucket_category.CREATIVITY,
+            bucket: CategoryBucket_bucket.EMERGING,
         };
 
         // Optimistic UI update
@@ -40,7 +41,7 @@ export function AnalysisComponent({ analysis }: AnalysisComponentProps) {
                 // Add the new analysis to the current state
                 setAnalyses((prevAnalyses) => [
                     ...prevAnalyses,
-                    { id: Date.now(), ...newAnalysis },  // Mock ID for immediate UI display
+                    { id: Date.now(), ...newAnalysis },
                 ]);
             } catch (error) {
                 console.error("Failed to add analysis:", error);

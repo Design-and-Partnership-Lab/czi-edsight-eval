@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/db";
+import { CategoryBucket_category, CategoryBucket_bucket } from "@prisma/client";
 
 export async function getAnalysesByTranscriptId(reflectionResponseTranscriptId: number) {
     const analyses = await db.categoryBucket.findMany({
@@ -19,8 +20,8 @@ export async function getAnalysesByTranscriptId(reflectionResponseTranscriptId: 
 
 interface AddAnalysisProps {
     reflectionResponseTranscriptId: number,
-    category: string;
-    bucket: string;
+    category: CategoryBucket_category;
+    bucket: CategoryBucket_bucket;
 }
 
 export async function writeAnalysisForTranscriptId({ reflectionResponseTranscriptId, category, bucket }: AddAnalysisProps) {

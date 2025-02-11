@@ -28,9 +28,9 @@ export default async function Page() {
         return <div>No student found</div>;
     }
 
+    console.log("Fetched student:", student);
     return (
         <div>
-            console.log("Fetched student:", student);
             <StudentComponent student={student} />
         </div>
     );

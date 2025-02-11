@@ -39,7 +39,8 @@ export function CourseComponent({ course }: CourseComponentProps) {
             try {
                 await upsertCourse({ 
                     id, 
-                    teacherEmail 
+                    teacherEmail,
+                    name
                 });
             } catch (error) {
                 // If there's an error, we should "rollback" to the prior value

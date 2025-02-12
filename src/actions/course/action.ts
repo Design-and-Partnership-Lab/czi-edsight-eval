@@ -2,38 +2,31 @@
 
 import { db } from "@/db";
 
-interface UpsertCourseProps {
-    id: number;
+interface CreateCourseProps {
     teacherEmail: string;
-    name: string; // Added name to the interface
+    name: string;
 }
 
-export async function upsertCourse({ id, teacherEmail, name }: UpsertCourseProps) {
-    console.log("UpsertCourse called with:", { id, teacherEmail, name });
+export async function createCourse({ teacherEmail, name }: CreateCourseProps) {
+    console.log("CreateCourse called with:", { teacherEmail, name });
 
     try {
-        const result = await db.course.upsert({
-            where: {
-                id: id,
-            },
-            create: {
+        const newCourse = await db.course.create({
+            data: {
                 externalId: String(Math.floor(100000 + Math.random() * 900000)), // random 6 digit number
-                name: name,                                           // hardcoded
-                period: String(Math.floor(Math.random() * 10) + 1),             // random period (1-10)
-                schoolId: 99,                                                   // jane smith's school id
-                gradingTermName: "24-25 Winter",                                // hardcoded
-                isPrimaryTeacher: true,         
-                teacherEmail: teacherEmail,                                     // provided teacher email
-            },
-            update: {
-                name: name // Updates course name
+                name: name, 
+                period: String(Math.floor(Math.random() * 10) + 1),              // random period (1-10)
+                schoolId: 99,                                      
+                gradingTermName: "24-25 Winter",                                
+                isPrimaryTeacher: true,
+                teacherEmail: teacherEmail,
             },
         });
 
-        console.log("Database upsert successful:", result);
-        return result;
+        console.log("New course created successfully:", newCourse);
+        return newCourse;
     } catch (error) {
-        console.error("Error updating course:", error);
-        throw new Error("Failed to update course");
+        console.error("Error creating course:", error);
+        throw new Error("Failed to create a new course");
     }
 }

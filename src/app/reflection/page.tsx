@@ -1,6 +1,6 @@
 import React from 'react'
 import { db } from "@/db";
-import AddReflection from '@/components/reflections/reflection-component';
+import AddReflection from '@/components/reflection/reflection-component';
 
 
 export default async function Page() {

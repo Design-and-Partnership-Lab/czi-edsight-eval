@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { createReflection } from '@/actions/teacher/createReflection';
+import { createReflection } from '@/actions/reflection/createReflection';
 
 const AddReflection = () => {
     const [inputs, setInputs] = useState({

@@ -8,7 +8,7 @@ import { getAnalysesByTranscriptId } from "@/actions/analyses/action"
  */
 export default async function Page() {
     // Fetch data in the Server Component
-    const analyses = await getAnalysesByTranscriptId(239868);
+    const analyses = await getAnalysesByTranscriptId(239867);
     console.log(analyses);
     if (!analyses) {
         return <div>No analysis found</div>;

@@ -31,6 +31,8 @@ export function AnalysisComponent({ analysis }: AnalysisComponentProps) {
             reflectionResponseTranscriptId: 239868,
             category: CategoryBucket_category.CREATIVITY,
             bucket: CategoryBucket_bucket.EMERGING,
+            reflectionId: "c700f8fe-de60-466f-a9b6-aeb7db3f7ec9",
+            modelId: "10_01_23",
         };
 
         // Optimistic UI update

@@ -22,16 +22,18 @@ interface AddAnalysisProps {
     reflectionResponseTranscriptId: number,
     category: CategoryBucket_category;
     bucket: CategoryBucket_bucket;
+    reflectionId: string;
+    modelId: string;
 }
 
-export async function writeAnalysisForTranscriptId({ reflectionResponseTranscriptId, category, bucket }: AddAnalysisProps) {
+export async function writeAnalysisForTranscriptId({ reflectionResponseTranscriptId, category, bucket, reflectionId, modelId }: AddAnalysisProps) {
     await db.categoryBucket.create({
         data: {
             reflectionResponseTranscriptId: reflectionResponseTranscriptId,
             category: category,
             bucket: bucket,
-            reflectionId: "default-reflection-id",
-            modelId: "default-model-id",
+            reflectionId: reflectionId,
+            modelId: modelId,
         }
     });
 }

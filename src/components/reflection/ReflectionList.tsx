@@ -20,7 +20,7 @@ export default function ReflectionsList() {
 
     useEffect(() => {
         loadReflections();
-    }, [reflections]);
+    }, [reflections.length]);
 
     return (
         <div>

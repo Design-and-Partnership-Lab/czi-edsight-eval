@@ -1,3 +1,4 @@
+import { ToggleAgreeButton } from "@/components/rr/ToggleAgreeButton";
 import { TeacherComponent } from "@/components/teacher/teacher-component";
 import { db } from "@/db";
 
@@ -10,13 +11,15 @@ export default async function Page() {
     // Fetch data in the Server Component
     const feedbacks = await db.userFeedback
         .findMany({
-            where: { reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test", 
-            studentId: 38693},
+            where: {
+                reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test",
+                studentId: 38693,
+            },
             select: {
                 id: true,
                 agree: true,
-                reflectionId: true, 
-                studentId: true, 
+                reflectionId: true,
+                studentId: true,
                 category: true,
                 teacherEmail: true,
             },
@@ -38,7 +41,8 @@ export default async function Page() {
                     <p>Reflection ID: {feedback.reflectionId}</p>
                     <p>Student ID: {feedback.studentId}</p>
                     <p>Category: {feedback.category}</p>
-                    <p>Agree: {feedback.agree}</p>
+                    <p>Agree: {feedback.agree ? "True" : "False"}</p>
+                    <ToggleAgreeButton feedback={feedback} />
                 </div>
             ))}
         </div>

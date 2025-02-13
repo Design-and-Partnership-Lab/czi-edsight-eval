@@ -5,13 +5,18 @@ import { UserFeedback_category } from "@prisma/client";
 
 interface upsertReflectionResponse {
     studentId: number;
-    agree: Boolean;
+    agree: boolean;
     reflectionId: string;
-    category: UserFeedback_category,
+    category: UserFeedback_category;
     teacherEmail: string;
 }
 
-export async function upsertReflectionResponse({agree, reflectionId, category, teacherEmail }: upsertReflectionResponse) {
+export async function upsertReflectionResponse({
+    agree,
+    reflectionId,
+    category,
+    teacherEmail,
+}: upsertReflectionResponse) {
     await db.userFeedback.upsert({
         where: {
             reflectionId_studentId_category_teacherEmail: {

@@ -1,66 +1,68 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { createClient, LiveTranscriptionEvents } from "@deepgram/sdk";
 
-const DEEPGRAM_API_KEY = ""
+const DEEPGRAM_API_KEY = ""; // Replace with your key
 
 const LiveTranscription = () => {
-    const [transcript, setTranscript] = useState("");
     const [isRecording, setIsRecording] = useState(false);
-    const [live, setLive] = useState<any>(null);
-    let mediaRecorder: MediaRecorder | null = null;
+    const [transcription, setTranscription] = useState("");
+    const deepgram = createClient(DEEPGRAM_API_KEY);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const liveRef = useRef<any>(null);
 
-    useEffect(() => {
-        if (!isRecording) return;
-
-        const startRecording = async () => {
+    const startRecording = async () => {
+        try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = mediaRecorder;
 
-            const deepgram = createClient(DEEPGRAM_API_KEY);
-            const liveClient = deepgram.listen.live({ model: "nova-3" });
-            setLive(liveClient);
+            // Initialize Deepgram Live Transcription
+            const live = deepgram.listen.live({ model: "nova-3" });
+            liveRef.current = live;
 
-            liveClient.on(LiveTranscriptionEvents.Open, () => {
-                liveClient.on(LiveTranscriptionEvents.Transcript, (data) => {
-                    console.log(data);
-                    setTranscript((prev) => prev + " " + data.channel.alternatives[0].transcript);
-                });
+            live.on(LiveTranscriptionEvents.Open, () => {
+                console.log("Connected to Deepgram");
 
-                mediaRecorder?.addEventListener("dataavailable", (event) => {
-                    /* console.log("Audio Data Available:", event.data); */
-                    if (event.data.size > 0) {
-                        liveClient.send(event.data);
+                live.on(LiveTranscriptionEvents.Transcript, (data) => {
+                    if (data.channel?.alternatives[0]?.transcript) {
+                        setTranscription((prev) => prev + " " + data.channel.alternatives[0].transcript);
                     }
                 });
             });
 
+            mediaRecorder.ondataavailable = async (event) => {
+                if (event.data.size > 0 && liveRef.current) {
+                    liveRef.current.send(event.data);
+                }
+            };
 
+            mediaRecorder.start(500);
+            setIsRecording(true);
+        } catch (error) {
+            console.error("Error accessing microphone:", error);
+        }
+    };
 
-            mediaRecorder.start(250);
-        };
-
-        startRecording();
-
-        return () => {
-            mediaRecorder?.stop();
-            live?.requestClose();
-        };
-    }, [isRecording]);
+    const stopRecording = () => {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
+        }
+        if (liveRef.current) {
+            liveRef.current.requestClose();
+        }
+        setIsRecording(false);
+    };
 
     return (
-        <div className="p-4 border rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold mb-2">Live Transcription</h2>
-            <button
-                onClick={() => setIsRecording(!isRecording)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg mb-2"
-            >
+        <div>
+            <h2>Live Transcription</h2>
+            <button onClick={isRecording ? stopRecording : startRecording}>
                 {isRecording ? "Stop" : "Start"} Recording
             </button>
-            <div className="p-2 border rounded-md min-h-[100px] bg-gray-100 mt-2">
-                {transcript || "Waiting for transcription..."}
-            </div>
+            <p><strong>Transcription:</strong> {transcription}</p>
         </div>
     );
 };

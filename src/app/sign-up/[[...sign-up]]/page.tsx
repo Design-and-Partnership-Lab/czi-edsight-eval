@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
 export default async function Page() {
     return (
@@ -34,7 +34,7 @@ export default async function Page() {
                     </div>
                     
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <SignIn />
+                        <SignUp/>
                         
                         <div className="mt-8 pt-6 border-t border-gray-100">
                             <p className="text-sm text-gray-500 text-center">

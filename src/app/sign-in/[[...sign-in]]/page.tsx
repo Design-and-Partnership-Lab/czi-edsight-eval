@@ -5,11 +5,8 @@ export default async function Page() {
         <div className="w-screen h-screen flex overflow-hidden">
             <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-sky-400 to-indigo-600 relative overflow-hidden">
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-12 z-10">
-                    <img className="w-64 h-auto mb-6" src="/edsightlogo.svg" alt="EdSight Logo" 
+                    <img className="w-64 h-auto mb-2" src="/edsightlogo-white.svg" alt="EdSight Logo" 
                     />
-                    <h1 className="text-white text-3xl font-bold mb-6 text-center">
-                        Welcome to Edsight
-                    </h1>
                     <p className="text-white/80 text-lg text-center max-w-md">
                         Blah bal labsd  fds f oidhsdoifahsdfo ahb Blakh asdioasdhjasd sahdaud
                     </p>

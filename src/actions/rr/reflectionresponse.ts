@@ -16,18 +16,19 @@ export async function upsertReflectionResponse({
     reflectionId,
     category,
     teacherEmail,
+    studentId,
 }: upsertReflectionResponse) {
     await db.userFeedback.upsert({
         where: {
             reflectionId_studentId_category_teacherEmail: {
-                studentId: 38695,
+                studentId: studentId,
                 reflectionId: reflectionId,
                 category: category,
                 teacherEmail: teacherEmail,
             },
         },
         create: {
-            studentId: 38695,
+            studentId: studentId,
             reflectionId: reflectionId,
             agree: agree,
             category: category,

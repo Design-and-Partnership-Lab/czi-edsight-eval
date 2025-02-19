@@ -1,9 +1,8 @@
 import { createClient, LiveTranscriptionEvents } from "@deepgram/sdk";
 
-const DEEPGRAM_API_KEY = process.env.NEXT_PUBLIC_DEEPGRAM_KEY;
+const NEXT_PUBLIC_DEEPGRAM_KEY = process.env.NEXT_PUBLIC_DEEPGRAM_KEY;
 
-
-if (!DEEPGRAM_API_KEY) {
+if (!NEXT_PUBLIC_DEEPGRAM_KEY) {
     throw new Error("Deepgram API key is missing in environment variables.");
 }
 
@@ -16,11 +15,12 @@ interface DeepgramTranscriptData {
 }
 
 export class DeepgramTranscriber {
-    private deepgram = createClient(DEEPGRAM_API_KEY);
+    private deepgram = createClient(NEXT_PUBLIC_DEEPGRAM_KEY);
     private live: any = null;
     private mediaRecorder: MediaRecorder | null = null;
     private setTranscription: (text: string) => void;
     private setIsRecording: (status: boolean) => void;
+    private currentTranscription: string = "";
 
     constructor(setTranscription: (text: string) => void, setIsRecording: (status: boolean) => void) {
         this.setTranscription = setTranscription;
@@ -35,13 +35,11 @@ export class DeepgramTranscriber {
 
             console.log("Connecting to Deepgram...");
             this.live = this.deepgram.listen.live({ model: "nova-3" });
-            this.live.on(LiveTranscriptionEvents.Transcript, (data: DeepgramTranscriptData) => {
-                const current_transcript = data.channel?.alternatives[0]?.transcript;
 
-                if (current_transcript) {
-                    this.setTranscription((prev: string) => {
-                        return prev + " " + current_transcript;
-                    })
+            this.live.on(LiveTranscriptionEvents.Transcript, (data: DeepgramTranscriptData) => {
+                const newTranscript = data.channel?.alternatives[0]?.transcript;
+                if (newTranscript) {
+                    this.updateTranscription(newTranscript);
                 }
             });
 
@@ -64,6 +62,11 @@ export class DeepgramTranscriber {
         } catch (error) {
             console.error("Error starting recording:", error);
         }
+    }
+
+    private updateTranscription(newTranscript: string) {
+        this.currentTranscription += ` ${newTranscript}`;
+        this.setTranscription(this.currentTranscription.trim());
     }
 
     stopRecording() {

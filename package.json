@@ -12,8 +12,9 @@
         "db:studio": "dotenv -e .env.local -- npx prisma studio"
     },
     "dependencies": {
-        "@clerk/nextjs": "^6.11.1",
-        "@prisma/client": "^6.3.0",
+        "@clerk/nextjs": "^6.10.5",
+        "@deepgram/sdk": "^3.11.1",
+        "@prisma/client": "^6.3.1",
         "@radix-ui/react-slot": "^1.1.1",
         "@remixicon/react": "^4.6.0",
         "class-variance-authority": "^0.7.1",

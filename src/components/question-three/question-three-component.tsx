@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, Textarea, Button, Title } from "@tremor/react";
 import { DeepgramTranscriber } from "@/actions/transcribe/action";
 
@@ -13,8 +13,8 @@ const QuestionThree = () => {
   const [recordingTime, setRecordingTime] = useState(0);
   const [transcription, setTranscription] = useState(""); // Holds real-time transcription
 
-  // Initialize DeepgramTranscriber
-  const transcriber = new DeepgramTranscriber(setTranscription, setIsRecording);
+  // Use a ref to store the transcriber instance
+  const transcriberRef = useRef<DeepgramTranscriber | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timer | null = null;
@@ -50,7 +50,8 @@ const QuestionThree = () => {
     console.log("Started recording");
 
     try {
-      await transcriber.startRecording();
+      transcriberRef.current = new DeepgramTranscriber(setTranscription, setIsRecording);
+      await transcriberRef.current.startRecording();
     } catch (error) {
       console.error("Error starting Deepgram transcription:", error);
     }
@@ -61,7 +62,8 @@ const QuestionThree = () => {
     setIsPaused(false);
     console.log("Stopped recording");
 
-    transcriber.stopRecording();
+    // Use the ref to stop recording
+    transcriberRef.current?.stopRecording();
     setAudioResponse(transcription);
   };
 
@@ -151,7 +153,7 @@ const QuestionThree = () => {
               onClick={handleAudioSubmit}
               variant="primary"
               className="mt-4 flex items-center px-4 py-2 text-base space-x-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 active:bg-blue-500"
-              >
+            >
               <span>Submit</span>
             </Button>
           )}

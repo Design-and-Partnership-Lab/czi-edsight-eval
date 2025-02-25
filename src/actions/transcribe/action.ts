@@ -78,4 +78,10 @@ export class DeepgramTranscriber {
         }
         this.setIsRecording(false);
     }
+
+    clearRecording() {
+        console.log("Clearing current recording transcription...");
+        this.currentTranscription = "";
+        this.setTranscription("");
+    }
 }

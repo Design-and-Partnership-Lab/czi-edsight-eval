@@ -172,7 +172,7 @@ const QuestionThree = () => {
             onChange={(e) => setTranscription(e.target.value)}
             placeholder="Transcription will appear here..."
             className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            // disabled // NOTE: Uncomment to disable editing
+            disabled // NOTE: Uncomment to disable editing
           />
 
           {!isRecording && audioResponse && (

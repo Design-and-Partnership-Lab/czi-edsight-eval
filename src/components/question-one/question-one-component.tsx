@@ -20,7 +20,7 @@ export default function QuestionOne() {
                         onClick={() => handleFeedback("thumbs-up")}
                     >
                         <ThumbsUp
-                            size={32}
+                            size={38}
                             strokeWidth={2.5}
                         />
                     </button>
@@ -29,7 +29,7 @@ export default function QuestionOne() {
                         onClick={() => handleFeedback("thumbs-down")}
                     >
                         <ThumbsDown
-                            size={32}
+                            size={38}
                             strokeWidth={2.5}
                         />
                     </button>

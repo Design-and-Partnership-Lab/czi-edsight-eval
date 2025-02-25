@@ -46,7 +46,6 @@ const QuestionThree = () => {
     setIsRecording(true);
     setIsPaused(false);
     setRecordingTime(0);
-    setTranscription(""); // clear previous transcription
     console.log("Started recording");
 
     try {
@@ -90,6 +89,14 @@ const QuestionThree = () => {
     setIsRecording(false);
     setIsPaused(false);
     console.log("Switched to text mode");
+  };
+
+  const handleClearRecording = () => {
+    transcriberRef.current?.clearRecording();
+    setTranscription("");
+    setAudioResponse(null);
+    setRecordingTime(0);
+    console.log("Cleared previous recording");
   };
 
   return (
@@ -136,6 +143,13 @@ const QuestionThree = () => {
                   onClick={handleStopRecording}
                 >
                   <span className="text-sm">Stop</span>
+                </Button>
+                <Button
+                  onClick={handleClearRecording}
+                  variant="secondary"
+                  className="flex items-center space-x-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 active:bg-blue-500"
+                >
+                  <span className="text-sm">Clear</span>
                 </Button>
                 <div className="text-gray-600 text-sm">
                   {new Date(recordingTime * 1000).toISOString().substr(14, 5)}

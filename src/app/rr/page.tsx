@@ -1,5 +1,4 @@
 import { ToggleAgreeButton } from "@/components/rr/ToggleAgreeButton";
-import { TeacherComponent } from "@/components/teacher/teacher-component";
 import { db } from "@/db";
 
 /**

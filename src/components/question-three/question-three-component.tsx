@@ -43,26 +43,27 @@ const QuestionThree = () => {
 
   const handleAudioRecording = async () => {
     setMode("audio");
-    setIsRecording(true);
-    setIsPaused(false);
-    setRecordingTime(0);
     console.log("Started recording");
 
     try {
       transcriberRef.current = new DeepgramTranscriber(setTranscription, setIsRecording);
       await transcriberRef.current.startRecording();
+
+      setIsRecording(true);
+      setIsPaused(false);
+      setRecordingTime(0);
     } catch (error) {
       console.error("Error starting Deepgram transcription:", error);
     }
   };
 
   const handleStopRecording = () => {
+    transcriberRef.current?.stopRecording();
+    setAudioResponse(transcription);
+
     setIsRecording(false);
     setIsPaused(false);
     console.log("Stopped recording");
-
-    transcriberRef.current?.stopRecording();
-    setAudioResponse(transcription);
   };
 
   const handlePauseRecording = () => {
@@ -93,6 +94,7 @@ const QuestionThree = () => {
 
   const handleClearRecording = () => {
     transcriberRef.current?.clearRecording();
+
     setTranscription("");
     setAudioResponse(null);
     setRecordingTime(0);

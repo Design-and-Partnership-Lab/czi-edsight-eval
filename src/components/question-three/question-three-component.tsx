@@ -86,6 +86,9 @@ const QuestionThree = () => {
   };
 
   const handleSwitchToText = () => {
+    if (isRecording) {
+      handleStopRecording();
+    }
     setMode("text");
     setIsRecording(false);
     setIsPaused(false);

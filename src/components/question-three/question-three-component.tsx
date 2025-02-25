@@ -83,6 +83,7 @@ const QuestionThree = () => {
   const handleAudioSubmit = () => {
     console.log("Final Transcription:", audioResponse);
     setAudioResponse(null);
+    handleClearRecording();
   };
 
   const handleSwitchToText = () => {

@@ -1,4 +1,5 @@
 import { foo } from "@/actions/foo/foo";
+import QuestionTwo from "../components/questions/question-two";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default async function Home() {
@@ -13,6 +14,7 @@ export default async function Home() {
             <SignedIn>
                 <UserButton />
             </SignedIn>
+            <QuestionTwo />
         </div>
     );
 }

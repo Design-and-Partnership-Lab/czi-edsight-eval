@@ -27,6 +27,7 @@ export class DeepgramTranscriber {
         this.setIsRecording = setIsRecording;
     }
 
+
     async startRecording() {
         try {
             console.log("Requesting microphone access...");
@@ -39,7 +40,8 @@ export class DeepgramTranscriber {
             this.live.on(LiveTranscriptionEvents.Transcript, (data: DeepgramTranscriptData) => {
                 const newTranscript = data.channel?.alternatives[0]?.transcript;
                 if (newTranscript) {
-                    this.updateTranscription(newTranscript);
+                    this.currentTranscription += ` ${newTranscript}`;
+                    this.setTranscription(this.currentTranscription.trim());
                 }
             });
 
@@ -64,11 +66,6 @@ export class DeepgramTranscriber {
         }
     }
 
-    private updateTranscription(newTranscript: string) {
-        this.currentTranscription += ` ${newTranscript}`;
-        this.setTranscription(this.currentTranscription.trim());
-    }
-
     stopRecording() {
         console.log("Stopping recording...");
         if (this.mediaRecorder) {
@@ -80,5 +77,11 @@ export class DeepgramTranscriber {
             this.live.requestClose();
         }
         this.setIsRecording(false);
+    }
+
+    clearRecording() {
+        console.log("Clearing current recording transcription...");
+        this.currentTranscription = "";
+        this.setTranscription("");
     }
 }

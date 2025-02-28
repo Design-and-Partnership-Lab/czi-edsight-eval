@@ -1,59 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fromRange } from 'xpath-range';
 import { v4 as uuidv4 } from 'uuid';
-
-interface HighlightData {
-  id: string;
-  text: string;
-  color: string;
-  decisionId: string;
-  startOffset: number;
-  endOffset: number;
-  startContainer: string;
-  endContainer: string;
-  type: string;
-}
-
-interface UserAnnotationsActions {
-  saveUserAnnotation: (
-    text: string,
-    colorName: string,
-    decisionId: string,
-    highlightId: string,
-    startOffset: number,
-    endOffset: number,
-    startContainer: string,
-    endContainer: string,
-    typename: string
-  ) => void;
-  annotations?: HighlightData[];
-}
-
-interface TextHighlighterProps {
-  decisionId: string;
-  userAnnotations: UserAnnotationsActions;
-  children?: React.ReactNode;
-}
-
-interface HighlightColor {
-  name: string;
-  color: string;
-  bgClass: string; // Tailwind class for background color
-}
-
-interface XPathObject {
-  startOffset: number;
-  endOffset: number;
-  start: string;
-  end: string;
-}
-
-interface XPathParameters {
-  startOffset: number;
-  endOffset: number;
-  startContainer: string;
-  endContainer: string;
-}
+import { HighlightColor, TextHighlighterProps, XPathObject, XPathParameters } from '../../types/index';
+import { Popover, PopoverContent } from '@radix-ui/react-popover';
 
 // Helper function to get window selection
 function getWindowSelection(): Selection | null {
@@ -89,7 +38,6 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
     { name: 'green', color: '#C5E1A5', bgClass: 'bg-green-200' },
     { name: 'blue', color: '#90CAF9', bgClass: 'bg-blue-200' },
     { name: 'purple', color: '#CE93D8', bgClass: 'bg-purple-200' },
-    { name: 'pink', color: '#F48FB1', bgClass: 'bg-pink-200' },
   ];
 
   // Handle selection and show tooltip
@@ -236,7 +184,6 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
   
   return (
     <div className="relative">
-      {/* Highlightable content */}
       <div 
         ref={contentRef}
         id="decision-reader-body-root"
@@ -246,23 +193,29 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
         {children}
       </div>
       
-      {/* Color picker tooltip */}
       {showTooltip && (
         <div 
-          className="absolute z-10 bg-white rounded shadow-md p-1 flex"
+          className="absolute z-10"
           style={{
-            top: `${tooltipPos.top}px`,
-            left: `${tooltipPos.left}px`,
+            top: `${tooltipPos.top-70}px`,
+            left: `${tooltipPos.left-30}px`,
+            transform: 'translateX(-50%) translateY(-100%)',
           }}
         >
-          {highlightColors.map(({ name, bgClass }) => (
-            <button
-              key={name}
-              onClick={() => onHighlightAction(name)}
-              className={`w-5 h-5 ${bgClass} rounded-full mx-1 cursor-pointer border-none`}
-              title={name}
-            />
-          ))}
+          <Popover open={true}>
+            <PopoverContent className="p-2 bg-neutral-700 rounded-lg" side="top" sideOffset={20}>
+              <div className="flex">
+                {highlightColors.map(({ name, bgClass }) => (
+                  <button
+                    key={name}
+                    onClick={() => onHighlightAction(name)}
+                    className={`w-5 h-5 ${bgClass} rounded-full mx-1 cursor-pointer border-none`}
+                    title={name}
+                  />
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       )}
     </div>

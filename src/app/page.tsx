@@ -1,5 +1,5 @@
 import { foo } from "@/actions/foo/foo";
-import DocumentViewer from "@/components/annotate/Mark";
+import AnnotateText from "@/components/annotate/AnnotateText";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default async function Home() {
@@ -14,7 +14,9 @@ export default async function Home() {
             <SignedIn>
                 <UserButton />
             </SignedIn>
-            <DocumentViewer />
+            <AnnotateText>
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Risus tristique vitae convallis augue dapibus erat dis. Pulvinar congue efficitur turpis convallis pulvinar ultrices tempus habitant. Interdum nisi blandit risus leo dui. Tempus taciti montes dapibus potenti primis magna est justo. Varius etiam scelerisque eget parturient sem vitae non. Odio eu consectetur sapien pellentesque libero arcu arcu eros ridiculus. Nulla class inceptos senectus proin aliquam. Odio non tincidunt justo mollis class volutpat netus penatibus.
+            </AnnotateText>
         </div>
     );
 }

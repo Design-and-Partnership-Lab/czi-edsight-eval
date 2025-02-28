@@ -1,7 +1,12 @@
+// AnnotateText.tsx
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import TextHighlighter from './TextHighlighter';
+
+interface Props {
+  children: ReactNode;
+}
 
 // Define TypeScript interfaces
 interface Highlight {
@@ -16,7 +21,7 @@ interface Highlight {
   type: string;
 }
 
-const DocumentViewer: React.FC = () => {
+const AnnotateText: React.FC<Props> = ({ children }) => {
   // State to track highlights
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   
@@ -49,7 +54,7 @@ const DocumentViewer: React.FC = () => {
       // Add to our local state
       setHighlights(prev => [...prev, newHighlight]);
       
-      // In a real app, you would save to your backend here
+      // need to eventaully save the newHighlight somewhere
       console.log('Saved highlight:', newHighlight);
     },
     annotations: highlights
@@ -57,19 +62,13 @@ const DocumentViewer: React.FC = () => {
   
   return (
     <div>
-      <div>
+      <div className='p-4 max-w-lg'>
         <TextHighlighter
           decisionId="doc-12345"
           userAnnotations={annotationSystem}
         >
-          <p>
-            This is a sample document that demonstrates the text highlighting functionality.
-            Try selecting any text in this paragraph and choose a highlight color from the
-            popup that appears.
-
-            The highlighting system uses xpath-range to identify the exact position of the text.
-            When you highlight text, it's immediately visible and the position information is
-            saved so it can be restored later.
+          <p className='text-2xl'>
+            {children}
           </p>
         </TextHighlighter>
       </div>
@@ -77,4 +76,4 @@ const DocumentViewer: React.FC = () => {
   );
 };
 
-export default DocumentViewer;
+export default AnnotateText;

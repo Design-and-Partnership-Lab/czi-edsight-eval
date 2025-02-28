@@ -25,6 +25,7 @@ interface Highlight {
 const AnnotateText: React.FC<Props> = ({ children }) => {
   // State to track highlights
   const [highlights, setHighlights] = useState<Highlight[]>([]);
+  const [deletedHighlights, setDeletedHighlights] = useState<Highlight[]>([]);
   
   // Annotation system
   const annotationSystem = {
@@ -61,7 +62,19 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
     annotations: highlights
   };
 
-  
+  const onUndo = () => {
+    console.log('Undo');
+    if (highlights.length > 0) {
+      const highlightsCopy = [...highlights];
+      const lastElement = highlightsCopy.pop();
+
+      if (lastElement) {
+      setHighlights(highlightsCopy);
+      setDeletedHighlights((prevArray: Highlight[]) => [...prevArray, lastElement]);
+      }
+    console.log(highlights);
+    }
+  }
   
   return (
     <div>
@@ -72,8 +85,8 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
           </p>
         </TextHighlighter>
         <div className='mt-3 flex justify-end mr-5 gap-x-3'>
-          <button>
-            <Undo2 size={24} />
+          <button onClick={() => onUndo()}>
+            <Undo2 size={24}/>
           </button>
           <button>
             <Redo2 size={24} />

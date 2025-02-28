@@ -15,7 +15,7 @@ export default async function Home() {
                 <UserButton />
             </SignedIn>
             <AnnotateText>
-                Lorem ipsum odor amet, consectetuer adipiscing elit. Risus tristique vitae convallis augue dapibus erat dis. Pulvinar congue efficitur turpis convallis pulvinar ultrices tempus habitant. Interdum nisi blandit risus leo dui. Tempus taciti montes dapibus potenti primis magna est justo. Varius etiam scelerisque eget parturient sem vitae non. Odio eu consectetur sapien pellentesque libero arcu arcu eros ridiculus. Nulla class inceptos senectus proin aliquam. Odio non tincidunt justo mollis class volutpat netus penatibus.
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Risus tristique vitae convallis augue dapibus erat dis. Pulvinar congue efficitur turpis convallis pulvinar ultrices tempus habitant. Interdum nisi blandit risus leo dui. 
             </AnnotateText>
         </div>
     );

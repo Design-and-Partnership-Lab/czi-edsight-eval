@@ -3,6 +3,7 @@
 
 import React, { useState, ReactNode } from 'react';
 import TextHighlighter from './TextHighlighter';
+import { Undo2, Redo2 } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
@@ -59,18 +60,25 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
     },
     annotations: highlights
   };
+
+  
   
   return (
     <div>
       <div className='p-4 max-w-lg'>
-        <TextHighlighter
-          decisionId="doc-12345"
-          userAnnotations={annotationSystem}
-        >
+        <TextHighlighter decisionId="doc-12345" userAnnotations={annotationSystem}>
           <p className='text-2xl'>
             {children}
           </p>
         </TextHighlighter>
+        <div className='mt-3 flex justify-end mr-5 gap-x-3'>
+          <button>
+            <Undo2 size={24} />
+          </button>
+          <button>
+            <Redo2 size={24} />
+          </button>
+        </div>
       </div>
     </div>
   );

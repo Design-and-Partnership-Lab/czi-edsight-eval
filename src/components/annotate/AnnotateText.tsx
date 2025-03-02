@@ -63,7 +63,6 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
         annotations: highlights,
     };
 
-    // Undo functionality
     const onUndo = () => {
         console.log("Undo");
         if (highlights.length > 0) {
@@ -87,7 +86,6 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
         }
     };
 
-    // Redo functionality
     const onRedo = () => {
         console.log("Redo");
         if (deletedHighlights.length > 0) {

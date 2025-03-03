@@ -1,16 +1,17 @@
-import { NextResponse } from 'next/server';
+"use server";
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function getAnnotationData() {
   try {
     const student = await prisma.student.findFirst({
       where: { email: "182test@student.auhsd.us" } // ex
     });
 
     if (!student) {
-      return NextResponse.json({ error: "Student not found" }, { status: 404 });
+      return { error: "Student not found" };
     }
 
     const reflectionQuestion = await prisma.reflectionQuestion.findFirst({
@@ -18,7 +19,7 @@ export async function GET() {
     });
 
     if (!reflectionQuestion) {
-      return NextResponse.json({ error: "Reflection question not found" }, { status: 404 });
+      return { error: "Reflection question not found" };
     }
 
     const reflectionResponseTranscript = await prisma.reflectionResponseTranscript.findFirst({
@@ -29,13 +30,13 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({
+    return {
       student,
       reflectionQuestion,
       reflectionResponseTranscript,
-    });
+    };
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Error fetching data" }, { status: 500 });
+    return { error: "Error fetching data" };
   }
 }

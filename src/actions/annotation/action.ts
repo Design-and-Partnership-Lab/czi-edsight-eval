@@ -30,10 +30,15 @@ export async function getAnnotationData() {
       },
     });
 
+    const aiGuesstimates = await prisma.insights.findMany({
+      where: { reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test" }
+    });
+
     return {
       student,
       reflectionQuestion,
       reflectionResponseTranscript,
+      aiGuesstimates,
     };
   } catch (error) {
     console.error(error);

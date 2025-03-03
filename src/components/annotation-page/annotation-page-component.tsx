@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { Card, Title, Text, Divider, Badge } from '@tremor/react';
+import { getAnnotationData } from "@/actions/annotation/action";
 
 type Student = {
   firstName: string;
@@ -25,24 +26,23 @@ export default function AnnotationPage() {
   const [data, setData] = useState<AnnotationData | null>(null);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
-    fetch('/api/annotation')
-    .then((res) => res.text())
-    .then((text) => {
-      console.log('Raw response:', text);
+    async function fetchData() {
       try {
-        const result = JSON.parse(text);
+        const result = await getAnnotationData();
+        console.log('Data from server function:', result);
+        // FIX: result type
         setData(result);
       } catch (err) {
-        console.error("JSON parse error:", err);
+        console.error("Failed to fetch data", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Failed to fetch data", err);
-      setLoading(false);
-    });
-}, []);
+    }
+
+    fetchData();
+  }, []);
 
   if (!data) return <div>No data found.</div>;
 

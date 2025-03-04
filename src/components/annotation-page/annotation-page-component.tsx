@@ -2,8 +2,9 @@
 
 import React from "react";
 import AnnotateText from "@/components/annotate/AnnotateText";
+import QUESTIONS from "@/lib/questions";
 import {
-    Insights,
+    RawAnalysis,
     ReflectionQuestion,
     ReflectionResponse,
     ReflectionResponseTranscript,
@@ -16,7 +17,7 @@ type AnnotationData = {
     reflectionQuestion: ReflectionQuestion;
     reflectionResponse: ReflectionResponse;
     reflectionResponseTranscript: ReflectionResponseTranscript;
-    aiRationale: Insights[];
+    aiRationale: RawAnalysis[];
 };
 
 export default function AnnotationPage({
@@ -31,10 +32,9 @@ export default function AnnotationPage({
     const category = reflectionQuestion?.category || "No category";
     const transcript =
         reflectionResponseTranscript?.transcript || "No transcript available";
-    const responseTranscript =
-        reflectionResponse?.transcription_q1 || "No transcript available";
 
-    console.log(reflectionQuestion.question);
+    const prompt =
+        QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS];
 
     return (
         <div className="flex justify-center p-32 text-black">
@@ -43,13 +43,17 @@ export default function AnnotationPage({
                     Reflection for {studentName}
                 </Title>
 
-                <div className="mt-6 grid grid-cols-2 gap-6">
-                    <div className="rounded-lg border p-6">
-                        <Title className="text-lg font-semibold">Prompt</Title>
-                        <Text className="mt-2 text-gray-700">{category}</Text>
+                <div className="mt-6 grid grid-cols-5 gap-6">
+                    <div className="col-span-3 rounded-lg border p-6">
+                        <Title className="text-3xl font-semibold">
+                            Prompt ({category})
+                        </Title>
+                        <Text className="mt-2 text-gray-700">
+                            {prompt.question}
+                        </Text>
                         <Divider className="my-4" />
 
-                        <Title className="text-lg font-semibold">
+                        <Title className="text-3xl font-semibold">
                             Response
                         </Title>
 
@@ -61,36 +65,44 @@ export default function AnnotationPage({
                         </Text>
 
                         <div className="mt-2 text-gray-700">
-                            <AnnotateText>{transcript}</AnnotateText>
+                            <AnnotateText>
+                                {transcript} Quis exercitation ut id laborum
+                                excepteur. Veniam aute sit mollit commodo dolore
+                                irure. Dolor laborum labore cupidatat consequat
+                                ex voluptate proident ea.
+                            </AnnotateText>
                         </div>
                     </div>
 
-                    <div className="rounded-lg border p-6">
-                        <Title className="text-lg font-semibold">
+                    <div className="col-span-2 rounded-lg border p-6">
+                        <Title className="text-3xl font-semibold">
                             AI Rationale
                         </Title>
 
                         <div className="mt-4 space-y-2">
                             {aiRationale && aiRationale.length > 0 ? (
-                                aiRationale.map((insight, idx) => {
-                                    if (!insight) return null;
-                                    const average = insight.average ?? 0;
-                                    const categoryLevel = `bg-blue-${average}00`;
-                                    return (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center"
-                                        >
-                                            <span
-                                                className={`h-4 w-4 ${categoryLevel} mr-2 rounded-full`}
-                                            ></span>
-                                            <span>
-                                                {insight.subcategory ||
-                                                    "Unknown"}
-                                            </span>
-                                        </div>
-                                    );
-                                })
+                                aiRationale
+                                    .slice(0, 12)
+                                    .map((rationale, idx) => {
+                                        if (
+                                            !rationale.response ||
+                                            rationale.response === "None"
+                                        )
+                                            return null;
+
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className="flex flex-col"
+                                            >
+                                                <div className="text-lg font-semibold">
+                                                    {rationale.promptCode ||
+                                                        "Unknown"}
+                                                </div>
+                                                <div>{rationale.response}</div>
+                                            </div>
+                                        );
+                                    })
                             ) : (
                                 <Text className="text-gray-700">
                                     No AI Rationale available.

@@ -4,7 +4,7 @@ import { db } from "@/db";
 export default async function Home() {
     try {
         // Testing ID for demonstration
-        const teacherId = 624;
+        const teacherId = 2050;
 
         const reflection = await db.reflection.findFirst({
             where: { teacherId: teacherId },
@@ -55,8 +55,10 @@ export default async function Home() {
             return <div>Error: Reflection response not found</div>;
         }
 
-        const aiRationale = await db.insights.findMany({
-            where: { reflectionId: reflection.id },
+        const aiRationale = await db.rawAnalysis.findMany({
+            where: {
+                reflectionResponseId: reflectionResponseTranscript.id,
+            },
         });
 
         if (!aiRationale) {

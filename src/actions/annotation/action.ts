@@ -18,9 +18,6 @@ export async function getAnnotationData() {
       console.error("Reflection question not found");
     }
 
-    {/*
-       NOTE: is this the same as question id for reflectionResponseTranscript?
-    */}
     const reflectionQuestion = await prisma.reflectionQuestion.findFirst({
       where: { reflectionId: reflection?.id },
       select: {

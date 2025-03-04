@@ -6,19 +6,19 @@ import { CategoryBucket_category, CategoryBucket_bucket } from "@prisma/client";
 
 type Student = {
   firstName: string;
-  lastName: string;
+  lastName: string | null;
 };
 
 type ReflectionQuestion = {
-  question: string;
+  question: string | null;
 };
 
 type ReflectionResponseTranscript = {
-  transcript: string;
-};
+  transcript: string | null;
+} | null;
 
 type Insight = {
-  category: string;
+  category: string | null;
   average: number | null;
 };
 
@@ -29,6 +29,8 @@ type AnnotationData = {
   aiGuesstimates: Insight[];
 };
 
+type AnnotationApiResponse = AnnotationData | { error: string };
+
 export default function AnnotationPage() {
   const [data, setData] = useState<AnnotationData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,9 +38,13 @@ export default function AnnotationPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await getAnnotationData();
+        const result: AnnotationApiResponse = await getAnnotationData();
         console.log('Data from server function:', result);
-        // FIX: this needs typing
+        if ("error" in result) {
+          console.error("API returned an error:", result.error);
+          setData(null);
+          return;
+        }
         setData(result);
       } catch (err) {
         console.error("Failed to fetch data", err);
@@ -51,7 +57,7 @@ export default function AnnotationPage() {
 
   if (loading) return <div>Loading...</div>;
   if (!data) return <div>No data found.</div>;
-  if ("error" in data) return <div>Error: {data.error}</div>;
+  // if ("error" in data) return <div>Error: {data.error}</div>;
 
   const { student, reflectionQuestion, reflectionResponseTranscript, aiGuesstimates } = data;
 
@@ -74,7 +80,7 @@ export default function AnnotationPage() {
               Please review the AI’s analysis and highlight any sections where it misinterprets the student’s response or overlooks key ideas.
             </Text>
             <Text className="mt-2 text-gray-700">
-              {reflectionResponseTranscript?.transcript}
+              {reflectionResponseTranscript?.transcript || "No transcript available."}
             </Text>
           </div>
           <div className="border rounded-lg p-6 bg-white">

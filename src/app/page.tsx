@@ -1,15 +1,12 @@
-import { foo } from "@/actions/foo/foo";
-import QuestionTwo from "../components/questions/question-two";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
-export default async function Home() {
-    const bar = await foo();
-    console.log(bar);
+import QuestionTwo from "../components/questions/question-two";
 
+export default async function Home() {
     return (
         <div className="mx-auto flex w-full flex-col space-y-8 pt-16">
             <SignedOut>
-                <SignInButton/>
+                <SignInButton />
             </SignedOut>
             <SignedIn>
                 <UserButton />

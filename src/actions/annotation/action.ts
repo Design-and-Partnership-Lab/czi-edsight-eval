@@ -6,37 +6,95 @@ const prisma = new PrismaClient();
 
 export async function getAnnotationData() {
   try {
-    const student = await prisma.student.findFirst({
-      where: { email: "182test@student.auhsd.us" } // ex
+    // NOTE: this is a testing id. Added test data to make it all appear to see if it worked.
+    const teacherId = 624;
+
+    const reflection = await prisma.reflection.findFirst({
+      where: { teacherId: teacherId },
+      select: { id: true }
     });
 
-    if (!student) {
-      return { error: "Student not found" };
+    if (!reflection) {
+      console.error("Reflection question not found");
     }
 
+    {/*
+       NOTE: is this the same as question id for reflectionResponseTranscript?
+    */}
     const reflectionQuestion = await prisma.reflectionQuestion.findFirst({
-      where: { reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test" } // ex
+      where: { reflectionId: reflection?.id },
+      select: {
+        category: true,
+        id: true,
+      }
     });
 
+    if (reflectionQuestion) {
+      const firstLetter = reflectionQuestion.category.slice(0, 1);
+      const restOfCategory = reflectionQuestion.category.slice(1).toLowerCase();
+      reflectionQuestion.category = firstLetter + restOfCategory;
+    }
+
     if (!reflectionQuestion) {
-      return { error: "Reflection question not found" };
+      console.error("Reflection question not found");
     }
 
     const reflectionResponseTranscript = await prisma.reflectionResponseTranscript.findFirst({
       where: {
-        studentEmail: student.email!,
-        reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test", // ex
-        questionId: reflectionQuestion.id,
+        reflectionId: reflection?.id,
+        questionId: reflectionQuestion?.id,
       },
+      select: {
+        transcript: true,
+        studentEmail: true,
+      }
     });
 
-    const aiGuesstimates = await prisma.insights.findMany({
-      where: { reflectionId: "0f999zzz-68ac-46ed-9cde-1f7c9045test" }
+    if (!reflectionResponseTranscript) {
+      console.error("Reflection response transcript not found");
+    }
+
+    const reflectionResponse = await prisma.reflectionResponse.findFirst({
+      where: {
+        reflectionId: reflection?.id,
+        studentEmail: reflectionResponseTranscript?.studentEmail,
+      },
+      select: {
+        transcription_q1: true,
+      }
     });
+
+    if (!reflectionResponse) {
+      console.error("Reflection response not found");
+    }
+    const aiGuesstimates = await prisma.insights.findMany({
+      where: { reflectionId: reflection?.id },
+      select: {
+        average: true,
+        subcategory: true,
+      }
+    });
+
+    if (!aiGuesstimates) {
+      console.error("AI guesstimate not found");
+    }
+
+    const student = await prisma.student.findFirst({
+      where: { email: reflectionResponseTranscript?.studentEmail },
+      select: {
+        firstName: true,
+        lastName: true,
+      }
+    });
+
+    if (!student) {
+      console.error("Student not found");
+    }
 
     return {
       student,
       reflectionQuestion,
+      reflectionResponse,
       reflectionResponseTranscript,
       aiGuesstimates,
     };

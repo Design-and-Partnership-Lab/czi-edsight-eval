@@ -273,7 +273,7 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
 
     return (
         <div>
-            <div className="max-w-lg p-4">
+            <div>
                 <div
                     id="decision-reader-body-root"
                     ref={contentRef}
@@ -282,7 +282,7 @@ const AnnotateText: React.FC<Props> = ({ children }) => {
                         decisionId="doc-12345"
                         userAnnotations={annotationSystem}
                     >
-                        <p className="text-2xl">{children}</p>
+                        <div>{children}</div>
                     </TextHighlighter>
                 </div>
                 <div className="mr-5 mt-3 flex justify-end gap-x-3">

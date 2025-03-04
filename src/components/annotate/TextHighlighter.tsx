@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Popover, PopoverContent } from "@radix-ui/react-popover";
 import { v4 as uuidv4 } from "uuid";
 import { fromRange } from "xpath-range";
@@ -39,37 +39,53 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
     );
     const [selectedText, setSelectedText] = useState<string>("");
     const contentRef = useRef<HTMLDivElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
 
     // Colors with Tailwind classes and hex values for DOM manipulation
-    const highlightColors: HighlightColor[] = [
-        { name: "yellow", color: "#FFF59D", bgClass: "bg-yellow-200" },
-        { name: "green", color: "#C5E1A5", bgClass: "bg-green-200" },
-        { name: "blue", color: "#90CAF9", bgClass: "bg-blue-200" },
-        { name: "purple", color: "#CE93D8", bgClass: "bg-purple-200" },
-    ];
+    const highlightColors: HighlightColor[] = useMemo(
+        () => [
+            { name: "yellow", color: "#FFF59D", bgClass: "bg-yellow-200" },
+            { name: "green", color: "#C5E1A5", bgClass: "bg-green-200" },
+            { name: "blue", color: "#90CAF9", bgClass: "bg-blue-200" },
+            { name: "purple", color: "#CE93D8", bgClass: "bg-purple-200" },
+        ],
+        []
+    );
 
-    // Handle selection and show tooltip
     const handleSelection = (): void => {
         const selection = getWindowSelection();
         const text = selection ? selection.toString().trim() : "";
 
-        if (!text) {
+        if (
+            !text ||
+            !selection ||
+            !contentRef.current ||
+            selection?.rangeCount === 0
+        ) {
             setShowTooltip(false);
             return;
         }
 
-        setSelectedText(text);
+        const range = selection.getRangeAt(0);
+        const startContainer = range.startContainer;
+        const endContainer = range.endContainer;
 
-        if (selection && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
+        // Check if both start and end nodes are inside contentRef
+        if (
+            contentRef.current.contains(startContainer) &&
+            contentRef.current.contains(endContainer)
+        ) {
             const rect = range.getBoundingClientRect();
 
             setTooltipPos({
-                top: rect.top + window.scrollY - 35,
-                left: rect.left + rect.width / 2 - 50,
+                top: rect.top,
+                left: rect.left + rect.width / 2,
             });
 
+            setSelectedText(text);
             setShowTooltip(true);
+        } else {
+            setShowTooltip(false);
         }
     };
 
@@ -211,7 +227,24 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
                 }
             });
         }
-    }, [userAnnotations?.annotations, contentRef.current]);
+    }, [userAnnotations.annotations, highlightColors]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                contentRef.current &&
+                !contentRef.current.contains(event.target as Node) &&
+                !popoverRef.current?.contains(event.target as Node)
+            ) {
+                setShowTooltip(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="relative">
@@ -224,35 +257,29 @@ const TextHighlighter: React.FC<TextHighlighterProps> = ({
                 {children}
             </div>
 
-            {showTooltip && (
-                <div
-                    className="absolute z-10"
+            <Popover open={showTooltip}>
+                <PopoverContent
+                    className="absolute z-10 -translate-x-1/2 -translate-y-full rounded-lg bg-neutral-700 p-2"
                     style={{
-                        top: `${tooltipPos.top - 70}px`,
-                        left: `${tooltipPos.left - 30}px`,
-                        transform: "translateX(-50%) translateY(-100%)",
+                        top: `${tooltipPos.top}px`,
+                        left: `${tooltipPos.left}px`,
                     }}
+                    side="top"
+                    sideOffset={20}
+                    ref={popoverRef}
                 >
-                    <Popover open={true}>
-                        <PopoverContent
-                            className="rounded-lg bg-neutral-700 p-2"
-                            side="top"
-                            sideOffset={20}
-                        >
-                            <div className="flex">
-                                {highlightColors.map(({ name, bgClass }) => (
-                                    <button
-                                        key={name}
-                                        onClick={() => onHighlightAction(name)}
-                                        className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none`}
-                                        title={name}
-                                    />
-                                ))}
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-                </div>
-            )}
+                    <div className="flex">
+                        {highlightColors.map(({ name, bgClass }) => (
+                            <button
+                                key={name}
+                                onClick={() => onHighlightAction(name)}
+                                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none`}
+                                title={name}
+                            />
+                        ))}
+                    </div>
+                </PopoverContent>
+            </Popover>
         </div>
     );
 };

@@ -55,11 +55,11 @@ export default async function Home() {
             return <div>Error: Reflection response not found</div>;
         }
 
-        const aiGuesstimates = await db.insights.findMany({
+        const aiRationale = await db.insights.findMany({
             where: { reflectionId: reflection.id },
         });
 
-        if (!aiGuesstimates) {
+        if (!aiRationale) {
             console.error("AI guesstimate not found");
             return <div>Error: AI guesstimate not found</div>;
         }
@@ -75,13 +75,13 @@ export default async function Home() {
 
         // Passing fetched data as props to the AnnotationPage component
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-100">
+            <div className="flex min-h-screen items-center justify-center bg-gray-50">
                 <AnnotationPage
                     student={student}
                     reflectionQuestion={reflectionQuestion}
                     reflectionResponse={reflectionResponse}
                     reflectionResponseTranscript={reflectionResponseTranscript}
-                    aiGuesstimates={aiGuesstimates}
+                    aiRationale={aiRationale}
                 />
             </div>
         );

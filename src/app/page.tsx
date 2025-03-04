@@ -14,6 +14,7 @@ export default async function Home() {
             <SignedIn>
                 <UserButton />
             </SignedIn>
+            
             <AnnotateText>
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Risus
                 tristique vitae convallis augue dapibus erat dis. Pulvinar

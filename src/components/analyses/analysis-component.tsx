@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import { writeAnalysisForTranscriptId } from "@/actions/analyses/action";
+import { writeAnalysisForTranscriptId } from "@/actions/(legacy)/analyses/action";
 import { Button } from "@/components/ui/button";
-import { CategoryBucket_category, CategoryBucket_bucket } from "@prisma/client";
+import { CategoryBucket_bucket, CategoryBucket_category } from "@prisma/client";
 
 // Define what props your component will receive
 interface Analysis {
@@ -60,14 +60,21 @@ export function AnalysisComponent({ analysis }: AnalysisComponentProps) {
             ) : (
                 analyses.map((analysis) => (
                     <div key={analysis.id}>
-                        <p><strong>Category:</strong> {analysis.category}</p>
-                        <p><strong>Bucket:</strong> {analysis.bucket}</p>
+                        <p>
+                            <strong>Category:</strong> {analysis.category}
+                        </p>
+                        <p>
+                            <strong>Bucket:</strong> {analysis.bucket}
+                        </p>
                         <hr />
                     </div>
                 ))
             )}
 
-            <Button onClick={handleAddAnalysis} disabled={isPending}>
+            <Button
+                onClick={handleAddAnalysis}
+                disabled={isPending}
+            >
                 {isPending ? "Adding..." : "Add New Analysis"}
             </Button>
         </div>

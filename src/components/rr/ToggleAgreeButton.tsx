@@ -1,6 +1,6 @@
 "use client";
 
-import { upsertReflectionResponse } from "@/actions/rr/reflectionresponse";
+import { upsertReflectionResponse } from "@/actions/(legacy)/rr/reflectionresponse";
 import { UserFeedback_category } from "@prisma/client";
 
 interface Feedback {

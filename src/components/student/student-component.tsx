@@ -1,12 +1,17 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import { upsertStudent } from "@/actions/student/action";
+import { upsertStudent } from "@/actions/(legacy)/student/action";
 import { Button } from "@/components/ui/button";
 
 // Define what props your component will receive
 interface StudentComponentProps {
-    student: { id: number; email: string | null; firstName: string; lastName: string | null };
+    student: {
+        id: number;
+        email: string | null;
+        firstName: string;
+        lastName: string | null;
+    };
 }
 
 /**

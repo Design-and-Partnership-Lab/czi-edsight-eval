@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import { upsertTeacher } from "@/actions/teacher/action";
+import { upsertTeacher } from "@/actions/(legacy)/teacher/action";
 import { Button } from "@/components/ui/button";
 
 // Define what props your component will receive

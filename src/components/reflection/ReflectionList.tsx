@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { getReflectionSpecificID } from '@/actions/reflection/getReflectionSpecificID';
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
+import { getReflectionSpecificID } from "@/actions/(legacy)/reflection/getReflectionSpecificID";
 
 interface PartialReflection {
     id: string;
@@ -9,13 +9,13 @@ interface PartialReflection {
 }
 
 export default function ReflectionsList() {
-    const [reflections, setReflections] = React.useState<PartialReflection[]>([]);
+    const [reflections, setReflections] = React.useState<PartialReflection[]>(
+        []
+    );
 
     const loadReflections = async () => {
         const data = await getReflectionSpecificID();
-        if (data) 
-            setReflections(data);
-        
+        if (data) setReflections(data);
     };
 
     useEffect(() => {
@@ -29,6 +29,4 @@ export default function ReflectionsList() {
             ))}
         </div>
     );
-
-
 }

@@ -1,5 +1,5 @@
+import { getAnalysesByTranscriptId } from "@/actions/(legacy)/analyses/action";
 import { AnalysisComponent } from "@/components/analyses/analysis-component";
-import { getAnalysesByTranscriptId } from "@/actions/analyses/action"
 
 /**
  * Next.js pages are Server Components by default. You should fetch data at the top level in a server component whenever possible.

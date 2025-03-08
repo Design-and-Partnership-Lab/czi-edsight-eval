@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import AnnotateText from "@/components/annotate/AnnotateText";
+import { Highlighter, SelectionProvider } from 'react-selection-highlighter'
+import "@/components/comments/highlight.css"
 import QUESTIONS from "@/lib/questions";
 import {
     RawAnalysis,
@@ -65,12 +66,9 @@ export default function AnnotationPage({
                         </Text>
 
                         <div className="mt-2 text-gray-700">
-                            <AnnotateText>
-                                {transcript} Quis exercitation ut id laborum
-                                excepteur. Veniam aute sit mollit commodo dolore
-                                irure. Dolor laborum labore cupidatat consequat
-                                ex voluptate proident ea.
-                            </AnnotateText>
+                            <SelectionProvider>
+                                <Highlighter htmlString={`${transcript} Quis exercitation ut id laborum excepteur. Veniam aute sit mollit commodo dolore irure. Dolor laborum labore cupidatat consequat ex voluptate proident ea.`} />
+                            </SelectionProvider>
                         </div>
                     </div>
 

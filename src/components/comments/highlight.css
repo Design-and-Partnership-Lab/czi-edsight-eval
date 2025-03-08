@@ -1,0 +1,22 @@
+.relative {
+  position: relative;
+}
+
+.bg-yellow {
+  background-color: #FFF59D;
+}
+.bg-green {
+  background-color: #C5E1A5;
+}
+
+.bg-blue {
+    background-color: #90CAF9;
+}
+
+.bg-purple {
+    background-color: #CE93D8;
+}
+
+.select-none {
+  user-select: none;
+}

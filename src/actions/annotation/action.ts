@@ -1,15 +1,13 @@
 "use server";
 
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from "@/db"
 
 export async function getAnnotationData() {
   try {
     // NOTE: this is a testing id. Added test data to make it all appear to see if it worked.
     const teacherId = 624;
 
-    const reflection = await prisma.reflection.findFirst({
+    const reflection = await db.reflection.findFirst({
       where: { teacherId: teacherId },
       select: { id: true }
     });
@@ -18,7 +16,7 @@ export async function getAnnotationData() {
       console.error("Reflection question not found");
     }
 
-    const reflectionQuestion = await prisma.reflectionQuestion.findFirst({
+    const reflectionQuestion = await db.reflectionQuestion.findFirst({
       where: { reflectionId: reflection?.id },
       select: {
         category: true,
@@ -36,7 +34,7 @@ export async function getAnnotationData() {
       console.error("Reflection question not found");
     }
 
-    const reflectionResponseTranscript = await prisma.reflectionResponseTranscript.findFirst({
+    const reflectionResponseTranscript = await db.reflectionResponseTranscript.findFirst({
       where: {
         reflectionId: reflection?.id,
         questionId: reflectionQuestion?.id,
@@ -51,7 +49,7 @@ export async function getAnnotationData() {
       console.error("Reflection response transcript not found");
     }
 
-    const reflectionResponse = await prisma.reflectionResponse.findFirst({
+    const reflectionResponse = await db.reflectionResponse.findFirst({
       where: {
         reflectionId: reflection?.id,
         studentEmail: reflectionResponseTranscript?.studentEmail,
@@ -64,7 +62,7 @@ export async function getAnnotationData() {
     if (!reflectionResponse) {
       console.error("Reflection response not found");
     }
-    const aiGuesstimates = await prisma.insights.findMany({
+    const aiGuesstimates = await db.insights.findMany({
       where: { reflectionId: reflection?.id },
       select: {
         average: true,
@@ -76,7 +74,7 @@ export async function getAnnotationData() {
       console.error("AI guesstimate not found");
     }
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { email: reflectionResponseTranscript?.studentEmail },
       select: {
         firstName: true,

@@ -67,7 +67,9 @@ export default function AnnotationPage({
 
                         <div className="mt-2 text-gray-700">
                             <Annotate>
-                                {transcript}
+                                {`${transcript} Quis exercitation ut id laborum excepteur. 
+                                Veniam aute sit mollit commodo dolore irure. Dolor laborum labore 
+                                cupidatat consequat ex voluptate proident ea.`}
                             </Annotate>
                         </div>
                     </div>

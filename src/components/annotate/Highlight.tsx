@@ -20,11 +20,10 @@ function TextHighlighter(): React.ReactElement {
   const currentSelectionRef = useRef<string | null>(null);
   
   const COLORS = [
-    { name: 'Yellow', bgClass: 'bg-yellow-300' },
-    { name: 'Green', bgClass: 'bg-green-300' },
-    { name: 'Blue', bgClass: 'bg-blue-300' },
-    { name: 'Red', bgClass: 'bg-red-300' },
-    { name: 'Purple', bgClass: 'bg-purple-300' }
+    { name: 'Yellow', bgClass: 'bg-[#FFF59D]' },
+    { name: 'Green', bgClass: 'bg-[#C5E1A5]' },
+    { name: 'Blue', bgClass: 'bg-[#90CAF9]' },
+    { name: 'Purple', bgClass: 'bg-[#CE93D8]' }
   ];
 
   const handleMouseUp = () => {
@@ -60,14 +59,12 @@ function TextHighlighter(): React.ReactElement {
     const color = COLORS.find(c => c.name === colorName);
     if (!color) return;
 
-    console.log(currentSelectionRef.current)
     setAnnotations([...annotations, currentSelectionRef.current]);
-    console.log(annotations)
     
     // wrap the selected text in a span with the selected color, can make it a button
     // in the future for deleting and viewing options
-    const highlightedText = `<span class="${color.bgClass}">${currentSelectionRef.current}</span>`;
-    
+    const highlightedText = `<span class="${color.bgClass}" onClick="console.log('pressed')">${currentSelectionRef.current}</span>`;
+
     // replaces the selected text with the highlighted text
     const newText = text.replace(currentSelectionRef.current, highlightedText);
     
@@ -89,7 +86,7 @@ function TextHighlighter(): React.ReactElement {
       <Popover open={showTooltip} onOpenChange={setShowTooltip}>
         <PopoverTrigger className="hidden"></PopoverTrigger>
         <PopoverContent
-          className="absolute z-10 rounded-lg bg-neutral-700 p-2"
+          className="absolute z-10 rounded-lg !bg-neutral-700 !p-2"
           style={{
             top: `${tooltipPos.top}px`,
             left: `${tooltipPos.left}px`,

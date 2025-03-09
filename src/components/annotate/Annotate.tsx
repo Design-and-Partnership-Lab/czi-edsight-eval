@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Popover,
   PopoverContent,
@@ -12,7 +12,7 @@ interface Position {
   left: number;
 }
 
-const  Annotate = ({children} : {children: string}) => {
+const Annotate = ({children} : {children: string}) => {
   const [text, setText] = useState<string>(children);
   const [annotations, setAnnotations] = useState<string[]>([]);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -26,8 +26,36 @@ const  Annotate = ({children} : {children: string}) => {
     { name: 'Purple', bgClass: 'bg-[#CE93D8]' }
   ];
 
-  const handleMouseUp = () => {
+  const onAnnotationClick = (annotation: string) => {
+    // do something
+    console.log("Annotation clicked:", annotation);
+  }
 
+  const deleteAnnotation = (annotation: string) => {
+    // do something
+  }
+
+  // add an effect to attach click handlers to highlighted spans
+  useEffect(() => {
+    const highlightedSpans = document.querySelectorAll('.annotation-span');
+    
+    highlightedSpans.forEach(span => {
+      span.addEventListener('click', () => {
+        const annotation = span.getAttribute('data-annotation');
+        if (annotation) {
+          onAnnotationClick(annotation);
+        }
+      });
+    });
+    
+    return () => {
+      highlightedSpans.forEach(span => {
+        span.removeEventListener('click', () => {});
+      });
+    };
+  }, [text]); // Re-run when text changes
+
+  const handleMouseUp = () => {
     const selection = window.getSelection();
     if (!selection) return;
 
@@ -64,9 +92,7 @@ const  Annotate = ({children} : {children: string}) => {
 
     setAnnotations([...annotations, currentSelectionRef.current]);
     
-    // wrap the selected text in a span with the selected color, can make it a button
-    // in the future for deleting and viewing options
-    const highlightedText = `<span class="${color.bgClass} rounded-sm" onClick="console.log('pressed')">${currentSelectionRef.current}</span>`;
+    const highlightedText = `<span class="${color.bgClass} rounded-sm cursor-pointer annotation-span" data-annotation="${currentSelectionRef.current}">${currentSelectionRef.current}</span>`;
 
     // replaces the selected text with the highlighted text
     const newText = text.replace(currentSelectionRef.current, highlightedText);

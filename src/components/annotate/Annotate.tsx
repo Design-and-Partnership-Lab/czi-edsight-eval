@@ -28,7 +28,11 @@ const Annotate = ({children} : {children: string}) => {
 
   const onAnnotationClick = (annotation: string) => {
     // do something
-    console.log("Annotation clicked:", annotation);
+    console.log("annotation clicked:", annotation);
+    deleteAnnotation(annotation);
+    // another popover with colors, edit annotation, delete
+    // need to pass in rect to position the popover as well, need to find solution for this.
+    // TODO: change saved annotations to dicts with color, text, id, etc...
   }
 
   const deleteAnnotation = (annotation: string) => {
@@ -53,7 +57,7 @@ const Annotate = ({children} : {children: string}) => {
         span.removeEventListener('click', () => {});
       });
     };
-  }, [text]); // Re-run when text changes
+  }, [text]);
 
   const handleMouseUp = () => {
     const selection = window.getSelection();

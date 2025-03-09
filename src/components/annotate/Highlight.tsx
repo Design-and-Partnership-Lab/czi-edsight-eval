@@ -1,9 +1,30 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/tremor/Popover";
 
-function TextHighlighter() {
-  const [text, setText] = useState('Select some text to highlight');
+interface Position {
+  top: number;
+  left: number;
+}
+
+function TextHighlighter(): React.ReactElement {
+  const [text, setText] = useState<string>('duyfgsad fgdsauyfg sduiyfgasd fyug sadifgdsiuyfgasduyifgasduf gdsiuf gaiusdfg asdiuyfga sdiufgasi ');
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [tooltipPos, setTooltipPos] = useState<Position>({ top: 0, left: 0 });
+  const currentSelectionRef = useRef<string | null>(null);
+  
+  const COLORS = [
+    { name: 'Yellow', bgClass: 'bg-yellow-300' },
+    { name: 'Green', bgClass: 'bg-green-300' },
+    { name: 'Blue', bgClass: 'bg-blue-300' },
+    { name: 'Red', bgClass: 'bg-red-300' },
+    { name: 'Purple', bgClass: 'bg-purple-300' }
+  ];
 
   const handleMouseUp = () => {
 
@@ -14,16 +35,75 @@ function TextHighlighter() {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
 
-      if (selectedText) {
-        const highlightedText = `<span style="background-color: yellow;">${selectedText}</span>`;
-        const newText = text.replace(selectedText, highlightedText);
-        setText(newText);
+      if (selectedText && selectedText.trim() !== '') {
+        currentSelectionRef.current = selectedText;
+        
+        // get x and y coordinates of selection to place the popover
+        const rect = range.getBoundingClientRect();
+        setTooltipPos({
+          left: rect.left + (rect.width / 2),
+          top: rect.bottom - 15
+        });
+        
+        setShowTooltip(true);
+
+      } else {
+        setShowTooltip(false);
       }
     }
   };
 
+  const onHighlightAction = (colorName: string): void => {
+    if (!currentSelectionRef.current) return;
+
+    const color = COLORS.find(c => c.name === colorName);
+    if (!color) return;
+    
+    // wrap the selected text in a span with the selected color, can make it a button
+    // in the future for deleting and viewing options
+    const highlightedText = `<span class="${color.bgClass}">${currentSelectionRef.current}</span>`;
+    
+    // replaces the selected text with the highlighted text
+    const newText = text.replace(currentSelectionRef.current, highlightedText);
+    
+    setText(newText);
+    
+    // close popover and reset selection
+    setShowTooltip(false);
+    currentSelectionRef.current = null;
+  };
+
   return (
-    <div onMouseUp={handleMouseUp} dangerouslySetInnerHTML={{ __html: text }} />
+    <div>
+      <div 
+        className="p-4" 
+        onMouseUp={handleMouseUp} 
+        dangerouslySetInnerHTML={{ __html: text }} 
+      />
+      
+      <Popover open={showTooltip} onOpenChange={setShowTooltip}>
+        <PopoverTrigger className="hidden"></PopoverTrigger>
+        <PopoverContent
+          className="absolute z-10 rounded-lg bg-neutral-700 p-2"
+          style={{
+            top: `${tooltipPos.top}px`,
+            left: `${tooltipPos.left}px`,
+          }}
+          sideOffset={20}
+        >
+          <div className="flex">
+            {COLORS.map(({ name, bgClass }) => (
+              <button
+                key={name}
+                onClick={() => onHighlightAction(name)}
+                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none`}
+                title={name}
+              />
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 

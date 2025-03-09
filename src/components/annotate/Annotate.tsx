@@ -35,7 +35,10 @@ const  Annotate = ({children} : {children: string}) => {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
 
-      if (selectedText && selectedText.trim() !== '') {
+      // the selectedText.length > 5 can be temporary
+      // it prevents small things from accidentally being highlighted
+      // and also, there is a bug where if there are highlighted duplicates, it will highlight all of them
+      if (selectedText && selectedText.trim() !== '' && selectedText.length > 5) {
         currentSelectionRef.current = selectedText;
         
         // get x and y coordinates of selection to place the popover

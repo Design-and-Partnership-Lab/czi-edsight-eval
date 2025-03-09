@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import AnnotateText from "@/components/annotate/AnnotateText";
 import QUESTIONS from "@/lib/questions";
 import {
     RawAnalysis,

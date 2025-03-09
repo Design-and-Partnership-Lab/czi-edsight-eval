@@ -12,8 +12,8 @@ interface Position {
   left: number;
 }
 
-function TextHighlighter(): React.ReactElement {
-  const [text, setText] = useState<string>('duyfgsad fgdsauyfg sduiyfgasd fyug sadifgdsiuyfgasduyifgasduf gdsiuf gaiusdfg asdiuyfga sdiufgasi ');
+const  Annotate = ({children} : {children: string}) => {
+  const [text, setText] = useState<string>(children);
   const [annotations, setAnnotations] = useState<string[]>([]);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [tooltipPos, setTooltipPos] = useState<Position>({ top: 0, left: 0 });
@@ -63,7 +63,7 @@ function TextHighlighter(): React.ReactElement {
     
     // wrap the selected text in a span with the selected color, can make it a button
     // in the future for deleting and viewing options
-    const highlightedText = `<span class="${color.bgClass}" onClick="console.log('pressed')">${currentSelectionRef.current}</span>`;
+    const highlightedText = `<span class="${color.bgClass} rounded-sm" onClick="console.log('pressed')">${currentSelectionRef.current}</span>`;
 
     // replaces the selected text with the highlighted text
     const newText = text.replace(currentSelectionRef.current, highlightedText);
@@ -78,7 +78,7 @@ function TextHighlighter(): React.ReactElement {
   return (
     <div>
       <div 
-        className="p-4" 
+        className="" 
         onMouseUp={handleMouseUp} 
         dangerouslySetInnerHTML={{ __html: text }} 
       />
@@ -109,4 +109,4 @@ function TextHighlighter(): React.ReactElement {
   );
 }
 
-export default TextHighlighter;
+export default Annotate;

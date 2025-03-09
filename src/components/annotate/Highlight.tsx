@@ -14,6 +14,7 @@ interface Position {
 
 function TextHighlighter(): React.ReactElement {
   const [text, setText] = useState<string>('duyfgsad fgdsauyfg sduiyfgasd fyug sadifgdsiuyfgasduyifgasduf gdsiuf gaiusdfg asdiuyfga sdiufgasi ');
+  const [annotations, setAnnotations] = useState<string[]>([]);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [tooltipPos, setTooltipPos] = useState<Position>({ top: 0, left: 0 });
   const currentSelectionRef = useRef<string | null>(null);
@@ -58,6 +59,10 @@ function TextHighlighter(): React.ReactElement {
 
     const color = COLORS.find(c => c.name === colorName);
     if (!color) return;
+
+    console.log(currentSelectionRef.current)
+    setAnnotations([...annotations, currentSelectionRef.current]);
+    console.log(annotations)
     
     // wrap the selected text in a span with the selected color, can make it a button
     // in the future for deleting and viewing options

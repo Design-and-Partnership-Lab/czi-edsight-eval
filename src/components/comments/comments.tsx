@@ -1,42 +1,36 @@
-import { Card, Divider, Text, Title } from "@tremor/react";
-import AnnotateText from "@/components/annotate/AnnotateText";
-import { Recogito } from '@recogito/recogito-js';
+"use client";
+import { Card, Title, Button, Text } from "@tremor/react";
+import { useState } from "react";
 
 export default function Comment({ promptCode }: CommentProps) {
+    const [response, setResponse] = useState(""); // State to hold the user's input
+
     return (
-        <div className="flex justify-center p-32 text-black">
-            <Card className="w-full rounded-lg bg-white">
-                <Title className="text-4xl font-semibold">
-                    {promptCode}
-                </Title>
-                <div className="col-span-3 rounded-lg border p-6">
-                    <Title className="text-3xl font-semibold">
-                        Prompt
+        <div className="flex justify-center items-center min-h-screen p-4">
+            <Card className="w-full max-w-xl p-6 space-y-6 rounded-lg shadow-lg bg-white">
+                <div>
+                    <Title className="text-3xl text-black font-bold inline rounded">
+                        {promptCode}
                     </Title>
-                    <Text className="mt-2 text-gray-700">
-                        something
-                    </Text>
-                    <Divider className="my-4" />
+                    <Text className="text-gray-500 mt-1">1 of 1</Text>
+                </div>
 
-                    <Title className="text-3xl font-semibold">
-                        Response
-                    </Title>
+                <Card className="p-2">
+                    <textarea
+                        className="w-full h-40 p-2 text-gray-500 rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                        placeholder="Type your response here..."
+                        value={response}
+                        onChange={(e) => setResponse(e.target.value)}
+                    />
+                </Card>
 
-                    <Text className="mt-2 italic text-gray-700">
-                        Please review the student&apos;s response and
-                        highlight any sections where the AI Rationale is not
-                        consistent with your interpretation of the
-                        student&apos;s response.
-                    </Text>
-
-                    <div className="mt-2 text-gray-700">
-                        <AnnotateText>
-                            Quis exercitation ut id laborum
-                            excepteur. Veniam aute sit mollit commodo dolore
-                            irure. Dolor laborum labore cupidatat consequat
-                            ex voluptate proident ea.
-                        </AnnotateText>
-                    </div>
+                <div className="flex justify-center">
+                    <Button
+                        className="w-32 bg-blue-500 text-white hover:bg-blue-600"
+                        onClick={() => alert(`Saved response: ${response}`)}
+                    >
+                        Save
+                    </Button>
                 </div>
             </Card>
         </div>

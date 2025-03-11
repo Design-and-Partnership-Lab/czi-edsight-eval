@@ -1,7 +1,12 @@
-import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
-import { Undo2, Redo2, Trash2 } from 'lucide-react';
-import React from 'react'
-import { Annotation } from '@/types';
+import React from "react";
+import { annotationColors } from "@/lib/annotationColors";
+import { Annotation } from "@/types";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@radix-ui/react-popover";
+import { Redo2, Trash2, Undo2 } from "lucide-react";
 
 interface Props {
     text: string;
@@ -13,7 +18,9 @@ interface Props {
     setShowTooltip: (value: boolean) => void;
     selectedAnnotation: Annotation | null;
     historyPositionRef: React.MutableRefObject<number>;
-    historyRef: React.MutableRefObject<{ text: string; annotations: Annotation[] }[]>;
+    historyRef: React.MutableRefObject<
+        { text: string; annotations: Annotation[] }[]
+    >;
     showAnnotationOptions: boolean;
     setShowAnnotationOptions: (value: boolean) => void;
     onHighlightAction: (colorName: string) => void;
@@ -21,17 +28,23 @@ interface Props {
     deleteAnnotation: (id: string) => void;
 }
 
-const COLORS = [
-    { name: "Yellow", bgClass: "bg-[#FFF59D]" },
-    { name: "Green", bgClass: "bg-[#C5E1A5]" },
-    { name: "Blue", bgClass: "bg-[#90CAF9]" },
-    { name: "Purple", bgClass: "bg-[#CE93D8]" },
-];
-
-
-const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showTooltip, 
-    setShowTooltip, selectedAnnotation, historyPositionRef, historyRef, showAnnotationOptions, 
-    setShowAnnotationOptions, onHighlightAction, changeAnnotationColor, deleteAnnotation }: Props) => {
+const AnnotatedText = ({
+    text,
+    tooltipPos,
+    undo,
+    redo,
+    handleMouseUp,
+    showTooltip,
+    setShowTooltip,
+    selectedAnnotation,
+    historyPositionRef,
+    historyRef,
+    showAnnotationOptions,
+    setShowAnnotationOptions,
+    onHighlightAction,
+    changeAnnotationColor,
+    deleteAnnotation,
+}: Props) => {
     return (
         <div className="relative">
             {/* Undo/Redo Controls */}
@@ -77,7 +90,7 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                     sideOffset={20}
                 >
                     <div className="flex">
-                        {COLORS.map(({ name, bgClass }) => (
+                        {annotationColors.map(({ name, bgClass }) => (
                             <button
                                 key={name}
                                 onClick={() => onHighlightAction(name)}
@@ -105,7 +118,7 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                 >
                     <div className="space-y-2">
                         <div className="flex space-x-2">
-                            {COLORS.map(({ name, bgClass }) => (
+                            {annotationColors.map(({ name, bgClass }) => (
                                 <button
                                     key={name}
                                     onClick={() =>
@@ -125,7 +138,7 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                                 selectedAnnotation &&
                                 deleteAnnotation(selectedAnnotation.id)
                             }
-                            className="mt-2 flex row w-full rounded bg-red-100 px-2 py-1 text-red-600 hover:bg-red-200 text-md items-center justify-center gap-x-1"
+                            className="row text-md mt-2 flex w-full items-center justify-center gap-x-1 rounded bg-red-100 px-2 py-1 text-red-600 hover:bg-red-200"
                         >
                             <Trash2 size={14} /> Delete
                         </button>
@@ -134,6 +147,6 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
             </Popover>
         </div>
     );
-}
+};
 
-export default AnnotatedText
+export default AnnotatedText;

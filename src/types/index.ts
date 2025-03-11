@@ -52,3 +52,10 @@ export interface XPathParameters {
   startContainer: string;
   endContainer: string;
 }
+
+export interface Annotation {
+  id: string;
+  text: string;
+  color: string;
+  colorName: string;
+}

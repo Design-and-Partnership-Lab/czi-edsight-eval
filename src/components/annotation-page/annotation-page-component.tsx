@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import AnnotateText from "@/components/annotate/AnnotateText";
 import QUESTIONS from "@/lib/questions";
 import {
     RawAnalysis,
@@ -11,6 +10,7 @@ import {
     Student,
 } from "@prisma/client";
 import { Card, Divider, Text, Title } from "@tremor/react";
+import Annotate from "../annotate/Annotate";
 
 type AnnotationData = {
     student: Student;
@@ -65,12 +65,11 @@ export default function AnnotationPage({
                         </Text>
 
                         <div className="mt-2 text-gray-700">
-                            <AnnotateText>
-                                {transcript} Quis exercitation ut id laborum
-                                excepteur. Veniam aute sit mollit commodo dolore
-                                irure. Dolor laborum labore cupidatat consequat
-                                ex voluptate proident ea.
-                            </AnnotateText>
+                            <Annotate>
+                                {`${transcript} Quis exercitation ut id laborum excepteur. 
+                                Veniam aute sit mollit commodo dolore irure. Dolor laborum labore 
+                                cupidatat consequat ex voluptate proident ea.`}
+                            </Annotate>
                         </div>
                     </div>
 

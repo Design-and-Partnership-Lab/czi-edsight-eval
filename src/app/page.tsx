@@ -1,4 +1,5 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import Highlight from "../components/annotate/Annotate";
 
 export default async function Home() {
     return (
@@ -9,6 +10,8 @@ export default async function Home() {
             <SignedIn>
                 <UserButton />
             </SignedIn>
+
+            <Highlight />
         </div>
     );
 }

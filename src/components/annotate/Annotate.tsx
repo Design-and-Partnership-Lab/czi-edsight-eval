@@ -6,6 +6,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/tremor/Popover";
+import { Trash2 } from "lucide-react";
 
 interface Position {
     top: number;
@@ -314,7 +315,7 @@ const Annotate = ({ children }: { children: string }) => {
             >
                 <PopoverTrigger className="hidden"></PopoverTrigger>
                 <PopoverContent
-                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-lg"
+                    className="annotation-tooltip absolute z-10 rounded-lg !bg-neutral-700 !p-2"
                     style={{
                         top: `${tooltipPos.top}px`,
                         left: `${tooltipPos.left}px`,
@@ -322,7 +323,6 @@ const Annotate = ({ children }: { children: string }) => {
                     sideOffset={20}
                 >
                     <div className="space-y-2">
-                        <p className="text-sm font-medium">Change color:</p>
                         <div className="flex space-x-2">
                             {COLORS.map(({ name, bgClass }) => (
                                 <button
@@ -334,7 +334,7 @@ const Annotate = ({ children }: { children: string }) => {
                                             name
                                         )
                                     }
-                                    className={`h-5 w-5 ${bgClass} cursor-pointer rounded-full border-none ${selectedAnnotation?.colorName === name ? "ring-2 ring-black" : ""}`}
+                                    className={`h-5 w-5 ${bgClass} cursor-pointer rounded-full border-none ${selectedAnnotation?.colorName === name ? "ring-2 ring-neutral-400" : ""}`}
                                     title={name}
                                 />
                             ))}
@@ -344,9 +344,9 @@ const Annotate = ({ children }: { children: string }) => {
                                 selectedAnnotation &&
                                 deleteAnnotation(selectedAnnotation.id)
                             }
-                            className="mt-2 w-full rounded bg-red-100 px-2 py-1 text-sm text-red-600 hover:bg-red-200"
+                            className="mt-2 flex row w-full rounded bg-red-100 px-2 py-1 text-red-600 hover:bg-red-200 text-md items-center justify-center gap-x-1"
                         >
-                            Delete Annotation
+                            <Trash2 size={14}/> Delete
                         </button>
                     </div>
                 </PopoverContent>

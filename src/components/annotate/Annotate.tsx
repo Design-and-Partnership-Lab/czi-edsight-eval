@@ -168,6 +168,7 @@ const Annotate = ({ children }: { children: string }) => {
     };
 
     // add an effect to attach click handlers to highlighted spans
+    // THIS IS THE BUG
     useEffect(() => {
         const highlightedSpans = document.querySelectorAll(".annotation-span");
 
@@ -178,15 +179,12 @@ const Annotate = ({ children }: { children: string }) => {
                 if (annotation && annotationId) {
                     onAnnotationClick(annotation, event as MouseEvent);
                 }
+                
             });
         });
 
-        return () => {
-            highlightedSpans.forEach((span) => {
-                span.removeEventListener("click", () => {});
-            });
-        };
-    }, [text, annotations]);
+        
+    }, [text, annotations, showAnnotationOptions]);
 
     const handleMouseUp = () => {
         const selection = window.getSelection();
@@ -251,24 +249,6 @@ const Annotate = ({ children }: { children: string }) => {
         window.getSelection()?.removeAllRanges();
     };
 
-    // handle clicks outside the tooltips to close them
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as HTMLElement;
-            if (
-                !target.closest(".annotation-tooltip") &&
-                !target.closest(".annotation-span")
-            ) {
-                setShowTooltip(false);
-                setShowAnnotationOptions(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
 
     return (
         <div className="relative">

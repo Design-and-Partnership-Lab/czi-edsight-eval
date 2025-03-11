@@ -6,7 +6,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/tremor/Popover";
-import { Trash2 } from "lucide-react";
+import { Trash2, Undo2, Redo2 } from "lucide-react";
 
 interface Position {
     top: number;
@@ -260,7 +260,7 @@ const Annotate = ({ children }: { children: string }) => {
                     disabled={historyPositionRef.current <= 0}
                     className="rounded bg-gray-200 px-2 py-1 text-sm disabled:opacity-50"
                 >
-                    Undo
+                    <Undo2/>
                 </button>
                 <button
                     onClick={redo}
@@ -270,7 +270,7 @@ const Annotate = ({ children }: { children: string }) => {
                     }
                     className="rounded bg-gray-200 px-2 py-1 text-sm disabled:opacity-50"
                 >
-                    Redo
+                    <Redo2/>
                 </button>
             </div>
 

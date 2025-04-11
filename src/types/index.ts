@@ -58,4 +58,5 @@ export interface Annotation {
   text: string;
   color: string;
   colorName: string;
+  comment: string;
 }

@@ -42,6 +42,7 @@ const Annotate = ({ children }: { children: string }) => {
     addToHistory(text, annotations);
   }, []);
 
+
   const addToHistory = (
     currentText: string,
     currentAnnotations: Annotation[]
@@ -53,7 +54,6 @@ const Annotate = ({ children }: { children: string }) => {
         historyPositionRef.current + 1
       );
     }
-
     // add current state to history
     historyRef.current.push({
       text: currentText,
@@ -62,6 +62,7 @@ const Annotate = ({ children }: { children: string }) => {
 
     historyPositionRef.current = historyRef.current.length - 1;
   };
+
 
   const undo = () => {
     if (historyPositionRef.current > 0) {
@@ -73,6 +74,7 @@ const Annotate = ({ children }: { children: string }) => {
     }
   };
 
+
   const redo = () => {
     if (historyPositionRef.current < historyRef.current.length - 1) {
       historyPositionRef.current++;
@@ -82,9 +84,11 @@ const Annotate = ({ children }: { children: string }) => {
     }
   };
 
+
   const generateId = () => {
     return `annotation-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
+
 
   const changeAnnotationColor = (annotationId: string, colorName: string) => {
     const annotation = annotations.find((a) => a.id === annotationId);
@@ -99,16 +103,13 @@ const Annotate = ({ children }: { children: string }) => {
             ? { ...a, color: color.bgClass, colorName }
             : a
     );
-
     // update the HTML with the new color
     const spanPattern = new RegExp(
         `<span class="[^"]*annotation-span[^"]*" data-annotation-id="${annotationId}"[^>]*>${escapeRegExp(annotation.text)}</span>`,
         "g"
     );
-
     const highlightedText = `<span class="${color.bgClass} rounded-sm cursor-pointer annotation-span" data-annotation-id="${annotationId}" data-color="${colorName}">${annotation.text}</span>`;
     const newText = text.replace(spanPattern, highlightedText);
-
     setText(newText);
     setAnnotations(updatedAnnotations);
     setShowAnnotationOptions(false);
@@ -215,7 +216,7 @@ const Annotate = ({ children }: { children: string }) => {
     }
   };
 
-  const onHighlightAction = (colorName: string): void => {
+  const onHighlightAction = (colorName: string, comment: string): void => {
     if (!currentSelectionRef.current) return;
 
     const color = COLORS.find((c) => c.name === colorName);
@@ -227,6 +228,7 @@ const Annotate = ({ children }: { children: string }) => {
       text: currentSelectionRef.current,
       color: color.bgClass,
       colorName: colorName,
+      comment: comment,
     };
 
     const newAnnotations = [...annotations, newAnnotation];

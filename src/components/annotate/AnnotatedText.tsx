@@ -2,6 +2,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover
 import { Undo2, Redo2, Trash2 } from 'lucide-react';
 import React from 'react'
 import { Annotation } from '@/types';
+import { Input } from "@/components/ui/input"
 
 interface Props {
     text: string;
@@ -16,7 +17,7 @@ interface Props {
     historyRef: React.MutableRefObject<{ text: string; annotations: Annotation[] }[]>;
     showAnnotationOptions: boolean;
     setShowAnnotationOptions: (value: boolean) => void;
-    onHighlightAction: (colorName: string) => void;
+    onHighlightAction: (colorName: string, comment: string) => void;
     changeAnnotationColor: (id: string, colorName: string) => void;
     deleteAnnotation: (id: string) => void;
 }
@@ -80,11 +81,28 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                         {COLORS.map(({ name, bgClass }) => (
                             <button
                                 key={name}
-                                onClick={() => onHighlightAction(name)}
+                                onClick={() => onHighlightAction(name, "")}
                                 className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none`}
                                 title={name}
                             />
                         ))}
+                    </div>
+                    <div>
+                        <Input
+                            type="text"
+                            placeholder="Add a comment..."
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    if (selectedAnnotation) {
+                                        onHighlightAction(
+                                            selectedAnnotation.colorName,
+                                            (e.target as HTMLInputElement).value
+                                        );
+                                    }
+                                }
+                            }}
+                        />
                     </div>
                 </PopoverContent>
             </Popover>

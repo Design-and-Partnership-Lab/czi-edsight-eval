@@ -10,8 +10,6 @@ export default async function Home() {
             <SignedIn>
                 <UserButton />
             </SignedIn>
-
-            <Highlight />
         </div>
     );
 }

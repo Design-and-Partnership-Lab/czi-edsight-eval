@@ -18,6 +18,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from '../ui/textarea';
 
 interface Props {
     text: string;
@@ -46,23 +47,23 @@ const COLORS = [
     { name: "Purple", bgClass: "bg-[#CE93D8]" },
 ];
 
-const AnnotatedText = ({ 
-    text, 
-    tooltipPos, 
-    undo, 
-    redo, 
-    handleMouseUp, 
+const AnnotatedText = ({
+    text,
+    tooltipPos,
+    undo,
+    redo,
+    handleMouseUp,
     handleContainerClick,
     showTooltip,
-    setShowTooltip, 
-    selectedAnnotation, 
-    historyPositionRef, 
-    historyRef, 
+    setShowTooltip,
+    selectedAnnotation,
+    historyPositionRef,
+    historyRef,
     showAnnotationOptions,
-    setShowAnnotationOptions, 
-    onHighlightAction, 
-    changeAnnotationColor, 
-    deleteAnnotation 
+    setShowAnnotationOptions,
+    onHighlightAction,
+    changeAnnotationColor,
+    deleteAnnotation
 }: Props) => {
 
     const [selectedColor, setSelectedColor] = useState("");
@@ -123,8 +124,8 @@ const AnnotatedText = ({
                 <PopoverContent
                     className="annotation-tooltip absolute z-10 rounded-lg !bg-neutral-700 !p-2"
                     style={{
-                        top: `${tooltipPos.top}px`,
-                        left: `${tooltipPos.left}px`,
+                        top: `${tooltipPos.top - 50}px`,
+                        left: `10px`,
                     }}
                     sideOffset={20}
                 >
@@ -148,7 +149,11 @@ const AnnotatedText = ({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder="Comment..." {...field} />
+                                            <Textarea
+                                                placeholder="Comment Something..."
+                                                className="resize-none"
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

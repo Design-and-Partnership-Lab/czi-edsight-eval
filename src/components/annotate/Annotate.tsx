@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/tremor/Popover";
-import { Trash2, Undo2, Redo2 } from "lucide-react";
-import AnnotatedText from "./AnnotatedText";
+import AnnotatedText from "./AnnotatePopover";
 import { Annotation } from "@/types";
 
 interface Position {
@@ -114,28 +108,6 @@ const Annotate = ({ children }: { children: string }) => {
     setAnnotations(updatedAnnotations);
     setShowAnnotationOptions(false);
     addToHistory(newText, updatedAnnotations);
-};
-
-  const onAnnotationClick = (annotation: string, event: MouseEvent) => {
-    // another popover with colors, edit annotation, delete
-    // need to pass in rect to position the popover as well, need to find solution for this.
-    // TODO: change saved annotations to dicts with color, text, id, etc...
-
-    const foundAnnotation = annotations.find((a) => a.text === annotation);
-    if (foundAnnotation) {
-      setSelectedAnnotation(foundAnnotation);
-
-      // get position of the clicked element
-      const target = event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-
-      setTooltipPos({
-        left: rect.left + rect.width / 2,
-        top: rect.bottom,
-      });
-
-      setShowAnnotationOptions(true);
-    }
   };
 
   const deleteAnnotation = (annotationId: string) => {
@@ -165,24 +137,40 @@ const Annotate = ({ children }: { children: string }) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
-  // add an effect to attach click handlers to highlighted spans
-  // THIS IS THE BUG
-  useEffect(() => {
-    const highlightedSpans = document.querySelectorAll(".annotation-span");
 
-    highlightedSpans.forEach((span) => {
-      span.addEventListener("click", (event) => {
-        const annotationId = span.getAttribute("data-annotation-id");
-        const annotation = span.textContent;
-        if (annotation && annotationId) {
-          onAnnotationClick(annotation, event as MouseEvent);
+  // replacing useeffect and using this to better handle the click event
+  const handleContainerClick = (e: React.MouseEvent) => {
+    // find if a span was clicked
+    let target = e.target as HTMLElement;
+    
+    // try to find the closest annotation span
+    while (target && !target.classList.contains('annotation-span')) {
+      if (target === e.currentTarget) break;
+      target = target.parentElement as HTMLElement;
+    }
+    
+    // ff we found an annotation span
+    if (target && target.classList.contains('annotation-span')) {
+      const annotationId = target.getAttribute('data-annotation-id');
+      const annotation = target.textContent;
+      console.log("Annotation clicked:", annotationId, annotation);
+      
+      if (annotation && annotationId) {
+        const foundAnnotation = annotations.find((a) => a.text === annotation);
+        if (foundAnnotation) {
+          setSelectedAnnotation(foundAnnotation);
+          
+          const rect = target.getBoundingClientRect();
+          setTooltipPos({
+            left: rect.left + rect.width / 2,
+            top: rect.bottom,
+          });
+          
+          setShowAnnotationOptions(true);
         }
-
-      });
-    });
-
-
-  }, [text, annotations, showAnnotationOptions]);
+      }
+    }
+  };
 
   const handleMouseUp = () => {
     const selection = window.getSelection();
@@ -246,6 +234,7 @@ const Annotate = ({ children }: { children: string }) => {
     setShowTooltip(false);
     currentSelectionRef.current = null;
     window.getSelection()?.removeAllRanges();
+    console.log(annotations);
   };
 
   return (
@@ -256,6 +245,7 @@ const Annotate = ({ children }: { children: string }) => {
         undo={undo}
         redo={redo}
         handleMouseUp={handleMouseUp}
+        handleContainerClick={handleContainerClick}
         showTooltip={showTooltip}
         setShowTooltip={setShowTooltip}
         selectedAnnotation={selectedAnnotation}

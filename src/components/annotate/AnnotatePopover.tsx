@@ -1,7 +1,22 @@
+"use client";
+
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
 import { Undo2, Redo2, Trash2 } from 'lucide-react';
-import React from 'react'
+import React, { useState } from 'react'
 import { Annotation } from '@/types';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
 interface Props {
@@ -10,6 +25,7 @@ interface Props {
     undo: () => void;
     redo: () => void;
     handleMouseUp: () => void;
+    handleContainerClick: (e: React.MouseEvent) => void; // this is for click handler on annotations to make edit popover appear
     showTooltip: boolean;
     setShowTooltip: (value: boolean) => void;
     selectedAnnotation: Annotation | null;
@@ -22,6 +38,7 @@ interface Props {
     deleteAnnotation: (id: string) => void;
 }
 
+
 const COLORS = [
     { name: "Yellow", bgClass: "bg-[#FFF59D]" },
     { name: "Green", bgClass: "bg-[#C5E1A5]" },
@@ -29,10 +46,43 @@ const COLORS = [
     { name: "Purple", bgClass: "bg-[#CE93D8]" },
 ];
 
+const AnnotatedText = ({ 
+    text, 
+    tooltipPos, 
+    undo, 
+    redo, 
+    handleMouseUp, 
+    handleContainerClick,
+    showTooltip,
+    setShowTooltip, 
+    selectedAnnotation, 
+    historyPositionRef, 
+    historyRef, 
+    showAnnotationOptions,
+    setShowAnnotationOptions, 
+    onHighlightAction, 
+    changeAnnotationColor, 
+    deleteAnnotation 
+}: Props) => {
 
-const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showTooltip, 
-    setShowTooltip, selectedAnnotation, historyPositionRef, historyRef, showAnnotationOptions, 
-    setShowAnnotationOptions, onHighlightAction, changeAnnotationColor, deleteAnnotation }: Props) => {
+    const [selectedColor, setSelectedColor] = useState("");
+    const formSchema = z.object({
+        comment: z.string({ message: "Comment is required" }),
+    });
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            comment: "",
+        },
+    });
+    const onSubmit = (formData: { comment: string; }) => {
+        onHighlightAction(selectedColor, formData.comment);
+        setShowTooltip(false);
+        form.reset();
+        setSelectedColor(""); // reset selected color
+    };
+
+
     return (
         <div className="relative">
             {/* Undo/Redo Controls */}
@@ -56,14 +106,15 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                 </button>
             </div>
 
-            {/* Text content with highlighting */}
+            {/* Text content with highlighting - now with click handler */}
             <div
                 className="min-h-[200px] rounded-md border p-4"
                 onMouseUp={handleMouseUp}
+                onClick={handleContainerClick}
                 dangerouslySetInnerHTML={{ __html: text }}
             />
 
-            {/* Annotation color picker */}
+            {/* New Annotation box */}
             <Popover
                 open={showTooltip}
                 onOpenChange={setShowTooltip}
@@ -77,33 +128,41 @@ const AnnotatedText = ({ text, tooltipPos, undo, redo, handleMouseUp, showToolti
                     }}
                     sideOffset={20}
                 >
-                    <div className="flex">
+                    <div className="flex mb-3">
                         {COLORS.map(({ name, bgClass }) => (
                             <button
                                 key={name}
-                                onClick={() => onHighlightAction(name, "")}
-                                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none`}
+                                onClick={() => setSelectedColor(name)}
+                                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-white" : ""
+                                    }`}
                                 title={name}
                             />
                         ))}
                     </div>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Add a comment..."
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    e.preventDefault();
-                                    if (selectedAnnotation) {
-                                        onHighlightAction(
-                                            selectedAnnotation.colorName,
-                                            (e.target as HTMLInputElement).value
-                                        );
-                                    }
-                                }
-                            }}
-                        />
-                    </div>
+
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="comment"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input placeholder="Comment..." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button
+                                type="submit"
+                                disabled={!selectedColor}
+                                className="w-full bg-black"
+                            >
+                                Submit
+                            </Button>
+                        </form>
+                    </Form>
                 </PopoverContent>
             </Popover>
 

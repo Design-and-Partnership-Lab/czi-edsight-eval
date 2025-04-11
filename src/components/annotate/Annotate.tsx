@@ -79,12 +79,37 @@ const Annotate = ({ children }: { children: string }) => {
   };
 
 
+  const updateAnnotation = (id: string, colorName: string, comment: string) => {
+
+    console.log(comment)
+
+    const newAnnotations = annotations.map(anno => 
+      anno.id === id 
+        ? { ...anno, colorName, comment } 
+        : anno
+    );
+    console.log(newAnnotations) // works
+    
+    setAnnotations(newAnnotations);
+    changeAnnotationColor(id, colorName);
+
+    console.log(annotations) // doesnt work???
+    
+    const newHistory = historyRef.current.slice(0, historyPositionRef.current + 1);
+    newHistory.push({ text, annotations: newAnnotations });
+    historyRef.current = newHistory;
+    historyPositionRef.current = newHistory.length - 1;
+  };
+  
+
+
   const generateId = () => {
     return `annotation-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
 
 
   const changeAnnotationColor = (annotationId: string, colorName: string) => {
+    
     const annotation = annotations.find((a) => a.id === annotationId);
     if (!annotation) return;
 
@@ -256,6 +281,7 @@ const Annotate = ({ children }: { children: string }) => {
         onHighlightAction={onHighlightAction}
         changeAnnotationColor={changeAnnotationColor}
         deleteAnnotation={deleteAnnotation}
+        updateAnnotation={updateAnnotation}
         />
     </div>
   );

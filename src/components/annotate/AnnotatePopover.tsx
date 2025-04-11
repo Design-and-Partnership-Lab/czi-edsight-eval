@@ -2,7 +2,7 @@
 
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
 import { Undo2, Redo2, Trash2 } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Annotation } from '@/types';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -37,6 +37,7 @@ interface Props {
     onHighlightAction: (colorName: string, comment: string) => void;
     changeAnnotationColor: (id: string, colorName: string) => void;
     deleteAnnotation: (id: string) => void;
+    updateAnnotation: (id: string, colorName: string, comment: string) => void;
 }
 
 
@@ -62,25 +63,62 @@ const AnnotatedText = ({
     showAnnotationOptions,
     setShowAnnotationOptions,
     onHighlightAction,
-    changeAnnotationColor,
-    deleteAnnotation
+    deleteAnnotation,
+    updateAnnotation
 }: Props) => {
 
     const [selectedColor, setSelectedColor] = useState("");
     const formSchema = z.object({
-        comment: z.string({ message: "Comment is required" }),
+        comment: z.string(),
     });
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             comment: "",
         },
     });
-    const onSubmit = (formData: { comment: string; }) => {
-        onHighlightAction(selectedColor, formData.comment);
-        setShowTooltip(false);
+
+    // reset form with selectedAnnotation data when it changes
+    useEffect(() => {
+        if (selectedAnnotation && showAnnotationOptions) {
+            console.log("Editing annotation:", selectedAnnotation);
+            form.reset({
+                comment: selectedAnnotation.comment || "",
+            });
+
+            setSelectedColor(selectedAnnotation.colorName || "");
+        } else if (showTooltip) {
+            form.reset({
+                comment: "",
+            });
+            setSelectedColor("");
+        }
+    }, [selectedAnnotation, showAnnotationOptions, showTooltip, form]);
+
+    const onSubmit = (formData: { comment: string }) => {
+        console.log("Form submitted with:", formData);
+
+        if (showAnnotationOptions && selectedAnnotation) {
+            console.log("Updating annotation with:", {
+                id: selectedAnnotation.id,
+                color: selectedColor,
+                comment: formData.comment
+            });
+
+            updateAnnotation(
+                selectedAnnotation.id,
+                selectedColor || selectedAnnotation.colorName,
+                formData.comment
+            );
+            setShowAnnotationOptions(false);
+        } else {
+            onHighlightAction(selectedColor, formData.comment);
+            setShowTooltip(false);
+        }
+
         form.reset();
-        setSelectedColor(""); // reset selected color
+        setSelectedColor("");
     };
 
 
@@ -122,7 +160,7 @@ const AnnotatedText = ({
             >
                 <PopoverTrigger className="hidden"></PopoverTrigger>
                 <PopoverContent
-                    className="annotation-tooltip absolute z-10 rounded-lg !bg-neutral-700 !p-2"
+                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl"
                     style={{
                         top: `${tooltipPos.top - 50}px`,
                         left: `10px`,
@@ -134,7 +172,7 @@ const AnnotatedText = ({
                             <button
                                 key={name}
                                 onClick={() => setSelectedColor(name)}
-                                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-white" : ""
+                                className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-neutral-200" : ""
                                     }`}
                                 title={name}
                             />
@@ -142,7 +180,7 @@ const AnnotatedText = ({
                     </div>
 
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                             <FormField
                                 control={form.control}
                                 name="comment"
@@ -162,9 +200,9 @@ const AnnotatedText = ({
                             <Button
                                 type="submit"
                                 disabled={!selectedColor}
-                                className="w-full bg-black"
+                                className="w-full h-2/3 bg-[#26488a]/90 hover:bg-[#26488a] text-white"
                             >
-                                Submit
+                                Save
                             </Button>
                         </form>
                     </Form>
@@ -178,10 +216,10 @@ const AnnotatedText = ({
             >
                 <PopoverTrigger className="hidden"></PopoverTrigger>
                 <PopoverContent
-                    className="annotation-tooltip absolute z-10 rounded-lg !bg-neutral-700 !p-2"
+                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl"
                     style={{
-                        top: `${tooltipPos.top}px`,
-                        left: `${tooltipPos.left}px`,
+                        top: `${tooltipPos.top - 50}px`,
+                        left: `10px`,
                     }}
                     sideOffset={20}
                 >
@@ -190,27 +228,53 @@ const AnnotatedText = ({
                             {COLORS.map(({ name, bgClass }) => (
                                 <button
                                     key={name}
-                                    onClick={() =>
-                                        selectedAnnotation &&
-                                        changeAnnotationColor(
-                                            selectedAnnotation.id,
-                                            name
-                                        )
-                                    }
-                                    className={`h-5 w-5 ${bgClass} cursor-pointer rounded-full border-none ${selectedAnnotation?.colorName === name ? "ring-2 ring-neutral-400" : ""}`}
+                                    onClick={() => setSelectedColor(name)}
+                                    className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-neutral-200" : ""
+                                        }`}
                                     title={name}
                                 />
                             ))}
                         </div>
-                        <button
-                            onClick={() =>
-                                selectedAnnotation &&
-                                deleteAnnotation(selectedAnnotation.id)
-                            }
-                            className="mt-2 flex row w-full rounded bg-red-100 px-2 py-1 text-red-600 hover:bg-red-200 text-md items-center justify-center gap-x-1"
-                        >
-                            <Trash2 size={14} /> Delete
-                        </button>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                                <FormField
+                                    control={form.control}
+                                    name="comment"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Comment Something..."
+                                                    className="resize-none"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div className='flex row'>
+                                    <button
+                                        onClick={() =>
+                                            selectedAnnotation &&
+                                            deleteAnnotation(selectedAnnotation.id)
+                                        }
+                                        className="mr-1 w-1/2 flex row rounded bg-neutral-100 px-2 py-1 text-neutral-600 hover:bg-neutral-200 text-md items-center justify-center gap-x-1"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                    <Button
+                                        type="submit"
+                                        disabled={!selectedColor}
+                                        className="w-full h-1/2 bg-[#26488a]/90 hover:bg-[#26488a] text-white"
+                                    >
+                                        Update
+                                    </Button>
+
+                                </div>
+                            </form>
+                        </Form>
+
                     </div>
                 </PopoverContent>
             </Popover>

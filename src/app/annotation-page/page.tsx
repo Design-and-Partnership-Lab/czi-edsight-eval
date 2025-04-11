@@ -77,7 +77,7 @@ export default async function Home() {
 
         // Passing fetched data as props to the AnnotationPage component
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
+            <div className="flex min-h-screen items-center justify-center bg-neutral-100">
                 <AnnotationPage
                     student={student}
                     reflectionQuestion={reflectionQuestion}

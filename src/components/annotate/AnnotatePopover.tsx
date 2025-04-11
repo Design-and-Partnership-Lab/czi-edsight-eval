@@ -229,7 +229,7 @@ const AnnotatedText = ({
                                 <button
                                     key={name}
                                     onClick={() => setSelectedColor(name)}
-                                    className={`h-5 w-5 ${bgClass} mx-1 cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-neutral-200" : ""
+                                    className={`h-5 w-5 ${bgClass} cursor-pointer rounded-full border-none ${selectedColor === name ? "ring-2 ring-neutral-200" : ""
                                         }`}
                                     title={name}
                                 />

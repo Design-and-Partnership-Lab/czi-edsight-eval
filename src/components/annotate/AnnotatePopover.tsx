@@ -37,6 +37,7 @@ interface Props {
     onHighlightAction: (colorName: string, comment: string) => void;
     deleteAnnotation: (id: string) => void;
     updateAnnotation: (id: string, colorName: string, comment: string) => void;
+    annotationId: string;
 }
 
 
@@ -63,7 +64,8 @@ const AnnotatedText = ({
     setShowAnnotationOptions,
     onHighlightAction,
     deleteAnnotation,
-    updateAnnotation
+    updateAnnotation,
+    annotationId
 }: Props) => {
 
     const [selectedColor, setSelectedColor] = useState("");
@@ -98,23 +100,28 @@ const AnnotatedText = ({
     const onSubmit = (formData: { comment: string }) => {
         console.log("Form submitted with:", formData);
 
-        if (showAnnotationOptions && selectedAnnotation) {
-            console.log("Updating annotation with:", {
-                id: selectedAnnotation.id,
-                color: selectedColor,
-                comment: formData.comment
-            });
+        console.log("Updating annotation with:", {
+            id: selectedAnnotation ? selectedAnnotation.id : annotationId,
+            color: selectedColor,
+            comment: formData.comment
+        });
 
-            updateAnnotation(
-                selectedAnnotation.id,
-                selectedColor || selectedAnnotation.colorName,
-                formData.comment
-            );
-            setShowAnnotationOptions(false);
-        } else {
-            onHighlightAction(selectedColor, formData.comment);
-            setShowTooltip(false);
-        }
+        console.log('showAnnotationOptions', showAnnotationOptions)
+
+
+        // if (showAnnotationOptions) {
+        updateAnnotation(
+            selectedAnnotation ? selectedAnnotation.id : annotationId,
+            selectedColor || (selectedAnnotation?.colorName || ''),
+            formData.comment
+        );
+        setShowAnnotationOptions(false);
+        // } else {
+        onHighlightAction(selectedColor, formData.comment);
+        setShowTooltip(false);
+        // }
+
+
 
         form.reset();
         setSelectedColor("");
@@ -159,10 +166,10 @@ const AnnotatedText = ({
             >
                 <PopoverTrigger className="hidden"></PopoverTrigger>
                 <PopoverContent
-                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl"
+                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl !min-w-60"
                     style={{
-                        top: `${tooltipPos.top - 50}px`,
-                        left: `10px`,
+                        top: `${tooltipPos.top - 250}px`,
+                        left: `${tooltipPos.left + 10}px`,
                     }}
                     sideOffset={20}
                 >
@@ -215,10 +222,10 @@ const AnnotatedText = ({
             >
                 <PopoverTrigger className="hidden"></PopoverTrigger>
                 <PopoverContent
-                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl"
+                    className="annotation-tooltip absolute z-10 rounded-lg !bg-white !p-2 shadow-2xl !min-w-60"
                     style={{
-                        top: `${tooltipPos.top - 50}px`,
-                        left: `10px`,
+                        top: `${tooltipPos.top - 250}px`,
+                        left: `${tooltipPos.left + 10}px`,
                     }}
                     sideOffset={20}
                 >

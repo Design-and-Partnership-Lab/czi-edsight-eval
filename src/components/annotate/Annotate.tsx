@@ -10,6 +10,8 @@ interface Position {
 }
 
 const Annotate = ({ children }: { children: string }) => {
+  const [annotationId, setAnnotationId] = useState<string>("");
+  const [tempHighlightedText, setTempHighlightedText] = useState<string>("");
   const [text, setText] = useState<string>(children);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -35,7 +37,6 @@ const Annotate = ({ children }: { children: string }) => {
   useEffect(() => {
     addToHistory(text, annotations);
   }, []);
-
 
   const addToHistory = (
     currentText: string,
@@ -84,39 +85,58 @@ const Annotate = ({ children }: { children: string }) => {
   };
 
 
-  const updateAnnotation = (annotationId: string, colorName?: string, comment?: string) => {
-    
-    if (!selectedAnnotation){
-      return
+  const updateAnnotation = (annotationId: string, colorName: string, comment?: string) => {
+    console.log("update annotation called")
+    if (selectedAnnotation) {
+      if (!colorName) {
+        colorName = selectedAnnotation?.colorName || '';
+      }
+      if (!comment) {
+        comment = selectedAnnotation?.comment || '';
+      }
     }
-
-    if (!colorName) {
-      colorName = selectedAnnotation.colorName;
+    else {
+      if (!comment) comment = "";
     }
-    if (!comment) {
-      comment = selectedAnnotation.comment;
-    }
-
-    const annotation = annotations.find((a) => a.id === annotationId);
-    if (!annotation) return;
 
     const color = COLORS.find((c) => c.name === colorName);
+    console.log("colors")
     if (!color) return;
 
-    // update the annotation in our state
-    const updatedAnnotations = annotations.map((a) =>
-        a.id === annotationId
-            ? { ...a, color: color.bgClass, colorName, comment }
-            : a
-    );
+    let annotation = annotations.find((a) => a.id === annotationId);
+    if (!annotation) {
+      annotation = {
+        id: annotationId,
+        text: currentSelectionRef.current || '',
+        color: color.bgClass,
+        colorName: colorName,
+        comment: comment,
+      }
+    };
+
+    // update the annotation in our state if updating 
+    const updatedAnnotations = selectedAnnotation ? annotations.map((a) =>
+      a.id === annotationId
+        ? { ...a, color: color.bgClass, colorName, comment }
+        : a
+    ) : [...annotations, annotation];
+
+    console.log("reached on submit")
+    console.log(annotation)
+
+
     // update the HTML with the new color
     const spanPattern = new RegExp(
-        `<span class="[^"]*annotation-span[^"]*" data-annotation-id="${annotationId}"[^>]*>${escapeRegExp(annotation.text)}</span>`,
-        "g"
+      `<span class="[^"]*annotation-span[^"]*" data-annotation-id="${annotationId}"[^>]*>${escapeRegExp(annotation.text)}</span>`,
+      "g"
     );
+
     const highlightedText = `<span class="${color.bgClass} rounded-sm cursor-pointer annotation-span" data-annotation-id="${annotationId}" data-color="${colorName}">${annotation.text}</span>`;
+    console.log("highlighted text", highlightedText)
     const newText = text.replace(spanPattern, highlightedText);
-    setText(newText);
+    console.log('newText', newText)
+
+    setText(newText); // so the logic of the code is right but the frontend html is not updating the new text
     setAnnotations(updatedAnnotations);
     setShowAnnotationOptions(false);
     addToHistory(newText, updatedAnnotations);
@@ -143,7 +163,7 @@ const Annotate = ({ children }: { children: string }) => {
     addToHistory(newText, newAnnotations);
   };
 
-  
+
   // helper function to escape special characters in regex
   const escapeRegExp = (string: string) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -154,30 +174,30 @@ const Annotate = ({ children }: { children: string }) => {
   const handleContainerClick = (e: React.MouseEvent) => {
     // find if a span was clicked
     let target = e.target as HTMLElement;
-    
+
     // try to find the closest annotation span
     while (target && !target.classList.contains('annotation-span')) {
       if (target === e.currentTarget) break;
       target = target.parentElement as HTMLElement;
     }
-    
+
     // ff we found an annotation span
     if (target && target.classList.contains('annotation-span')) {
       const annotationId = target.getAttribute('data-annotation-id');
       const annotation = target.textContent;
       console.log("Annotation clicked:", annotationId, annotation);
-      
+
       if (annotation && annotationId) {
         const foundAnnotation = annotations.find((a) => a.text === annotation);
         if (foundAnnotation) {
           setSelectedAnnotation(foundAnnotation);
-          
+
           const rect = target.getBoundingClientRect();
           setTooltipPos({
             left: rect.left + rect.width / 2,
             top: rect.bottom,
           });
-          
+
           setShowAnnotationOptions(true);
         }
       }
@@ -202,6 +222,23 @@ const Annotate = ({ children }: { children: string }) => {
       ) {
         currentSelectionRef.current = selectedText;
 
+        const annotationId = generateId();
+
+        const highlightedText = `<span class="bg-[#CE93D8] rounded-sm cursor-pointer annotation-span" data-annotation-id="${annotationId}" data-color="neutral">${currentSelectionRef.current}</span>`;
+        const plainTextPattern = new RegExp(
+          `(?<!<span[^>]*>)${escapeRegExp(currentSelectionRef.current)}(?!</span>)`,
+          ""
+        );
+
+        const newText = text.replace(plainTextPattern, highlightedText);
+        setText(newText);
+
+        setAnnotationId(annotationId);
+        setTempHighlightedText(highlightedText);
+
+        console.log(newText);
+
+
         // get x and y coordinates of selection to place the popover
         const rect = range.getBoundingClientRect();
         setTooltipPos({
@@ -222,7 +259,6 @@ const Annotate = ({ children }: { children: string }) => {
     const color = COLORS.find((c) => c.name === colorName);
     if (!color) return;
 
-    const annotationId = generateId();
     const newAnnotation: Annotation = {
       id: annotationId,
       text: currentSelectionRef.current,
@@ -246,7 +282,6 @@ const Annotate = ({ children }: { children: string }) => {
     setShowTooltip(false);
     currentSelectionRef.current = null;
     window.getSelection()?.removeAllRanges();
-    console.log(annotations);
   };
 
   return (
@@ -268,7 +303,8 @@ const Annotate = ({ children }: { children: string }) => {
         onHighlightAction={onHighlightAction}
         deleteAnnotation={deleteAnnotation}
         updateAnnotation={updateAnnotation}
-        />
+        annotationId={annotationId}
+      />
     </div>
   );
 

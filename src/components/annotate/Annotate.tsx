@@ -83,22 +83,10 @@ const Annotate = ({ children }: { children: string }) => {
 
     console.log(comment)
 
-    const newAnnotations = annotations.map(anno => 
-      anno.id === id 
-        ? { ...anno, colorName, comment } 
-        : anno
-    );
-    console.log(newAnnotations) // works
     
-    setAnnotations(newAnnotations);
-    changeAnnotationColor(id, colorName);
+    changeAnnotation(id, colorName, comment);
 
     console.log(annotations) // doesnt work???
-    
-    const newHistory = historyRef.current.slice(0, historyPositionRef.current + 1);
-    newHistory.push({ text, annotations: newAnnotations });
-    historyRef.current = newHistory;
-    historyPositionRef.current = newHistory.length - 1;
   };
   
 
@@ -108,8 +96,19 @@ const Annotate = ({ children }: { children: string }) => {
   };
 
 
-  const changeAnnotationColor = (annotationId: string, colorName: string) => {
+  const changeAnnotation = (annotationId: string, colorName?: string, comment?: string) => {
     
+    if (!selectedAnnotation){
+      return
+    }
+
+    if (!colorName) {
+      colorName = selectedAnnotation.colorName;
+    }
+    if (!comment) {
+      comment = selectedAnnotation.comment;
+    }
+
     const annotation = annotations.find((a) => a.id === annotationId);
     if (!annotation) return;
 
@@ -119,7 +118,7 @@ const Annotate = ({ children }: { children: string }) => {
     // update the annotation in our state
     const updatedAnnotations = annotations.map((a) =>
         a.id === annotationId
-            ? { ...a, color: color.bgClass, colorName }
+            ? { ...a, color: color.bgClass, colorName, comment }
             : a
     );
     // update the HTML with the new color
@@ -279,7 +278,7 @@ const Annotate = ({ children }: { children: string }) => {
         showAnnotationOptions={showAnnotationOptions}
         setShowAnnotationOptions={setShowAnnotationOptions}
         onHighlightAction={onHighlightAction}
-        changeAnnotationColor={changeAnnotationColor}
+        changeAnnotationColor={changeAnnotation}
         deleteAnnotation={deleteAnnotation}
         updateAnnotation={updateAnnotation}
         />

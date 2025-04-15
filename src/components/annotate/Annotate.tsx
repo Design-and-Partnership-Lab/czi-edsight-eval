@@ -79,24 +79,12 @@ const Annotate = ({ children }: { children: string }) => {
   };
 
 
-  const updateAnnotation = (id: string, colorName: string, comment: string) => {
-
-    console.log(comment)
-
-    
-    changeAnnotation(id, colorName, comment);
-
-    console.log(annotations) // doesnt work???
-  };
-  
-
-
   const generateId = () => {
     return `annotation-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
 
 
-  const changeAnnotation = (annotationId: string, colorName?: string, comment?: string) => {
+  const updateAnnotation = (annotationId: string, colorName?: string, comment?: string) => {
     
     if (!selectedAnnotation){
       return
@@ -278,7 +266,6 @@ const Annotate = ({ children }: { children: string }) => {
         showAnnotationOptions={showAnnotationOptions}
         setShowAnnotationOptions={setShowAnnotationOptions}
         onHighlightAction={onHighlightAction}
-        changeAnnotationColor={changeAnnotation}
         deleteAnnotation={deleteAnnotation}
         updateAnnotation={updateAnnotation}
         />

@@ -35,7 +35,6 @@ interface Props {
     showAnnotationOptions: boolean;
     setShowAnnotationOptions: (value: boolean) => void;
     onHighlightAction: (colorName: string, comment: string) => void;
-    changeAnnotationColor: (id: string, colorName: string) => void;
     deleteAnnotation: (id: string) => void;
     updateAnnotation: (id: string, colorName: string, comment: string) => void;
 }

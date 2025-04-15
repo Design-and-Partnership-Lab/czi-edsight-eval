@@ -21,7 +21,7 @@ export default function RootLayout({
                     className={cx(
                         `${GeistSans.variable} ${GeistMono.variable}`,
                         "antialiased",
-                        "bg-neutral-900"
+                        "bg-neutral-50 dark:bg-neutral-900"
                     )}
                 >
                     {children}

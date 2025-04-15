@@ -1,12 +1,17 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import { upsertTeacher } from "@/actions/(legacy)/teacher/action";
+import { upsertStudent } from "@/actions/(legacy)/student/action";
 import { Button } from "@/components/ui/button";
 
 // Define what props your component will receive
-interface TeacherComponentProps {
-    teacher: { id: number; firstName: string; lastName: string };
+interface StudentComponentProps {
+    student: {
+        id: number;
+        email: string | null;
+        firstName: string;
+        lastName: string | null;
+    };
 }
 
 /**
@@ -14,9 +19,9 @@ interface TeacherComponentProps {
  *
  * @see {@link https://nextjs.org/docs/app/building-your-application/rendering/client-components}
  */
-export function TeacherComponent({ teacher }: TeacherComponentProps) {
+export function StudentComponent({ student }: StudentComponentProps) {
     // Data is passed via props from the Server Component which calls it
-    const { id, firstName: serverFirstName, lastName } = teacher;
+    const { id, email, firstName: serverFirstName, lastName } = student;
 
     const [firstName, setFirstName] = useState(serverFirstName);
     const [isPending, startTransition] = useTransition();
@@ -32,17 +37,18 @@ export function TeacherComponent({ teacher }: TeacherComponentProps) {
          */
         startTransition(async () => {
             try {
-                await upsertTeacher({
-                    id,
+                await upsertStudent({
+                    email: "182test@student.auhsd.us",
                     firstName: newName,
+                    lastName: "Doe",
                 });
             } catch (error) {
                 // If there's an error, we should "rollback" to the prior value
                 setFirstName(prevName);
-                console.error("Failed to update teacher:", error);
+                console.error("Failed to update student:", error);
             }
         });
-    }, [id, firstName, newName]);
+    }, [email, firstName, newName]);
 
     return (
         <div>
@@ -55,7 +61,7 @@ export function TeacherComponent({ teacher }: TeacherComponentProps) {
                 onClick={handleClick}
                 disabled={isPending}
             >
-                {isPending ? "Updating..." : `Upsert Teacher as ${newName}`}
+                {isPending ? "Updating..." : `Upsert Student as ${newName}`}
             </Button>
         </div>
     );

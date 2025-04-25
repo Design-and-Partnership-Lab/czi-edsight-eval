@@ -1,0 +1,25 @@
+/* Basic styles for the editor */
+.ProseMirror {
+    min-height: 300px;
+    padding: 0.5rem;
+    outline: none;
+  
+    p {
+      margin: 0.5em 0;
+    }
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  /* Style for annotations when selected */
+  .annotation-highlight.active {
+    outline: 2px solid #3B82F6;
+    border-radius: 2px;
+  }
+  
+  /* Style to ensure the bubble menu stays above content */
+  .bubble-menu {
+    z-index: 50;
+  }

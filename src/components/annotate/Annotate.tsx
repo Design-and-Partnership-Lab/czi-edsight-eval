@@ -13,16 +13,9 @@ interface Annotation {
     createdAt: Date;
 }
 
-export const COLORS = [
-    { name: "Yellow", bgClass: "bg-yellow-200", colorValue: "#FEFCBF" },
-    { name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5" },
-    { name: "Blue", bgClass: "bg-blue-200", colorValue: "#BEE3F8" },
-    { name: "Purple", bgClass: "bg-purple-200", colorValue: "#E9D8FD" },
-];
-
 export type { Annotation };
 
-const Annotate = ({ children }: { children: string }) => {
+const Annotate = ({ children, color }: { children: string, color: { name: string; bgClass: string; colorValue: string; } }) => {
     const [annotations, setAnnotations] = useState<Annotation[]>([]);
 
     const addAnnotation = (annotation: Annotation) => {
@@ -47,7 +40,7 @@ const Annotate = ({ children }: { children: string }) => {
                 onAddAnnotation={addAnnotation}
                 onUpdateAnnotation={updateAnnotation}
                 onRemoveAnnotation={removeAnnotation}
-                colors={COLORS}
+                color={color}
             />
         </div>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import QUESTIONS from "@/lib/questions";
 import {
     RawAnalysis,
@@ -11,6 +11,7 @@ import {
 } from "@prisma/client";
 import { Card, Divider, Text, Title } from "@tremor/react";
 import Annotate from "../annotate/Annotate";
+import RationaleItem from "../annotate/RationaleItem";
 
 type AnnotationData = {
     student: Student;
@@ -35,6 +36,8 @@ export default function AnnotationPage({
 
     const prompt =
         QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS];
+
+    const [selectedColor, setSelectedColor] = useState<{ name: string; bgClass: string; colorValue: string; }>({ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5" });
 
     return (
         <div className="flex justify-center p-32 text-black">
@@ -65,7 +68,7 @@ export default function AnnotationPage({
                         </Text>
 
                         <div className="mt-2 text-gray-700">
-                            <Annotate>
+                            <Annotate color={selectedColor}>
                                 {`${transcript} Quis exercitation ut id laborum excepteur. 
                                 Veniam aute sit mollit commodo dolore irure. Dolor laborum labore 
                                 cupidatat consequat ex voluptate proident ea.`}
@@ -74,40 +77,37 @@ export default function AnnotationPage({
                     </div>
 
                     <div className="col-span-2 rounded-lg border p-6">
-                        <Title className="text-3xl font-semibold">
-                            AI Rationale
-                        </Title>
-
-                        <div className="mt-4 space-y-2">
-                            {aiRationale && aiRationale.length > 0 ? (
-                                aiRationale
-                                    .slice(0, 12)
-                                    .map((rationale, idx) => {
-                                        if (
-                                            !rationale.response ||
-                                            rationale.response === "None"
-                                        )
-                                            return null;
-
-                                        return (
-                                            <div
-                                                key={idx}
-                                                className="flex flex-col"
-                                            >
-                                                <div className="text-lg font-semibold">
-                                                    {rationale.promptCode ||
-                                                        "Unknown"}
-                                                </div>
-                                                <div>{rationale.response}</div>
-                                            </div>
-                                        );
-                                    })
-                            ) : (
-                                <Text className="text-gray-700">
-                                    No AI Rationale available.
-                                </Text>
-                            )}
-                        </div>
+                         <Title className="text-3xl font-semibold">AI Rationale</Title>
+ 
+                         <div className="mt-4 space-y-4">
+                             <RationaleItem
+                                 title="Grit"
+                                 status="Emerging"
+                                 colorText="text-green-400"
+                                 color={{ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5" }}
+                                 selectedColor={selectedColor}
+                                 setSelectedColor={setSelectedColor}
+                                 points={[
+                                     "<strong>did</strong> articulate strategies for critiques or suggestions",
+                                     "<strong>did</strong> work towards a shared goal",
+                                     "<strong>somewhat did</strong> adapt ideas or approaches",
+                                 ]}
+                             />
+ 
+                             <RationaleItem
+                                 title="Problem-solving"
+                                 status="Progressing"
+                                 colorText="text-blue-400"
+                                 color={{ name: "Blue", bgClass: "bg-blue-200", colorValue: "#BEE3F8" }}
+                                 selectedColor={selectedColor}
+                                 setSelectedColor={setSelectedColor}
+                                 points={[
+                                     "working on conversational language",
+                                     "understanding subtext",
+                                     "learning colloquialisms and idioms",
+                                 ]}
+                             />
+                         </div>
                     </div>
                 </div>
             </Card>

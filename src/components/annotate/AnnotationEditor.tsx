@@ -19,7 +19,7 @@ interface AnnotationEditorProps {
     onAddAnnotation: (annotation: Annotation) => void;
     onUpdateAnnotation: (id: string, data: Partial<Annotation>) => void;
     onRemoveAnnotation: (id: string) => void;
-    colors: { name: string; bgClass: string; colorValue: string }[];
+    color: { name: string; bgClass: string; colorValue: string; };
 }
 
 const AnnotationEditor = ({
@@ -28,12 +28,11 @@ const AnnotationEditor = ({
     onAddAnnotation,
     onUpdateAnnotation,
     onRemoveAnnotation,
-    colors,
+    color
 }: AnnotationEditorProps) => {
     const [activeAnnotationId, setActiveAnnotationId] = useState<string | null>(
         null
     );
-    const [selectedColor, setSelectedColor] = useState(colors[3]);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const commentsSectionRef = useRef<HTMLDivElement>(null);
     const colorPickerRef = useRef<HTMLDivElement>(null);
@@ -84,7 +83,6 @@ const AnnotationEditor = ({
                             );
                         }
                         el.style.backgroundColor = backgroundColor;
-                        el.style.padding = "0 2px";
                         el.style.borderRadius = "2px";
                     }
                 });
@@ -144,8 +142,8 @@ const AnnotationEditor = ({
         const newAnnotation: Annotation = {
             id,
             text,
-            color: selectedColor.colorValue,
-            colorName: selectedColor.name,
+            color: color.colorValue,
+            colorName: color.name,
             comment: "",
             createdAt: new Date(),
         };
@@ -239,44 +237,6 @@ const AnnotationEditor = ({
                             editor={editor}
                             className="flex gap-1 rounded-lg border border-slate-400 bg-white p-1 shadow-md"
                         >
-                            <div className="relative">
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="flex items-center gap-1"
-                                    onClick={() =>
-                                        setShowColorPicker(!showColorPicker)
-                                    }
-                                >
-                                    <div
-                                        className={`h-3 w-3 rounded-full ${selectedColor.bgClass}`}
-                                    />
-                                    <PaintBucket className="h-4 w-4" />
-                                </Button>
-
-                                {showColorPicker && (
-                                    <div
-                                        ref={colorPickerRef}
-                                        className="absolute left-0 top-full z-50 mt-1 w-40 rounded-md border bg-white p-2 shadow-lg"
-                                    >
-                                        <div className="flex flex-wrap gap-2">
-                                            {colors.map((color) => (
-                                                <button
-                                                    key={color.name}
-                                                    className={`h-8 w-8 rounded-full ${color.bgClass} ${selectedColor.name === color.name ? "ring-2 ring-blue-500 ring-offset-2" : ""}`}
-                                                    onClick={() => {
-                                                        setSelectedColor(color);
-                                                        setShowColorPicker(
-                                                            false
-                                                        );
-                                                    }}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
                             <Button
                                 size="sm"
                                 variant="ghost"
@@ -292,15 +252,15 @@ const AnnotationEditor = ({
                 {/* Comments Sidebar */}
                 <div
                     ref={commentsSectionRef}
-                    className="flex max-h-[80vh] w-[300px] flex-col gap-3 overflow-y-auto rounded-lg border p-4"
+                    className="flex max-h-[80vh] w-[300px] flex-col gap-3 overflow-y-auto rounded-lg border py-4"
                 >
-                    <span className="text-sm font-semibold text-blue-600">
+                    <span className="text-sm ml-4 font-semibold">
                         Comments
                     </span>
                     {annotations.map((annotation) => (
                         <div
                             key={annotation.id}
-                            className={`relative flex flex-col gap-2 rounded-md border p-3 ${annotation.id === activeAnnotationId ? "border-2 border-blue-400" : "border-slate-200"}`}
+                            className={`relative flex flex-col gap-2 rounded-md border p-3 ${annotation.id === activeAnnotationId ? "border-slate-200 ml-6 mr-2 duration-300" : "border-slate-200 duration-300 mx-4"}`}
                             style={{
                                 borderLeft: `4px solid ${annotation.color}`,
                             }}

@@ -18,16 +18,15 @@ interface AnnotationEditorProps {
     onAddAnnotation: (annotation: Annotation) => void;
     onUpdateAnnotation: (id: string, data: Partial<Annotation>) => void;
     onRemoveAnnotation: (id: string) => void;
-    color: { name: string; bgClass: string; colorValue: string; rationale: string };
+    color: { name: string; bgClass: string ; colorValue: string; rationale: string };
 }
-
 const AnnotationEditor = ({
     initialContent,
     annotations,
     onAddAnnotation,
     onUpdateAnnotation,
     onRemoveAnnotation,
-    color
+    color,
 }: AnnotationEditorProps) => {
     const [activeAnnotationId, setActiveAnnotationId] = useState<string | null>(
         null
@@ -55,6 +54,12 @@ const AnnotationEditor = ({
         ],
         content: initialContent,
     });
+
+    useEffect(() => {
+        if (editor && editor.view) {
+            editor.view.dom.setAttribute("contenteditable", "false");
+        }
+    }, [editor]);
 
     // Apply highlight colors when active annotation changes
     useEffect(() => {
@@ -253,13 +258,11 @@ const AnnotationEditor = ({
                     ref={commentsSectionRef}
                     className="flex max-h-[80vh] w-[300px] flex-col gap-3 overflow-y-auto rounded-lg border py-4"
                 >
-                    <span className="text-sm ml-4 font-semibold">
-                        Comments
-                    </span>
+                    <span className="ml-4 text-sm font-semibold">Comments</span>
                     {annotations.map((annotation) => (
                         <div
                             key={annotation.id}
-                            className={`relative flex flex-col gap-2 rounded-md border p-3 ${annotation.id === activeAnnotationId ? "border-slate-200 ml-6 mr-2 duration-300" : "border-slate-200 duration-300 mx-4"}`}
+                            className={`relative flex flex-col gap-2 rounded-md border p-3 ${annotation.id === activeAnnotationId ? "ml-6 mr-2 border-slate-200 duration-300" : "mx-4 border-slate-200 duration-300"}`}
                             style={{
                                 borderLeft: `4px solid ${annotation.color}`,
                             }}
@@ -286,7 +289,7 @@ const AnnotationEditor = ({
                                 })}
                             </div>
                             <div className="rounded bg-gray-50 p-2 text-sm font-medium">
-                                "{annotation.text}"
+                                {`"${annotation.text}"`}
                             </div>
                             <div className="flex flex-col gap-2">
                                 <textarea

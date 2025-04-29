@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import QUESTIONS from "@/lib/questions";
+import Modal from "../modal/modal";
+
 import {
     RawAnalysis,
     ReflectionQuestion,
@@ -35,6 +37,7 @@ export default function AnnotationPage({
 
     const prompt =
         QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS];
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <div className="flex justify-center p-32 text-black">
@@ -64,12 +67,23 @@ export default function AnnotationPage({
                             student&apos;s response.
                         </Text>
 
-                        <div className="mt-2 text-gray-700">
+                        <div className="mt-2 mb-6 text-gray-700">
                             <Annotate>
                                 {`${transcript} Quis exercitation ut id laborum excepteur. 
                                 Veniam aute sit mollit commodo dolore irure. Dolor laborum labore 
                                 cupidatat consequat ex voluptate proident ea.`}
                             </Annotate>
+                        </div>
+                        <div className="flex justify-end">
+                           <button
+                                className="
+                                bg-[#001F5B] text-white rounded-full px-8 py-3 font-medium
+                                shadow-lg hover:bg-[#002A7A] transition-colors duration-150
+                                "                           
+                                onClick={() => setIsModalOpen(true)}
+                                >
+                                Done
+                            </button>
                         </div>
                     </div>
 
@@ -111,6 +125,13 @@ export default function AnnotationPage({
                     </div>
                 </div>
             </Card>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Thank you"
+            >
+                <Text>Your feedback has been recorded.</Text>
+            </Modal>
         </div>
     );
 }

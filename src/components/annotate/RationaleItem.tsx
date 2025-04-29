@@ -6,9 +6,9 @@ type RationaleItemProps = {
     status: string;
     points: string[];
     colorText: string;
-    color: { name: string; bgClass: string; colorValue: string };
-    selectedColor?: { name: string; bgClass: string; colorValue: string };
-    setSelectedColor?: (color: { name: string; bgClass: string; colorValue: string }) => void;
+    color: { name: string; bgClass: string; colorValue: string; rationale: string };
+    selectedColor?: { name: string; bgClass: string; colorValue: string; rationale: string };
+    setSelectedColor?: (color: { name: string; bgClass: string; colorValue: string; rationale: string }) => void;
 };
 
 export function RationaleItem({
@@ -21,7 +21,7 @@ export function RationaleItem({
     setSelectedColor,
 }: RationaleItemProps) {
 
-    const handleColorChange = (color: { name: string; bgClass: string; colorValue: string }) => {
+    const handleColorChange = (color: { name: string; bgClass: string; colorValue: string; rationale: string }) => {
         if (setSelectedColor) {
             setSelectedColor(color);
         }

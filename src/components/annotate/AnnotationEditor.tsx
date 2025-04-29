@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import CommentExtension from "@sereneinserenade/tiptap-comment-extension";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { PaintBucket } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Annotation } from "./Annotate";
@@ -19,7 +18,7 @@ interface AnnotationEditorProps {
     onAddAnnotation: (annotation: Annotation) => void;
     onUpdateAnnotation: (id: string, data: Partial<Annotation>) => void;
     onRemoveAnnotation: (id: string) => void;
-    color: { name: string; bgClass: string; colorValue: string; };
+    color: { name: string; bgClass: string; colorValue: string; rationale: string };
 }
 
 const AnnotationEditor = ({
@@ -50,7 +49,7 @@ const AnnotationEditor = ({
         extensions: [
             StarterKit,
             CommentExtension.configure({
-                HTMLAttributes: { class: "annotation-highlight" },
+                HTMLAttributes: { class: `annotation-highlight ${color.rationale}` },
                 onCommentActivated: handleCommentActivated,
             }),
         ],
@@ -60,7 +59,8 @@ const AnnotationEditor = ({
     // Apply highlight colors when active annotation changes
     useEffect(() => {
         applyHighlightColors();
-    }, [editor, annotations, activeAnnotationId]);
+        console.log(color)
+    }, [editor, annotations, color, activeAnnotationId]);
 
     // Apply highlight colors to annotations
     const applyHighlightColors = () => {
@@ -68,24 +68,22 @@ const AnnotationEditor = ({
 
         setTimeout(() => {
             annotations.forEach((annotation) => {
-                const commentElements = document.querySelectorAll(
+                const commentElement = document.querySelector(
                     `[data-comment-id="${annotation.id}"]`
                 );
-
-                commentElements.forEach((el) => {
-                    if (el instanceof HTMLElement) {
-                        let backgroundColor = annotation.color;
-                        // Darken color if active
-                        if (annotation.id === activeAnnotationId) {
-                            backgroundColor = darkenColor(
-                                annotation.color,
-                                0.2
-                            );
-                        }
-                        el.style.backgroundColor = backgroundColor;
-                        el.style.borderRadius = "2px";
+                
+                if (commentElement instanceof HTMLElement) {
+                    let backgroundColor = annotation.color;
+                    // Darken color if active
+                    if (annotation.id === activeAnnotationId) {
+                        backgroundColor = darkenColor(
+                            annotation.color,
+                            0.2
+                        );
                     }
-                });
+                    commentElement.style.backgroundColor = backgroundColor;
+                    commentElement.style.borderRadius = "2px";
+                }
             });
         }, 10);
     };
@@ -213,6 +211,7 @@ const AnnotationEditor = ({
                     el.style.borderRadius = "";
                     el.removeAttribute("data-comment-id");
                     el.classList.remove("annotation-highlight");
+                    el.classList.remove(`${color.rationale}`);
                 }
             });
             onRemoveAnnotation(id);

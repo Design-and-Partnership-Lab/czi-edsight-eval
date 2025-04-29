@@ -15,7 +15,7 @@ interface Annotation {
 
 export type { Annotation };
 
-const Annotate = ({ children, color }: { children: string, color: { name: string; bgClass: string; colorValue: string; } }) => {
+const Annotate = ({ children, color }: { children: string, color: { name: string; bgClass: string; colorValue: string; rationale: string; } }) => {
     const [annotations, setAnnotations] = useState<Annotation[]>([]);
 
     const addAnnotation = (annotation: Annotation) => {

@@ -37,7 +37,7 @@ export default function AnnotationPage({
     const prompt =
         QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS];
 
-    const [selectedColor, setSelectedColor] = useState<{ name: string; bgClass: string; colorValue: string; }>({ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5" });
+    const [selectedColor, setSelectedColor] = useState<{ name: string; bgClass: string; colorValue: string; rationale: string }>({ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5", rationale: "Grit" });
 
     return (
         <div className="flex justify-center p-32 text-black">
@@ -84,7 +84,7 @@ export default function AnnotationPage({
                                  title="Grit"
                                  status="Emerging"
                                  colorText="text-green-400"
-                                 color={{ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5" }}
+                                 color={{ name: "Green", bgClass: "bg-green-200", colorValue: "#C6F6D5", rationale: "Grit"}}
                                  selectedColor={selectedColor}
                                  setSelectedColor={setSelectedColor}
                                  points={[
@@ -93,12 +93,12 @@ export default function AnnotationPage({
                                      "<strong>somewhat did</strong> adapt ideas or approaches",
                                  ]}
                              />
- 
+                            {/*
                              <RationaleItem
-                                 title="Problem-solving"
+                                 title="Problem Solving"
                                  status="Progressing"
                                  colorText="text-blue-400"
-                                 color={{ name: "Blue", bgClass: "bg-blue-200", colorValue: "#BEE3F8" }}
+                                 color={{ name: "Blue", bgClass: "bg-blue-200", colorValue: "#BEE3F8", rationale: "Problem" }}
                                  selectedColor={selectedColor}
                                  setSelectedColor={setSelectedColor}
                                  points={[
@@ -107,6 +107,7 @@ export default function AnnotationPage({
                                      "learning colloquialisms and idioms",
                                  ]}
                              />
+                                */}
                          </div>
                     </div>
                 </div>

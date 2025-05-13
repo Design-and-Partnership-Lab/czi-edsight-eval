@@ -154,7 +154,7 @@ function PlainTextEditor({
   onEscape,
   onChange,
   editorRef,
-  placeholder = 'Type a comment...',
+  placeholder = '',
 }: {
   autoFocus?: boolean;
   className?: string;
@@ -348,7 +348,7 @@ function CommentInputBox({
   return (
     <div className="CommentPlugin_CommentInputBox" ref={boxRef}>
       <PlainTextEditor
-        className="CommentPlugin_CommentInputBox_Editor"
+        className="text-neutral-900 border-neutral-800 px-1 py-1"
         onEscape={onEscape}
         onChange={onChange}
       />

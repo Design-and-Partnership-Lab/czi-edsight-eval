@@ -499,20 +499,6 @@ function CommentsPanelListComment({
       </p>
       {!comment.deleted && (
         <>
-          <Button
-            onClick={() => {
-              showModal('Delete Comment', (onClose) => (
-                <ShowDeleteCommentOrThreadDialog
-                  commentOrThread={comment}
-                  deleteCommentOrThread={deleteComment}
-                  thread={thread}
-                  onClose={onClose}
-                />
-              ));
-            }}
-            className="CommentPlugin_CommentsPanel_List_DeleteButton">
-            <i className="delete" />
-          </Button>
           {modal}
         </>
       )}
@@ -640,13 +626,6 @@ function CommentsPanelList({
                   />
                 ))}
               </ul>
-              <div className="CommentPlugin_CommentsPanel_List_Thread_Editor">
-                <CommentsComposer
-                  submitAddComment={submitAddComment}
-                  thread={commentOrThread}
-                  placeholder="Reply to comment..."
-                />
-              </div>
             </li>
           );
         }
@@ -708,7 +687,7 @@ function CommentsPanel({
 function useCollabAuthorName(): string {
   const collabContext = useCollaborationContext();
   const {yjsDocMap, name} = collabContext;
-  return yjsDocMap.has('comments') ? name : 'Playground User';
+  return yjsDocMap.has('comments') ? name : 'Comment';
 }
 
 export default function CommentPlugin({

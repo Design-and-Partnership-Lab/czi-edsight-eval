@@ -16,7 +16,7 @@ const SimilarityPill: React.FC<SimilarityPillProps> = ({
   const s           = Math.max(0, Math.min(1, similarity));
   const greenPct    = s * 100;
   const sidePct     = (100 - greenPct) / 2;
-  const fadeWidth   = 3; 
+  const fadeWidth   = 10; 
   const b2gStart    = Math.max(0, sidePct - fadeWidth);
   const b2gEnd      = Math.min(100, sidePct + fadeWidth);
   const g2yStart    = Math.max(0, sidePct + greenPct - fadeWidth);
@@ -26,29 +26,30 @@ const SimilarityPill: React.FC<SimilarityPillProps> = ({
     linear-gradient(
       to right,
         /* solid blue until fade zone */
-        #DBEAFE 0%,
-        #DBEAFE ${b2gStart}%,
+        #A0E9F9 0%,
+        #A0E9F9 ${b2gStart}%,
         /* fade blue → green between b2gStart…b2gEnd */
         #BBF7D0 ${b2gEnd}%,
         /* solid green until next fade */
-        #BBF7D0 ${g2yStart}%,
+        #A0DFB980 ${g2yStart}%,
         /* fade green → yellow between g2yStart…g2yEnd */
-        #FEF3C7 ${g2yEnd}%,
+        #FFEA7F ${g2yEnd}%,
         /* solid yellow to the end */
-        #FEF3C7 100%
+        #FFEA7F 100%
     )
-  `.replace(/\s+/g, ' ');
-
+  `.replace(/\s+/g, ' ')
+  ;
+  
   return (
     <div className="flex items-center w-full">
       {/* left box */}
       <div className="flex-1 min-w-0">
-        <div className="bg-blue-100 text-gray-900 px-6 py-3 rounded break-words">
+        <div className="bg-[#A0E9F9] text-gray-900 px-6 py-3 rounded break-words">
           {leftText}
         </div>
       </div>
 
-      <div className="flex-shrink-0 w-16 h-4 bg-blue-100" />
+      <div className="flex-shrink-0 w-16 h-4 bg-[#A0E9F9]" />
 
       {/* center box */}
       <div className="flex-1 min-w-0">
@@ -62,11 +63,11 @@ const SimilarityPill: React.FC<SimilarityPillProps> = ({
         </div>
       </div>
 
-      <div className="flex-shrink-0 w-16 h-4 bg-yellow-100" />
+      <div className="flex-shrink-0 w-16 h-4 bg-[#FFEA7F]" />
 
       {/* right box */}
       <div className="flex-1 min-w-0">
-        <div className="bg-yellow-100 text-gray-900 px-6 py-3 rounded break-words">
+        <div className="bg-[#FFEA7F] text-gray-900 px-6 py-3 rounded break-words">
           {rightText}
         </div>
       </div>

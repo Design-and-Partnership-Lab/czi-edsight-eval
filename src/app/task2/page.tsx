@@ -1,4 +1,4 @@
-import EPEPage from "@/components/epe-guess/epe-guess-component";
+import EPEPage from "@/components/task2/task2-component";
 import ProgressBar from "@/components/progress-bar/progress-bar";
 import { db } from "@/db";
 
@@ -54,11 +54,11 @@ export default async function Home() {
         }
 
         return (
-            <div className="flex flex-col justify-content-center p-16 bg-white">
+            <div className="flex flex-col h-screen justify-content-center p-16 bg-white">
                 <div className="pb-8">
                     <ProgressBar currentStep={2} />
                 </div>
-        
+
                 <EPEPage
                     student={student}
                     reflectionQuestion={reflectionQuestion}

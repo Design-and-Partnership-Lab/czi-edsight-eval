@@ -94,14 +94,12 @@ function AddCommentBox({
 
   const updatePosition = useCallback(() => {
     const boxElem = boxRef.current;
-    const rootElement = editor.getRootElement();
     const anchorElement = editor.getElementByKey(anchorKey);
-
-    if (boxElem !== null && rootElement !== null && anchorElement !== null) {
-      const {right} = rootElement.getBoundingClientRect();
-      const {top} = anchorElement.getBoundingClientRect();
-      boxElem.style.left = `${right - 20}px`;
-      boxElem.style.top = `${top - 30}px`;
+  
+    if (boxElem !== null && anchorElement !== null) {
+      const {right, top} = anchorElement.getBoundingClientRect();
+      boxElem.style.left = `${right + 10}px`;
+      boxElem.style.top = `${top - 10}px`;
     }
   }, [anchorKey, editor]);
 

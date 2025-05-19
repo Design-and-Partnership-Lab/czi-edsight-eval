@@ -1,6 +1,5 @@
 import ProgressBar from "@/components/progress-bar/progress-bar";
-import EPEPage from "@/components/task2/task2-component";
-// import EPEPage from "@/components/task2and3/EPEPageShared";
+import EPEPage from "@/components/task3/task3-component";
 import { db } from "@/db";
 
 export default async function Home() {
@@ -57,7 +56,7 @@ export default async function Home() {
         return (
             <div className="justify-content-center flex h-screen flex-col bg-white p-16">
                 <div className="pb-8">
-                    <ProgressBar currentStep={1} />
+                    <ProgressBar currentStep={2} />
                 </div>
 
                 <EPEPage

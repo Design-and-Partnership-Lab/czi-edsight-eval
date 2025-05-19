@@ -177,18 +177,9 @@ i.add-comment {
 /* Show Comments Button */
 .CommentPlugin_ShowCommentsButton {
   position: fixed;
-  top: 16px;
-  right: 16px;
-  background-color: #f5f7fa;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  height: 40px;
-  width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  right: 10px;
+  background-color: #ddd;
+  border-radius: 10px;
 }
 
 i.comments {

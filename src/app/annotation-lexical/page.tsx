@@ -11,12 +11,12 @@ import "./index.css";
 
 import * as React from "react";
 
-import App from "./App";
+import AnnotateLexical from "./AnnotateLexical";
 
 export default function AnnotationLexicalPage() {
     return (
         <React.StrictMode>
-            <App />
+            <AnnotateLexical> ok can this work please </AnnotateLexical>
         </React.StrictMode>
     );
 }

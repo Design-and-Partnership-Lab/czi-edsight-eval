@@ -440,16 +440,16 @@ function ShowDeleteCommentOrThreadDialog({
 }): JSX.Element {
   return (
     <>
-      Are you sure you want to delete this {commentOrThread.type}?
+    <div className='text-neutral-900'>Are you sure you want to delete this annotation?</div>
       <div className="Modal__content">
-        <Button
+        <Button className='!bg-[#4a6fa5] !mr-2 !text-neutral-100'
           onClick={() => {
             deleteCommentOrThread(commentOrThread, thread);
             onClose();
           }}>
           Delete
         </Button>{' '}
-        <Button
+        <Button className='!text-neutral-600'
           onClick={() => {
             onClose();
           }}>

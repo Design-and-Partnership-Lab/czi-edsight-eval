@@ -78,8 +78,8 @@ export default function AnnotationPage({
                         <div className="flex justify-end">
                            <button
                                 className="
-                                bg-[#001F5B] text-white rounded-full px-8 py-3 font-medium
-                                shadow-lg hover:bg-[#002A7A] transition-colors duration-150
+                                bg-[#4a6fa5] text-white rounded-full px-8 py-3 font-medium
+                                shadow-lg hover:bg-[#3f5e8d] transition-colors duration-150
                                 "                           
                                 onClick={() => setIsModalOpen(true)}
                                 >
@@ -105,7 +105,7 @@ export default function AnnotationPage({
                                      "<strong>somewhat did</strong> adapt ideas or approaches",
                                  ]}
                              />
-                            {/*
+
                              <RationaleItem
                                  title="Problem Solving"
                                  status="Progressing"
@@ -119,7 +119,6 @@ export default function AnnotationPage({
                                      "learning colloquialisms and idioms",
                                  ]}
                              />
-                                */}
                          </div>
                     </div>
                 </div>

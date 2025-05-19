@@ -101,14 +101,37 @@ function TextFormatFloatingToolbar({
       rootElement.contains(nativeSelection.anchorNode)
     ) {
       const rangeRect = getDOMRangeRect(nativeSelection, rootElement);
-
-      setFloatingElemPosition(
-        rangeRect,
-        popupCharStylesEditorElem,
-        anchorElem,
-      );
+      
+      if (rangeRect !== null) {
+        // Position the toolbar to the left and above the selection
+        const toolbarRect = popupCharStylesEditorElem.getBoundingClientRect();
+        
+        // Position left of the selection and up
+        let left = rangeRect.left - 150; // 20px to the left
+        let top = rangeRect.top - toolbarRect.height - 110; // 5px above selection
+        
+        // Make sure we don't go off-screen
+        if (left < 10) {
+          left = 10;
+        }
+        
+        // Apply position directly with absolute positioning
+        popupCharStylesEditorElem.style.opacity = '1';
+        popupCharStylesEditorElem.style.position = 'absolute';
+        popupCharStylesEditorElem.style.top = `${top}px`;
+        popupCharStylesEditorElem.style.left = `${left}px`;
+        popupCharStylesEditorElem.style.transform = 'none';
+      } else {
+        // Hide if no valid range
+        popupCharStylesEditorElem.style.opacity = '0';
+        popupCharStylesEditorElem.style.transform = 'translate(-10000px, -10000px)';
+      }
+    } else {
+      // Hide toolbar when no valid selection
+      popupCharStylesEditorElem.style.opacity = '0';
+      popupCharStylesEditorElem.style.transform = 'translate(-10000px, -10000px)';
     }
-  }, [editor, anchorElem]);
+  }, [editor]);
 
   useEffect(() => {
     const scrollerElem = anchorElem.parentElement;
@@ -200,9 +223,6 @@ function useFloatingTextFormatToolbar(
 
       const node = getSelectedNode(selection);
 
-      // Update links
-
-
       if (
         !$isCodeHighlightNode(selection.anchor.getNode()) &&
         selection.getTextContent() !== ''
@@ -254,10 +274,15 @@ function useFloatingTextFormatToolbar(
 }
 
 export default function FloatingCommentToolbar({
-  anchorElem = document.body,
+  anchorElem,
 }: {
   anchorElem?: HTMLElement;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  return useFloatingTextFormatToolbar(editor, anchorElem);
+  
+  // Use editor root element as the anchor instead of document.body
+  const rootElement = editor.getRootElement();
+  const actualAnchorElem = anchorElem || (rootElement || document.body);
+  
+  return useFloatingTextFormatToolbar(editor, actualAnchorElem);
 }

@@ -66,8 +66,10 @@ export function setFloatingElemPosition(
     left = editorScrollerRect.left + horizontalOffset;
   }
 
-  top -= anchorElementRect.top;
-  left -= anchorElementRect.left;
+  if (anchorElem !== document.body) {
+    top -= anchorElementRect.top;
+    left -= anchorElementRect.left;
+  }
 
   floatingElem.style.opacity = '1';
   floatingElem.style.transform = `translate(${left}px, ${top}px)`;

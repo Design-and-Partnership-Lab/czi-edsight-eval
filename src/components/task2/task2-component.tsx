@@ -1,5 +1,3 @@
-// EPEPageTask2.tsx
-
 "use client";
 
 import React, { useState } from "react";
@@ -62,19 +60,6 @@ export default function EPEPageTask2({
                         onSelect={setSelectedCategory}
                     />
                 </div>
-                {/* <div className="mt-4 flex justify-end">
-                    <button
-                        onClick={handleNextClick}
-                        disabled={!selectedCategory}
-                        className={`rounded-3xl px-6 py-2 font-semibold transition-colors duration-200 focus:outline-none ${
-                            selectedCategory
-                                ? "cursor-pointer bg-[#001F54] text-white"
-                                : "cursor-not-allowed bg-gray-300 text-gray-500"
-                        }`}
-                    >
-                        Next Activity →
-                    </button>
-                </div> */}
             </EPEPageShared>
         </div>
     );

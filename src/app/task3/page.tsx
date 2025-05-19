@@ -54,7 +54,7 @@ export default async function Home() {
         }
 
         return (
-            <div className="justify-content-center flex h-screen flex-col bg-white p-16">
+            <div className="justify-content-center flex min-h-screen flex-col bg-white p-16">
                 <div className="pb-8">
                     <ProgressBar currentStep={2} />
                 </div>

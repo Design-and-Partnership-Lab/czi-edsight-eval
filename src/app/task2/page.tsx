@@ -1,6 +1,5 @@
 import ProgressBar from "@/components/progress-bar/progress-bar";
 import EPEPage from "@/components/task2/task2-component";
-// import EPEPage from "@/components/task2and3/EPEPageShared";
 import { db } from "@/db";
 
 export default async function Home() {

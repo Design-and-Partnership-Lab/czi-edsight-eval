@@ -486,6 +486,7 @@ i.send {
 
 .CommentPlugin_CommentsPanel_List_DeleteButton i.delete {
   background-size: contain;
+  background-color: rgba(0, 0, 0, 0.05);
   position: absolute;
   left: 7px;
   top: 7px;

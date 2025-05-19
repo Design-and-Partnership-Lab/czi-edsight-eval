@@ -107,8 +107,8 @@ function TextFormatFloatingToolbar({
         const toolbarRect = popupCharStylesEditorElem.getBoundingClientRect();
         
         // Position left of the selection and up
-        let left = rangeRect.left - 150; // 20px to the left
-        let top = rangeRect.top - toolbarRect.height - 110; // 5px above selection
+        let left = rangeRect.left - 280; // 20px to the left
+        let top = rangeRect.top - toolbarRect.height - 90; // 5px above selection
         
         // Make sure we don't go off-screen
         if (left < 10) {

@@ -56,7 +56,7 @@ export default async function Home() {
         return (
             <div className="flex flex-col h-screen justify-content-center p-16 bg-white">
                 <div className="pb-8">
-                    <ProgressBar currentStep={2} />
+                    <ProgressBar currentStep={1} />
                 </div>
 
                 <EPEPage

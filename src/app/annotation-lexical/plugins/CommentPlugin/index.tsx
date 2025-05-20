@@ -220,6 +220,7 @@ function CommentInputBox({
     editor,
     cancelAddComment,
     submitAddComment,
+    initialContent,
 }: {
     cancelAddComment: () => void;
     editor: LexicalEditor;
@@ -229,8 +230,12 @@ function CommentInputBox({
         thread?: Thread,
         selection?: RangeSelection | null
     ) => void;
+    initialContent: string | undefined;
 }) {
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState(
+        initialContent ? initialContent : ""
+    );
+    console.log("CommentInputBox content", initialContent);
     const [canSubmit, setCanSubmit] = useState(false);
     const boxRef = useRef<HTMLDivElement>(null);
     const selectionState = useMemo(
@@ -935,6 +940,7 @@ export default function CommentPlugin({
                     const selection = $getSelection();
                     let hasActiveIds = false;
                     let hasAnchorKey = false;
+                    let isExistingComment = false;
 
                     if ($isRangeSelection(selection)) {
                         const anchorNode = selection.anchor.getNode();
@@ -947,6 +953,8 @@ export default function CommentPlugin({
                             if (commentIDs !== null) {
                                 setActiveIDs(commentIDs);
                                 hasActiveIds = true;
+                                isExistingComment = true;
+                                setShowCommentInput(true);
                             }
                             if (!selection.isCollapsed()) {
                                 setActiveAnchorKey(anchorNode.getKey());
@@ -964,7 +972,8 @@ export default function CommentPlugin({
                     }
                     if (
                         !tags.has(COLLABORATION_TAG) &&
-                        $isRangeSelection(selection)
+                        $isRangeSelection(selection) &&
+                        !isExistingComment
                     ) {
                         setShowCommentInput(false);
                     }
@@ -997,6 +1006,14 @@ export default function CommentPlugin({
                         editor={editor}
                         cancelAddComment={cancelAddComment}
                         submitAddComment={submitAddComment}
+                        initialContent={
+                            comments.length > 0 && activeIDs.length > 0
+                                ? comments.find((c) => c.id === activeIDs[0]) !=
+                                  null
+                                    ? "found"
+                                    : "no"
+                                : "N/A"
+                        }
                     />,
                     document.body
                 )}

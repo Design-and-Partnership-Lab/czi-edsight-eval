@@ -9,6 +9,7 @@ import {
 } from "@/components/tremor/Tabs";
 import { cx } from "@/lib/utils";
 import { Text, TextInput, Title } from "@tremor/react";
+import { CircleIcon } from "lucide-react";
 
 interface TaskThreeProps {
     teacherEval: Category | null;
@@ -77,6 +78,10 @@ export function TaskThree({
         handleCanProgress(!!value.length);
     };
 
+    if (!teacherEval) {
+        return "Teacher Eval was not provided.";
+    }
+
     return (
         <>
             <Summary
@@ -97,14 +102,22 @@ export function TaskThree({
                             <TabsTrigger
                                 key={tab}
                                 value={tab}
-                                className={cx(
-                                    "text-lg font-bold",
-                                    activeTab === tab
-                                        ? "text-primary-dark"
-                                        : "text-secondary"
-                                )}
+                                className="flex items-center gap-x-2 text-lg font-bold"
                             >
-                                {tab}
+                                <span
+                                    className={cx(
+                                        activeTab === tab
+                                            ? "text-primary-dark"
+                                            : "text-secondary"
+                                    )}
+                                >
+                                    {tab}
+                                </span>
+                                {visitedTabs.has(tab) ? (
+                                    <CircleIcon className="fill-primary-dark text-primary-dark size-4" />
+                                ) : (
+                                    <CircleIcon className="size-4" />
+                                )}
                             </TabsTrigger>
                         ))}
                     </TabsList>

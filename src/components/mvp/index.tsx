@@ -6,21 +6,27 @@ import { Category } from "@/components/mvp/lib/utils";
 import { TaskThree } from "@/components/mvp/task-three";
 import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
+import { useProgress } from "@/components/progress/ProgressContext";
 import { Button } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
 export function Mvp() {
+    const { progress, increment } = useProgress();
+
     const [canProgress, setCanProgress] = useState(false);
     const [teacherEval, setTeacherEval] = useState<Category | null>(null);
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
     }, []);
-    const [currentTask, setCurrentTask] = useState(2);
+    const handleNextTask = useCallback(() => {
+        increment();
+        setCanProgress(false);
+    }, [increment]);
 
     const renderTask = () => {
-        switch (currentTask) {
-            case 2:
+        switch (progress) {
+            case 1:
                 return (
                     <TaskTwo
                         teacherEval={teacherEval}
@@ -28,7 +34,7 @@ export function Mvp() {
                         handleCanProgress={handleCanProgress}
                     />
                 );
-            case 3:
+            case 2:
                 return (
                     <TaskThree
                         teacherEval={teacherEval}
@@ -42,7 +48,7 @@ export function Mvp() {
     };
 
     return (
-        <div className="mx-16 my-8 space-y-8">
+        <div className="mx-16 my-8 min-w-[1200px] space-y-8">
             <Progress />
 
             <div className="space-y-8 pb-8">
@@ -56,10 +62,7 @@ export function Mvp() {
                         iconPosition="right"
                         className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
                         disabled={!canProgress}
-                        onClick={() => {
-                            setCurrentTask(currentTask + 1);
-                            setCanProgress(false);
-                        }}
+                        onClick={handleNextTask}
                     >
                         Next Activity
                     </Button>

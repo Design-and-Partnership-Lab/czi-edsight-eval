@@ -104,15 +104,7 @@ export function TaskThree({
                                 value={tab}
                                 className="flex items-center gap-x-2 text-lg font-bold"
                             >
-                                <span
-                                    className={cx(
-                                        activeTab === tab
-                                            ? "text-primary-dark"
-                                            : "text-secondary"
-                                    )}
-                                >
-                                    {tab}
-                                </span>
+                                {tab}
                                 {visitedTabs.has(tab) ? (
                                     <CircleIcon className="fill-primary-dark text-primary-dark size-4" />
                                 ) : (

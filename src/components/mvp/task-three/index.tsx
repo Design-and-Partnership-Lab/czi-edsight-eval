@@ -8,7 +8,7 @@ import {
     TabsTrigger,
 } from "@/components/tremor/Tabs";
 import { SubcategoryBucket } from "@prisma/client";
-import { Text, TextInput, Title } from "@tremor/react";
+import { Text, Textarea } from "@tremor/react";
 import { CircleIcon } from "lucide-react";
 
 interface TaskThreeProps {
@@ -126,14 +126,15 @@ export function TaskThree({
                         thoughts or manually type into the box below.
                     </Text>
 
-                    <TextInput
+                    <Textarea
                         placeholder={
                             hasScrolledThroughTabs
                                 ? "Input your response here..."
                                 : "You must read through all five sub-skills before you can respond to this question."
                         }
                         disabled={!hasScrolledThroughTabs}
-                        onChange={handleInput}
+                        onValueChange={handleInput}
+                        className="min-h-24"
                     />
 
                     {/* <div className="mt-2 flex justify-end">

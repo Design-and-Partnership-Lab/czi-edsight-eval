@@ -111,7 +111,7 @@ export function Mvp({
         <div className="mx-16 my-8 min-w-[1200px] space-y-8">
             <Progress />
 
-            <div className="space-y-8 pb-8">
+            <div className="space-y-8 pb-4">
                 <div className="flex items-center justify-between">
                     <span className="text-ee-gray text-2xl font-bold">
                         Reflection

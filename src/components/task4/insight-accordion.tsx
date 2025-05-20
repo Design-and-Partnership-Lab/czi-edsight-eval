@@ -23,14 +23,16 @@ export default function InsightAccordion({ header, insights }: InsightAccordionP
       </button>
 
       {isOpen && (
-        <div className="bg-white border border-gray-200 rounded-lg mt-2 px-6 py-4 space-y-3">
+        <div className=" mt-2 bg-white border border-gray-200 rounded-lg mt-2 px-6 py-4 space-y-3">
           {insights.map((text, idx) => (
-            <p key={idx} className="text-sm text-gray-700 leading-relaxed">
+            <li key={idx} className="text-sm text-gray-700 leading-relaxed">
               {text}
-            </p>
+            </li>
           ))}
         </div>
       )}
     </div>
   );
 }
+
+//flex justify-between items-center

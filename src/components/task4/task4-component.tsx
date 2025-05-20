@@ -2,6 +2,7 @@
 
 import React from "react";
 import InsightAccordion from "./insight-accordion";
+import InsightAccordionDiverged from "./insight-accordion-diverge";
 import { Card, Title, Text } from "@tremor/react";
 
 export default function Task4Component() {
@@ -56,11 +57,11 @@ export default function Task4Component() {
             <Title className="text-xl font-semibold mb-4 text-center">
             Here is where your insights diverged from the AI Rationale.
             </Title>
-            <InsightAccordion
+            <InsightAccordionDiverged
             header="While the AI noted that the student demonstrated open-mindedness, you pointed out that the student was talking about other students instead."
             insights={[diverged[0], diverged[1]]}
             />
-            <InsightAccordion
+            <InsightAccordionDiverged
             header="Where the AI commented on the student’s ability to use sources effectively, you noted room for improvement."
             insights={[diverged[0], diverged[1]]}
             />

@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
 import { Category } from "@/components/mvp/lib/utils";
+import { TaskFour } from "@/components/mvp/task-four";
 import { TaskThree } from "@/components/mvp/task-three";
 import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
@@ -44,20 +45,32 @@ export function Mvp({
         switch (progress) {
             case 1:
                 return (
-                    <TaskTwo
-                        teacherEval={teacherEval}
-                        setTeacherEval={setTeacherEval}
-                        handleCanProgress={handleCanProgress}
-                    />
+                    <AnnotationWrapper
+                        questionData={questionData}
+                        response=""
+                    >
+                        <TaskTwo
+                            teacherEval={teacherEval}
+                            setTeacherEval={setTeacherEval}
+                            handleCanProgress={handleCanProgress}
+                        />
+                    </AnnotationWrapper>
                 );
             case 2:
                 return (
-                    <TaskThree
-                        teacherEval={teacherEval}
-                        aiEval="Excelling"
-                        handleCanProgress={handleCanProgress}
-                    />
+                    <AnnotationWrapper
+                        questionData={questionData}
+                        response=""
+                    >
+                        <TaskThree
+                            teacherEval={teacherEval}
+                            aiEval="Excelling"
+                            handleCanProgress={handleCanProgress}
+                        />
+                    </AnnotationWrapper>
                 );
+            case 3:
+                return <TaskFour />;
             default:
                 return null;
         }
@@ -90,12 +103,7 @@ export function Mvp({
                 </div>
             </div>
 
-            <AnnotationWrapper
-                questionData={questionData}
-                response=""
-            >
-                {renderTask()}
-            </AnnotationWrapper>
+            {renderTask()}
         </div>
     );
 }

@@ -35,11 +35,13 @@ export function Mvp({
     const { progress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
-    const [teacherEval, setTeacherEval] = useState<Category | null>(null);
+    const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
+    const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
     }, []);
+
     const handleNextTask = useCallback(() => {
         increment();
         setCanProgress(false);
@@ -88,10 +90,12 @@ export function Mvp({
                         response=""
                     >
                         <TaskThree
-                            teacherEval={teacherEval}
                             aiEval="Excelling"
+                            teacherEval={teacherEval}
                             handleCanProgress={handleCanProgress}
                             aiRationale={aiRationale}
+                            teacherFeedback={teacherFeedback}
+                            setTeacherFeedback={setTeacherFeedback}
                         />
                     </AnnotationWrapper>
                 );
@@ -117,15 +121,28 @@ export function Mvp({
                         Reflection
                     </span>
 
-                    <Button
-                        icon={ArrowRightIcon}
-                        iconPosition="right"
-                        className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
-                        disabled={!canProgress}
-                        onClick={handleNextTask}
-                    >
-                        Next Activity
-                    </Button>
+                    {progress === 3 ? (
+                        <Button
+                            icon={ArrowRightIcon}
+                            iconPosition="right"
+                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold"
+                            onClick={() => {
+                                /* TODO: handle final task completion */
+                            }}
+                        >
+                            Next Reflection
+                        </Button>
+                    ) : (
+                        <Button
+                            icon={ArrowRightIcon}
+                            iconPosition="right"
+                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
+                            disabled={!canProgress}
+                            onClick={handleNextTask}
+                        >
+                            Next Activity
+                        </Button>
+                    )}
                 </div>
             </div>
 

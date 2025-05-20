@@ -16,6 +16,8 @@ interface TaskThreeProps {
     aiEval: Category;
     handleCanProgress: (value: boolean) => void;
     aiRationale: SubcategoryBucket[];
+    teacherFeedback: string | null;
+    setTeacherFeedback: (value: string) => void;
 }
 
 const TABS = [
@@ -31,6 +33,8 @@ export function TaskThree({
     aiEval,
     handleCanProgress,
     aiRationale,
+    teacherFeedback,
+    setTeacherFeedback,
 }: TaskThreeProps) {
     const [activeTab, setActiveTab] = useState("Openmindedness");
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(
@@ -47,16 +51,14 @@ export function TaskThree({
         });
     };
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    const handleInput = (value: string) => {
+        setTeacherFeedback(value);
         handleCanProgress(!!value.length);
     };
 
     if (!teacherEval) {
         return "Teacher Eval was not provided.";
     }
-
-    console.log("aiRationale", aiRationale);
 
     return (
         <>
@@ -133,6 +135,7 @@ export function TaskThree({
                                 : "You must read through all five sub-skills before you can respond to this question."
                         }
                         disabled={!hasScrolledThroughTabs}
+                        value={teacherFeedback ?? ""}
                         onValueChange={handleInput}
                         className="min-h-24"
                     />

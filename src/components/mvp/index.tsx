@@ -1,16 +1,32 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
 import { Category } from "@/components/mvp/lib/utils";
 import { TaskThree } from "@/components/mvp/task-three";
 import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
 import { useProgress } from "@/components/progress/ProgressContext";
+import QUESTIONS from "@/lib/questions";
+import {
+    Reflection,
+    ReflectionQuestion,
+    ReflectionResponseTranscript,
+} from "@prisma/client";
 import { Button } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
-export function Mvp() {
+interface MvpProps {
+    reflection: Reflection;
+    reflectionQuestion: ReflectionQuestion;
+    reflectionResponseTranscript: ReflectionResponseTranscript;
+}
+
+export function Mvp({
+    reflection,
+    reflectionQuestion,
+    reflectionResponseTranscript,
+}: MvpProps) {
     const { progress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
@@ -47,6 +63,11 @@ export function Mvp() {
         }
     };
 
+    const questionData = useMemo(
+        () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
+        [reflectionQuestion.question]
+    );
+
     return (
         <div className="mx-16 my-8 min-w-[1200px] space-y-8">
             <Progress />
@@ -54,7 +75,7 @@ export function Mvp() {
             <div className="space-y-8 pb-8">
                 <div className="flex items-center justify-between">
                     <span className="text-ee-gray text-2xl font-bold">
-                        Reflection #1
+                        Reflection
                     </span>
 
                     <Button
@@ -69,7 +90,12 @@ export function Mvp() {
                 </div>
             </div>
 
-            <AnnotationWrapper>{renderTask()}</AnnotationWrapper>
+            <AnnotationWrapper
+                questionData={questionData}
+                response=""
+            >
+                {renderTask()}
+            </AnnotationWrapper>
         </div>
     );
 }

@@ -1,20 +1,27 @@
+import QUESTIONS from "@/lib/questions";
 import { Text, Title } from "@tremor/react";
 
-export function AnnotationWrapper({ children }: { children: React.ReactNode }) {
+interface AnnotationWrapperProps {
+    questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
+    response: string;
+    children: React.ReactNode;
+}
+
+export function AnnotationWrapper({
+    questionData,
+    response,
+    children,
+}: AnnotationWrapperProps) {
+    const { question, code } = questionData;
+
     return (
         <div className="grid grid-cols-6 border">
             <div className="col-span-2 space-y-8 border-r p-10">
                 <div className="space-y-2">
                     <Title className="text-ee-gray-dark text-xl font-semibold">
-                        Prompt
+                        Prompt ({code})
                     </Title>
-                    <Text className="text-ee-gray-light">
-                        Critical Thinking: Describe an experience in this class
-                        when learning felt like a big challenge to you. How did
-                        you overcome this challenge? What did you learn about
-                        yourself during the process? Thinking back, what would
-                        you do differently to overcome the challenge?
-                    </Text>
+                    <Text className="text-ee-gray-light">{question}</Text>
                 </div>
 
                 <div className="space-y-2">

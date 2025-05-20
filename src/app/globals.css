@@ -11,7 +11,7 @@ body {
         @apply min-w-0;
     }
     body {
-        @apply text-gray-200;
+        @apply text-gray-800;
     }
     img {
         @apply pointer-events-none;

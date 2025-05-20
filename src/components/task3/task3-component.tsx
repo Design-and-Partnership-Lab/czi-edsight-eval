@@ -32,7 +32,6 @@ export default function EPEPageTask3({
     ];
 
     useEffect(() => {
-        // In a real implementation, you'd track tab visits.
         const timer = setTimeout(() => {
         setHasScrolledThroughTabs(true);
         }, 3000);
@@ -59,11 +58,32 @@ export default function EPEPageTask3({
         }
     };
 
+    const handleNextClick = () => {
+        if (hasScrolledThroughTabs) {
+            console.log("User has scrolled through all tabs.");
+        } 
+    };
+
+    const headerButton = (
+        <button
+            onClick={handleNextClick}
+            disabled={!hasScrolledThroughTabs}
+            className={`rounded-3xl px-6 py-2 font-semibold transition-colors duration-200 focus:outline-none ${
+                hasScrolledThroughTabs
+                    ? "cursor-pointer bg-[#001F54] text-white"
+                    : "cursor-not-allowed bg-gray-300 text-gray-500"
+            }`}
+        >
+            Next Activity →
+        </button>
+    );
+
     return (
         <div>
         <EPEPageShared
             reflectionQuestion={reflectionQuestion}
             reflectionResponseTranscript={reflectionResponseTranscript}
+            headerAction={headerButton}
         >
             <div className="-mx-10 -my-10 bg-[#EDF2F7] px-8 py-7 mb-6">
                 <div className="text-lg text-gray-800 font-bold mb-3">

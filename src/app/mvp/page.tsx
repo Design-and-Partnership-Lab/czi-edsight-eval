@@ -36,6 +36,19 @@ export default async function Page() {
         return <div>Error: Reflection response transcript not found</div>;
     }
 
+    const ai_rationale = await db.subcategoryBucket.findFirst({
+        where: {
+            reflectionResponseId: reflectionResponseTranscript.id,
+        },
+        select: {
+            subcategory: true,
+            bucket: true,
+            rationale: true,
+        },
+    });
+
+    console.log("AI Rationale: ", ai_rationale);
+
     return (
         <Mvp
             reflection={reflection}

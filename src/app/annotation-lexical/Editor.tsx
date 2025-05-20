@@ -71,11 +71,11 @@ export default function Editor(): JSX.Element {
                         }
                         ErrorBoundary={LexicalErrorBoundary}
                     />
-                    {floatingAnchorElem && !isSmallWidthViewport && (
+                    {/* {floatingAnchorElem && !isSmallWidthViewport && (
                         <FloatingCommentToolbar
                             anchorElem={floatingAnchorElem}
                         />
-                    )}
+                    )} */}
                 </>
             </div>
         </>

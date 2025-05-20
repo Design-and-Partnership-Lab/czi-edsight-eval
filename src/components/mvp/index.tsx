@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
 import { Category } from "@/components/mvp/lib/utils";
 import { TaskFour } from "@/components/mvp/task-four";
+import { TaskOne } from "@/components/mvp/task-one";
 import { TaskThree } from "@/components/mvp/task-three";
 import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
@@ -43,6 +44,19 @@ export function Mvp({
 
     const renderTask = () => {
         switch (progress) {
+            case 0:
+                return (
+                    <AnnotationWrapper
+                        questionData={questionData}
+                        response=""
+                    >
+                        <TaskOne
+                            teacherEval={teacherEval}
+                            setTeacherEval={setTeacherEval}
+                            handleCanProgress={handleCanProgress}
+                        />
+                    </AnnotationWrapper>
+                );
             case 1:
                 return (
                     <AnnotationWrapper
@@ -87,14 +101,14 @@ export function Mvp({
 
             <div className="space-y-8 pb-8">
                 <div className="flex items-center justify-between">
-                    <span className="text-ee-gray text-2xl font-bold">
+                    <span className="text-2xl font-bold text-ee-gray">
                         Reflection
                     </span>
 
                     <Button
                         icon={ArrowRightIcon}
                         iconPosition="right"
-                        className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
+                        className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
                         disabled={!canProgress}
                         onClick={handleNextTask}
                     >

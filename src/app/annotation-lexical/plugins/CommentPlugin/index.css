@@ -9,499 +9,501 @@
 
 /* Comment Add Button */
 .CommentPlugin_AddCommentBox {
-  position: absolute;
-  border-radius: 12px;
-  background-color: #ffffff;
-  width: 40px;
-  height: 45px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 10;
-  transition: all 0.2s ease;
+    position: absolute;
+    border-radius: 12px;
+    background-color: #ffffff;
+    width: 40px;
+    height: 45px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    transition: all 0.2s ease;
 }
 
 .CommentPlugin_AddCommentBox:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
 }
 
 .CommentPlugin_AddCommentBox_button {
-  border-radius: 12px;
-  border: none;
-  background: none;
-  width: 40px;
-  height: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    width: 40px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
 }
 
 .CommentPlugin_AddCommentBox_button:hover {
-  background-color: #f5f7fa;
+    background-color: #f5f7fa;
 }
 
 i.add-comment {
-  background-size: contain;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  background-image: url(../../images/icons/chat-left-text.svg);
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+    background-size: contain;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    background-image: url(../../images/icons/chat-left-text.svg);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
 }
 
 .CommentPlugin_AddCommentBox_button:hover i.add-comment {
-  opacity: 0.9;
+    opacity: 0.9;
 }
 
 @media (max-width: 600px) {
-  .CommentPlugin_AddCommentBox {
-    display: none;
-  }
+    .CommentPlugin_AddCommentBox {
+        display: none;
+    }
 }
 
 /* Comment Input Box */
 .CommentPlugin_CommentInputBox {
-  position: absolute;
-  width: 280px;
-  min-height: 100px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
-  z-index: 24;
-  animation: show-input-box 0.3s ease;
-  border: 1px solid #e0e0e0;
+    position: absolute;
+    width: 280px;
+    min-height: 100px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    z-index: 24;
+    animation: show-input-box 0.3s ease;
+    border: 1px solid #e0e0e0;
 }
 
 .CommentPlugin_CommentInputBox::before {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  margin-left: 0.5em;
-  right: -0.8em;
-  top: 0;
-  left: calc(50% + 0.25em);
-  box-sizing: border-box;
-  border: 0.5em solid black;
-  border-color: transparent transparent #ffffff #ffffff;
-  transform-origin: 0 0;
-  transform: rotate(135deg);
-  box-shadow: -2px 2px 2px 0 rgba(0, 0, 0, 0.04);
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin-left: 0.5em;
+    right: -0.8em;
+    top: 0;
+    left: calc(50% + 0.25em);
+    box-sizing: border-box;
+    border: 0.5em solid black;
+    border-color: transparent transparent #ffffff #ffffff;
+    transform-origin: 0 0;
+    transform: rotate(135deg);
+    box-shadow: -2px 2px 2px 0 rgba(0, 0, 0, 0.04);
 }
 
 @keyframes show-input-box {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .CommentPlugin_CommentInputBox_Buttons {
-  display: flex;
-  flex-direction: row;
-  padding: 0 12px 12px 12px;
-  gap: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 0 12px 12px 12px;
+    gap: 10px;
 }
 
 .CommentPlugin_CommentInputBox_Button {
-  flex: 1;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #f5f7fa;
-  color: #4a4a4a;
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f5f7fa;
+    color: #4a4a4a;
 }
 
 .CommentPlugin_CommentInputBox_Button:hover {
-  background-color: #e8eaed;
+    background-color: #e8eaed;
 }
 
 .CommentPlugin_CommentInputBox_Button.primary {
-  background-color: #4a6fa5;
-  color: #ffffff;
-  font-weight: 500;
+    background-color: #4a6fa5;
+    color: #ffffff;
+    font-weight: 500;
 }
 
 .CommentPlugin_CommentInputBox_Button.primary:hover {
-  background-color: #3b5c8a;
+    background-color: #3b5c8a;
 }
 
 .CommentPlugin_CommentInputBox_Button[disabled] {
-  background-color: #f0f0f0;
-  opacity: 0.6;
-  cursor: not-allowed;
-  color: #9e9e9e;
+    background-color: #f0f0f0;
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: #9e9e9e;
 }
 
 .CommentPlugin_CommentInputBox_Button[disabled]:hover {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 
 .CommentPlugin_CommentInputBox_EditorContainer {
-  position: relative;
-  margin: 12px;
-  border-radius: 6px;
+    position: relative;
+    margin: 12px;
+    border-radius: 6px;
 }
 
 .CommentPlugin_CommentInputBox_Editor {
-  position: relative;
-  border: 1px solid #e0e0e0;
-  background-color: #ffffff;
-  border-radius: 6px;
-  font-size: 14px;
-  caret-color: #4a4a4a;
-  display: block;
-  padding: 10px 12px;
-  min-height: 80px;
-  transition: border-color 0.2s ease;
+    position: relative;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    caret-color: #4a4a4a;
+    display: block;
+    padding: 10px 12px;
+    min-height: 80px;
+    transition: border-color 0.2s ease;
 }
 
 .CommentPlugin_CommentInputBox_Editor:focus {
-  outline: none;
-  border-color: #4a6fa5;
-  box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.1);
+    outline: none;
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.1);
 }
 
 /* Show Comments Button */
 .CommentPlugin_ShowCommentsButton {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background-color: #ddd;
-  border-radius: 10px;
+    position: fixed;
+    top: 66px;
+    left: 10px;
+    background-color: #ddd;
+    border-radius: 10px;
 }
 
 i.comments {
-  background-size: contain;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  background-image: url(../../images/icons/comments.svg);
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+    background-size: contain;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    background-image: url(../../images/icons/comments.svg);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
 }
 
 .CommentPlugin_ShowCommentsButton:hover {
-  background-color: #e8eaed;
+    background-color: #e8eaed;
 }
 
 .CommentPlugin_ShowCommentsButton:hover i.comments {
-  opacity: 0.9;
+    opacity: 0.9;
 }
 
 .CommentPlugin_ShowCommentsButton.active {
-  background-color: #e8eaed;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-color: #e8eaed;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .CommentPlugin_ShowCommentsButton.active i.comments {
-  opacity: 0.9;
+    opacity: 0.9;
 }
 
 @media (max-width: 600px) {
-  .CommentPlugin_ShowCommentsButton {
-    display: none;
-  }
+    .CommentPlugin_ShowCommentsButton {
+        display: none;
+    }
 }
 
 .CommentPlugin_CommentsPanel {
-  position: fixed;
-  right: 0;
-  width: 320px;
-  height: calc(100% - 88px);
-  top: 88px;
-  background-color: #ffffff;
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
-  box-shadow: -2px 0 16px rgba(0, 0, 0, 0.08);
-  animation: show-comments 0.3s ease;
-  z-index: 25;
-  border-left: 1px solid #e0e0e0;
+    position: fixed;
+    left: 0;
+    width: 320px;
+    height: calc(100% - 88px);
+    top: 88px;
+    background-color: #ffffff;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    box-shadow: -2px 0 16px rgba(0, 0, 0, 0.08);
+    animation: show-comments 0.3s ease;
+    z-index: 25;
+    border-left: 1px solid #e0e0e0;
 }
 
 @keyframes show-comments {
-  0% {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .CommentPlugin_CommentsPanel_Heading {
-  padding: 16px 20px;
-  margin: 0;
-  border-bottom: 1px solid #ebebeb;
-  font-size: 18px;
-  font-weight: 500;
-  color: #333333;
-  display: flex;
-  align-items: center;
+    padding: 16px 20px;
+    margin: 0;
+    border-bottom: 1px solid #ebebeb;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+    display: flex;
+    align-items: center;
 }
 
 .CommentPlugin_CommentsPanel_Editor {
-  position: relative;
-  border: 1px solid #e0e0e0;
-  background-color: #ffffff;
-  border-radius: 6px;
-  font-size: 14px;
-  caret-color: #4a4a4a;
-  display: block;
-  padding: 10px 36px 10px 12px;
-  min-height: 20px;
-  transition: border-color 0.2s ease;
-  margin: 12px;
+    position: relative;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    caret-color: #4a4a4a;
+    display: block;
+    padding: 10px 36px 10px 12px;
+    min-height: 20px;
+    transition: border-color 0.2s ease;
+    margin: 12px;
 }
 
 .CommentPlugin_CommentsPanel_Editor:focus {
-  outline: none;
-  border-color: #4a6fa5;
-  box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.1);
+    outline: none;
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.1);
 }
 
 .CommentPlugin_CommentsPanel_SendButton {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
 }
 
 .CommentPlugin_CommentsPanel_SendButton:hover {
-  background-color: #f5f7fa;
+    background-color: #f5f7fa;
 }
 
 i.send {
-  background-size: contain;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  background-image: url(../../images/icons/send.svg);
-  opacity: 0.6;
-  transition: all 0.2s ease;
+    background-size: contain;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    background-image: url(../../images/icons/send.svg);
+    opacity: 0.6;
+    transition: all 0.2s ease;
 }
 
 .CommentPlugin_CommentsPanel_SendButton:hover i.send {
-  opacity: 0.9;
-  filter: invert(40%) sepia(15%) saturate(1000%) hue-rotate(180deg) brightness(90%) contrast(90%);
+    opacity: 0.9;
+    filter: invert(40%) sepia(15%) saturate(1000%) hue-rotate(180deg)
+        brightness(90%) contrast(90%);
 }
 
 .CommentPlugin_CommentsPanel_SendButton[disabled] i.send {
-  opacity: 0.3;
+    opacity: 0.3;
 }
 
 .CommentPlugin_CommentsPanel_SendButton:hover[disabled] i.send {
-  opacity: 0.3;
-  filter: none;
+    opacity: 0.3;
+    filter: none;
 }
 
 .CommentPlugin_CommentsPanel_Empty {
-  color: #666666;
-  font-size: 15px;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  padding: 0 20px;
+    color: #666666;
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    padding: 0 20px;
 }
 
 /* Comments List */
 .CommentPlugin_CommentsPanel_List {
-  padding: 0;
-  list-style-type: none;
-  margin: 0;
-  width: 100%;
-  position: absolute;
-  top: 54px;
-  overflow-y: auto;
-  height: calc(100% - 54px);
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+    width: 100%;
+    position: absolute;
+    top: 54px;
+    overflow-y: auto;
+    height: calc(100% - 54px);
 }
 
 .CommentPlugin_CommentsPanel_List_Comment {
-  padding: 14px 16px;
-  margin: 0;
-  font-size: 14px;
-  position: relative;
-  transition: background-color 0.2s ease;
+    padding: 14px 16px;
+    margin: 0;
+    font-size: 14px;
+    position: relative;
+    transition: background-color 0.2s ease;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment:hover {
-  background-color: #f8f9fa;
+    background-color: #f8f9fa;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active
-  .CommentPlugin_CommentsPanel_List_Comment:hover {
-  background-color: inherit;
+    .CommentPlugin_CommentsPanel_List_Comment:hover {
+    background-color: inherit;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment p {
-  margin: 0;
-  color: #4a4a4a;
-  line-height: 1.5;
+    margin: 0;
+    color: #4a4a4a;
+    line-height: 1.5;
 }
 
 .CommentPlugin_CommentsPanel_List_Details {
-  color: #333333;
-  padding-bottom: 6px;
-  display: flex;
-  align-items: center;
+    color: #333333;
+    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment_Author {
-  font-weight: 500;
-  padding-right: 8px;
+    font-weight: 500;
+    padding-right: 8px;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment_Time {
-  color: #888888;
-  font-size: 12px;
+    color: #888888;
+    font-size: 12px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread {
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid #ebebeb;
-  border-bottom: 1px solid #ebebeb;
-  position: relative;
-  transition: all 0.2s ease;
-  border-left: 0 solid #ebebeb;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    position: relative;
+    transition: all 0.2s ease;
+    border-left: 0 solid #ebebeb;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread:first-child,
 .CommentPlugin_CommentsPanel_List_Thread
-  + .CommentPlugin_CommentsPanel_List_Thread {
-  border-top: none;
+    + .CommentPlugin_CommentsPanel_List_Thread {
+    border-top: none;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.interactive {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.interactive:hover {
-  background-color: #f8f9fa;
+    background-color: #f8f9fa;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active {
-  background-color: #f8f9fa;
-  border-left: 4px solid #4a6fa5;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+    background-color: #f8f9fa;
+    border-left: 4px solid #4a6fa5;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_QuoteBox {
-  padding: 14px 16px 0 16px;
-  color: #888888;
-  display: block;
+    padding: 14px 16px 0 16px;
+    color: #888888;
+    display: block;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Quote {
-  margin: 0 0 10px 0;
-  border-left: 3px solid #ebebeb;
-  padding-left: 12px;
+    margin: 0 0 10px 0;
+    border-left: 3px solid #ebebeb;
+    padding-left: 12px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Quote span {
-  color: #333333;
-  background-color: rgba(74, 111, 165, 0.1);
-  padding: 2px 3px;
-  line-height: 1.5;
-  display: inline;
-  font-weight: 500;
-  border-radius: 2px;
+    color: #333333;
+    background-color: rgba(74, 111, 165, 0.1);
+    padding: 2px 3px;
+    line-height: 1.5;
+    display: inline;
+    font-weight: 500;
+    border-radius: 2px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments {
-  padding-left: 16px;
-  list-style-type: none;
+    padding-left: 16px;
+    list-style-type: none;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
-  .CommentPlugin_CommentsPanel_List_Comment:first-child {
-  border: none;
-  margin-left: 0;
-  padding-left: 6px;
+    .CommentPlugin_CommentsPanel_List_Comment:first-child {
+    border: none;
+    margin-left: 0;
+    padding-left: 6px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
-  .CommentPlugin_CommentsPanel_List_Comment:first-child.CommentPlugin_CommentsPanel_List_Comment:last-child {
-  padding-bottom: 8px;
+    .CommentPlugin_CommentsPanel_List_Comment:first-child.CommentPlugin_CommentsPanel_List_Comment:last-child {
+    padding-bottom: 8px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
-  .CommentPlugin_CommentsPanel_List_Comment {
-  padding-left: 14px;
-  border-left: 3px solid #ebebeb;
-  margin-left: 8px;
+    .CommentPlugin_CommentsPanel_List_Comment {
+    padding-left: 14px;
+    border-left: 3px solid #ebebeb;
+    margin-left: 8px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Editor {
-  position: relative;
-  padding-top: 4px;
+    position: relative;
+    padding-top: 4px;
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  opacity: 0;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    opacity: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .CommentPlugin_CommentsPanel_DeletedComment,
 .CommentPlugin_CommentsPanel_List_Comment:hover
-  .CommentPlugin_CommentsPanel_List_DeleteButton,
+    .CommentPlugin_CommentsPanel_List_DeleteButton,
 .CommentPlugin_CommentsPanel_List_Thread_QuoteBox:hover
-  .CommentPlugin_CommentsPanel_List_DeleteButton {
-  opacity: 0.5;
+    .CommentPlugin_CommentsPanel_List_DeleteButton {
+    opacity: 0.5;
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.05);
+    opacity: 0.8;
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton i.delete {
-  background-size: contain;
-  background-color: rgba(0, 0, 0, 0.05);
-  position: absolute;
-  left: 7px;
-  top: 7px;
-  height: 16px;
-  width: 16px;
-  background-image: url(../../images/icons/trash3.svg);
-  transition: all 0.2s ease;
+    background-size: contain;
+    background-color: rgba(0, 0, 0, 0.05);
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    height: 16px;
+    width: 16px;
+    background-image: url(../../images/icons/trash3.svg);
+    transition: all 0.2s ease;
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton:hover i.delete {
-  filter: invert(40%) sepia(15%) saturate(1000%) hue-rotate(180deg) brightness(90%) contrast(90%);
+    filter: invert(40%) sepia(15%) saturate(1000%) hue-rotate(180deg)
+        brightness(90%) contrast(90%);
 }
 
 /* Deleted Comment */
 .CommentPlugin_CommentsPanel_DeletedComment {
-  font-style: italic;
-  color: #888888;
+    font-style: italic;
+    color: #888888;
 }

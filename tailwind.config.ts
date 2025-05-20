@@ -71,7 +71,11 @@ const config: Config = {
                 ee: {
                     white: "#FFFFFF",
                     black: "#000000",
-                    gray: "#4A5568",
+                    gray: {
+                        DEFAULT: "#4A5568",
+                        dark: "#1A202C",
+                        light: "#374151",
+                    },
                 },
                 primary: {
                     dark: "#25488A",

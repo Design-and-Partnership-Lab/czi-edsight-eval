@@ -7,7 +7,6 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/tremor/Tabs";
-import { cx } from "@/lib/utils";
 import { Text, TextInput, Title } from "@tremor/react";
 import { CircleIcon } from "lucide-react";
 
@@ -106,7 +105,7 @@ export function TaskThree({
                             >
                                 {tab}
                                 {visitedTabs.has(tab) ? (
-                                    <CircleIcon className="fill-primary-dark text-primary-dark size-4" />
+                                    <CircleIcon className="size-4 fill-blue-500 text-blue-500" />
                                 ) : (
                                     <CircleIcon className="size-4" />
                                 )}

@@ -3,7 +3,7 @@ import { Text, Title } from "@tremor/react";
 
 interface AnnotationWrapperProps {
     questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
-    response: string;
+    response: string | null;
     children: React.ReactNode;
 }
 
@@ -24,14 +24,16 @@ export function AnnotationWrapper({
                     <Text className="text-ee-gray-light">{question}</Text>
                 </div>
 
-                <div className="space-y-2">
-                    <Title className="text-ee-gray-dark text-xl font-semibold">
-                        Response
-                    </Title>
-                    <Text className="text-ee-gray-light">
-                        [[ THE COMPONENT ]]
-                    </Text>
-                </div>
+                {response ? (
+                    <div className="space-y-2">
+                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                            Response
+                        </Title>
+                        <Text className="text-ee-gray-light">
+                            [[ THE COMPONENT ]]
+                        </Text>
+                    </div>
+                ) : null}
             </div>
 
             <div className="col-span-4 p-10">{children}</div>

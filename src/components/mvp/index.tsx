@@ -14,20 +14,23 @@ import {
     Reflection,
     ReflectionQuestion,
     ReflectionResponseTranscript,
+    SubcategoryBucket,
 } from "@prisma/client";
-import { Button } from "@tremor/react";
+import { Button, Title } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
 interface MvpProps {
     reflection: Reflection;
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
+    aiRationale: SubcategoryBucket;
 }
 
 export function Mvp({
     reflection,
     reflectionQuestion,
     reflectionResponseTranscript,
+    aiRationale,
 }: MvpProps) {
     const { progress, increment } = useProgress();
 
@@ -46,16 +49,24 @@ export function Mvp({
         switch (progress) {
             case 0:
                 return (
-                    <AnnotationWrapper
-                        questionData={questionData}
-                        response=""
-                    >
-                        <TaskOne
-                            teacherEval={teacherEval}
-                            setTeacherEval={setTeacherEval}
-                            handleCanProgress={handleCanProgress}
-                        />
-                    </AnnotationWrapper>
+                    <div className="flex flex-col gap-y-8">
+                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                            Read the prompt and the student response. Annotate
+                            what stood out to you. Please note that you will not
+                            be able to revise your annotations afterward.
+                        </Title>
+
+                        <AnnotationWrapper
+                            questionData={questionData}
+                            response={null}
+                        >
+                            <TaskOne
+                                teacherEval={teacherEval}
+                                setTeacherEval={setTeacherEval}
+                                handleCanProgress={handleCanProgress}
+                            />
+                        </AnnotationWrapper>
+                    </div>
                 );
             case 1:
                 return (
@@ -101,14 +112,14 @@ export function Mvp({
 
             <div className="space-y-8 pb-8">
                 <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-ee-gray">
+                    <span className="text-ee-gray text-2xl font-bold">
                         Reflection
                     </span>
 
                     <Button
                         icon={ArrowRightIcon}
                         iconPosition="right"
-                        className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
+                        className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
                         disabled={!canProgress}
                         onClick={handleNextTask}
                     >

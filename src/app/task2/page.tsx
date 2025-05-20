@@ -1,5 +1,5 @@
-import ProgressBar from "@/components/progress-bar/progress-bar";
 import EPEPage from "@/components/task2/task2-component";
+import ProgressBar from "@/components/progress-bar/progress-bar";
 import { db } from "@/db";
 
 export default async function Home() {
@@ -54,7 +54,7 @@ export default async function Home() {
         }
 
         return (
-            <div className="justify-content-center flex h-screen flex-col bg-white p-16">
+            <div className="flex flex-col h-screen justify-content-center p-16 bg-white">
                 <div className="pb-8">
                     <ProgressBar currentStep={1} />
                 </div>
@@ -66,6 +66,7 @@ export default async function Home() {
                 />
             </div>
         );
+        
     } catch (error) {
         console.error(error);
         return <div>Error fetching data</div>;

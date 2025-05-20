@@ -1,5 +1,6 @@
 "use client";
 
+import { TaskTwo } from "@/components/mvp/task-two/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
 import { Button } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
@@ -24,6 +25,8 @@ export function Mvp() {
                     </Button>
                 </div>
             </div>
+
+            <TaskTwo />
         </div>
     );
 }

@@ -70,9 +70,14 @@ const config: Config = {
             colors: {
                 ee: {
                     white: "#FFFFFF",
+                    black: "#000000",
                     gray: "#4A5568",
                 },
-                "primary-dark": "#25488A",
+                primary: {
+                    dark: "#25488A",
+                    light: "#7DD2FB",
+                    medium: "#0EA4E8",
+                },
             },
         },
         animation: {

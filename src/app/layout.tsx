@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 
-import { Header } from "@/components/foo";
+import { Header } from "@/components/mvp/mvp-header";
 import { cx } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { GeistMono } from "geist/font/mono";

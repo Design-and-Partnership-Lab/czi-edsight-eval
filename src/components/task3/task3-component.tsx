@@ -15,25 +15,92 @@ type EPEData = {
   reflectionResponseTranscript: ReflectionResponseTranscript;
 };
 
+const tabs = [
+  "Openmindedness",
+  "Materials",
+  "Sources",
+  "Innovation",
+  "Reflection",
+] as const;
+type TabName = typeof tabs[number];
+
+interface TabInfo {
+  items?: string[];
+  badgeText?: string;
+  placeholder?: string;
+}
+
+const tabData: Record<TabName, TabInfo> = {
+  Openmindedness: {
+    items: [
+      "The student mentions using their creativity to develop different timelines for their essay but does not specify the use of multiple kinds of materials or media in the creative process.",
+      "The student discusses their creative approach in writing an essay and exploring different timelines, but does not mention using any specific media or materials in their process.",
+      "The student explains their creative approach to the essay and how they developed different timelines, but does not specify why they chose particular materials or media for their creative expression.",
+      "The student utilized timelines to creatively explore various outcomes from the trial in To Kill a Mockingbird, demonstrating a deeper understanding of the characters and the story’s themes.",
+    ],
+    badgeText: "Progressing",
+  },
+  Materials: {
+    placeholder: "Content for Materials would go here.",
+  },
+  Sources: {
+    placeholder: "Content for Sources would go here.",
+  },
+  Innovation: {
+    placeholder: "Content for Innovation would go here.",
+  },
+  Reflection: {
+    placeholder: "Content for Reflection would go here.",
+  },
+};
+
+const TabContent: React.FC<TabInfo> = ({ items, placeholder, badgeText }) => {
+  const colorMap = {
+    Emerging:    'rgba(125, 210, 251, 1)',
+    Progressing: 'rgba(14, 164, 232, 1)',
+    Excelling:   'rgba(3, 105, 160, 1)',
+  };
+
+  const baseBadgeClasses = "mt-4 rounded-full border-2 px-4 py-1 font-semibold";
+  const badgeColor = badgeText ? (colorMap as any)[badgeText] : undefined;
+  const badgeStyle = badgeColor
+    ? { borderColor: badgeColor, color: badgeColor }
+    : undefined;
+
+  return (
+    <div>
+      {items ? (
+        <ul className="list-disc pl-5 text-sm text-gray-800">
+          {items.map((text, idx) => (
+            <li key={idx}>{text}</li>
+          ))}
+        </ul>
+      ) : (
+        <div className="italic text-gray-500">{placeholder}</div>
+      )}
+
+      {badgeText && (
+        <button
+          className={baseBadgeClasses}
+          style={badgeStyle}
+        >
+          {badgeText}
+        </button>
+      )}
+    </div>
+  );
+};
+
 export default function EPEPageTask3({
   student,
   reflectionQuestion,
   reflectionResponseTranscript,
 }: EPEData) {
-  const tabs = [
-    "Openmindedness",
-    "Materials",
-    "Sources",
-    "Innovation",
-    "Reflection",
-  ] as const;
-
-  const [activeTab, setActiveTab] = useState<typeof tabs[number]>("Reflection");
+  const [activeTab, setActiveTab] = useState<TabName>("Reflection");
   const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(["Reflection"]));
   const hasScrolledThroughTabs = visitedTabs.size === tabs.length;
 
-  // whenever user clicks a tab, mark it visited
-  const handleTabClick = (tab: typeof tabs[number]) => {
+  const handleTabClick = (tab: TabName) => {
     setActiveTab(tab);
     setVisitedTabs((prev) => {
       const next = new Set(prev);
@@ -42,33 +109,16 @@ export default function EPEPageTask3({
     });
   };
 
-  const getTabContent = (tab: string) => {
-    switch (tab) {
-      case "Openmindedness":
-        return <div className="italic text-gray-500">Content for Openmindedness would go here.</div>;
-      case "Materials":
-        return <div className="italic text-gray-500">Content for Materials would go here.</div>;
-      case "Sources":
-        return <div className="italic text-gray-500">Content for Sources would go here.</div>;
-      case "Innovation":
-        return <div className="italic text-gray-500">Content for Innovation would go here.</div>;
-      case "Reflection":
-        return <div className="italic text-gray-500">Content for Reflection would go here.</div>;
-      default:
-        return null;
-    }
-  };
-
-  const handleNextClick = () => {
+  const handleNext = () => {
     if (hasScrolledThroughTabs) {
       console.log("User has visited all tabs.");
-      // ... whatever next should do
+      // TODO: onNext logic
     }
   };
 
   const headerButton = (
     <button
-      onClick={handleNextClick}
+      onClick={handleNext}
       disabled={!hasScrolledThroughTabs}
       className={`rounded-3xl px-6 py-2 font-semibold transition-colors duration-200 focus:outline-none ${
         hasScrolledThroughTabs
@@ -116,10 +166,12 @@ export default function EPEPageTask3({
             ))}
           </nav>
 
-          <div className="min-h-32">{getTabContent(activeTab)}</div>
+          <div className="min-h-32">
+            <TabContent {...tabData[activeTab]} />
+          </div>
 
           <div className="flex flex-col justify-between mt-6">
-            <div className="mb-4 text-sm leading-relaxed text-gray-800 font-semibold">
+            <div className="pt-14 mb-4 text-sm leading-relaxed text-gray-800 font-semibold">
               <p>
                 Think about how your annotations compare and contrast with the AI
                 Rationale. What stood out to you? When you are ready, either press

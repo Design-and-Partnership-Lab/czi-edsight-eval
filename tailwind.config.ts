@@ -82,6 +82,9 @@ const config: Config = {
                     light: "#7DD2FB",
                     medium: "#0EA4E8",
                 },
+                secondary: {
+                    DEFAULT: "#718096",
+                },
             },
         },
         animation: {

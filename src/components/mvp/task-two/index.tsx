@@ -1,25 +1,26 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { CATEGORIES, type Category } from "@/components/mvp/lib/utils";
 import { CategoryButton } from "@/components/mvp/task-two/category-button";
 
-const CATEGORIES = ["Emerging", "Progressing", "Excelling"] as const;
-
 interface TaskTwoProps {
+    teacherEval: Category | null;
+    setTeacherEval: (value: Category) => void;
     handleCanProgress: (value: boolean) => void;
 }
 
-export function TaskTwo({ handleCanProgress }: TaskTwoProps) {
-    const [selectedCategory, setSelectedCategory] = useState<
-        (typeof CATEGORIES)[number] | null
-    >(null);
-
+export function TaskTwo({
+    teacherEval,
+    setTeacherEval,
+    handleCanProgress,
+}: TaskTwoProps) {
     const handleClick = useCallback(
         (cat: (typeof CATEGORIES)[number]) => {
-            setSelectedCategory(cat);
+            setTeacherEval(cat);
             handleCanProgress(true);
         },
-        [handleCanProgress]
+        [handleCanProgress, setTeacherEval]
     );
 
     return (
@@ -34,7 +35,7 @@ export function TaskTwo({ handleCanProgress }: TaskTwoProps) {
                     <CategoryButton
                         key={c}
                         category={c}
-                        selected={selectedCategory === c}
+                        selected={teacherEval === c}
                         onClick={() => handleClick(c)}
                     />
                 ))}

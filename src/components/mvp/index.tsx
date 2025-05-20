@@ -23,7 +23,7 @@ interface MvpProps {
     reflection: Reflection;
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
-    aiRationale: SubcategoryBucket;
+    aiRationale: SubcategoryBucket[];
 }
 
 export function Mvp({
@@ -91,6 +91,7 @@ export function Mvp({
                             teacherEval={teacherEval}
                             aiEval="Excelling"
                             handleCanProgress={handleCanProgress}
+                            aiRationale={aiRationale}
                         />
                     </AnnotationWrapper>
                 );

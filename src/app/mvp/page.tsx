@@ -36,24 +36,24 @@ export default async function Page() {
         return <div>Error: Reflection response transcript not found</div>;
     }
 
-    const ai_rationale = await db.subcategoryBucket.findFirst({
+    const aiRationale = await db.subcategoryBucket.findMany({
         where: {
             reflectionResponseId: reflectionResponseTranscript.id,
-        },
-        select: {
-            subcategory: true,
-            bucket: true,
-            rationale: true,
+            category: "CREATIVITY",
         },
     });
 
-    console.log("AI Rationale: ", ai_rationale);
+    if (!aiRationale) {
+        console.error("AI Rationale not found");
+        return <div>Error: AI Rationale not found</div>;
+    }
 
     return (
         <Mvp
             reflection={reflection}
             reflectionQuestion={reflectionQuestion}
             reflectionResponseTranscript={reflectionResponseTranscript}
+            aiRationale={aiRationale}
         />
     );
 }

@@ -20,7 +20,7 @@ export function useProgress() {
 }
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(3);
 
     const increment = () => setProgress((p) => p + 1);
 

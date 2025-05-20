@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, Text, Title } from "@tremor/react";
 
-import InsightAccordion from "../mvp/task-four/insight-accordion";
+import InsightAccordion from "../mvp/task-four/insight-accordion-align";
 import InsightAccordionDiverged from "../mvp/task-four/insight-accordion-diverge";
 
 export default function Task4Component() {

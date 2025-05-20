@@ -1,13 +1,13 @@
 import {
     Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/tremor/Accordion";
+    AccordionBody,
+    AccordionHeader,
+    AccordionList,
+} from "@tremor/react";
 
 interface InsightAccordionProps {
     header: string;
-    insights: { ai: string; user: string }[]; // updated to expect structured insight data
+    insights: { ai: string; user: string }[];
 }
 
 export default function InsightAccordionDiverged({
@@ -15,15 +15,15 @@ export default function InsightAccordionDiverged({
     insights,
 }: InsightAccordionProps) {
     return (
-        <Accordion type="multiple">
-            <AccordionItem value="item-1">
-                <AccordionTrigger>
-                    <span className="text-left text-lg text-black">
+        <AccordionList>
+            <Accordion className="rounded-xl">
+                <AccordionHeader>
+                    <span className="text-ee-black text-left text-lg">
                         {header}
                     </span>
-                </AccordionTrigger>
+                </AccordionHeader>
 
-                <AccordionContent>
+                <AccordionBody>
                     <div className="space-y-6">
                         {insights.map((item, idx) => (
                             <div
@@ -49,8 +49,8 @@ export default function InsightAccordionDiverged({
                             </div>
                         ))}
                     </div>
-                </AccordionContent>
-            </AccordionItem>
-        </Accordion>
+                </AccordionBody>
+            </Accordion>
+        </AccordionList>
     );
 }

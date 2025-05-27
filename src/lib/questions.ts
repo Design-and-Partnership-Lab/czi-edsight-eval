@@ -1,4 +1,4 @@
-const QUESTIONS = {
+export const QUESTIONS = {
     criticalthinking_0: {
         index: 0,
         code: "criticalthinking_0",

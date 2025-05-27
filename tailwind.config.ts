@@ -67,6 +67,25 @@ const config: Config = {
                     to: { opacity: "0", transform: "translateX(100%)" },
                 },
             },
+            colors: {
+                ee: {
+                    white: "#FFFFFF",
+                    black: "#000000",
+                    gray: {
+                        DEFAULT: "#4A5568",
+                        dark: "#1A202C",
+                        light: "#374151",
+                    },
+                },
+                primary: {
+                    dark: "#25488A",
+                    light: "#7DD2FB",
+                    medium: "#0EA4E8",
+                },
+                secondary: {
+                    DEFAULT: "#718096",
+                },
+            },
         },
         animation: {
             hide: "hide 150ms cubic-bezier(0.16, 1, 0.3, 1)",

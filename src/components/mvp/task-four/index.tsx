@@ -42,11 +42,7 @@ export function TaskFour() {
                 </div>
             </div>
 
-<<<<<<< HEAD
             <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
-=======
-            <Card className="w-full space-y-4 rounded-2xl px-10 py-6">
->>>>>>> 63a65a23907330dc0911bcb4a479e9332a9cef53
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights aligned with the AI Rationale.
                 </Title>
@@ -61,11 +57,7 @@ export function TaskFour() {
                 />
             </div>
 
-<<<<<<< HEAD
             <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
-=======
-            <Card className="w-full space-y-4 rounded-2xl px-10 py-6">
->>>>>>> 63a65a23907330dc0911bcb4a479e9332a9cef53
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights diverged from the AI Rationale.
                 </Title>

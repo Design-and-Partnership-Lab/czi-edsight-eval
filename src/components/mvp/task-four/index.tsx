@@ -42,7 +42,7 @@ export function TaskFour() {
                 </div>
             </div>
 
-            <Card className="w-full space-y-10 rounded-2xl px-10 py-6">
+            <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights aligned with the AI Rationale.
                 </Title>
@@ -55,9 +55,9 @@ export function TaskFour() {
                     header="You both noticed that the student struggled to convey how their applied their materials skill."
                     insights={[aligned[0], aligned[1]]}
                 />
-            </Card>
+            </div>
 
-            <Card className="w-full space-y-10 rounded-2xl px-10 py-6">
+            <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights diverged from the AI Rationale.
                 </Title>
@@ -70,7 +70,7 @@ export function TaskFour() {
                     header="Where the AI commented on the student’s ability to use sources effectively, you noted room for improvement."
                     insights={[diverged[1]]}
                 />
-            </Card>
+            </div>
         </div>
     );
 }

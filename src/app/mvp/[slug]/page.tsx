@@ -10,11 +10,9 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
     const { slug } = await params;
 
-    const teacherId = parseInt(slug);
-
     // ! FIX ME: The 3 round trips to the database are not efficient.
     const reflection = await db.reflection.findFirst({
-        where: { teacherId: teacherId },
+        where: { id: slug },
     });
 
     if (!reflection) {

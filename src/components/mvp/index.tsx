@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
 import { Category } from "@/components/mvp/lib/utils";
 import { TaskFour } from "@/components/mvp/task-four";
@@ -33,6 +34,7 @@ export function Mvp({
     aiRationale,
 }: MvpProps) {
     const { progress, increment } = useProgress();
+    const router = useRouter();
 
     const [canProgress, setCanProgress] = useState(false);
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
@@ -52,7 +54,7 @@ export function Mvp({
             case 0:
                 return (
                     <div className="flex flex-col gap-y-8">
-                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                        <Title className="text-xl font-semibold text-ee-gray-dark">
                             Read the prompt and the student response. Annotate
                             what stood out to you. Please note that you will not
                             be able to revise your annotations afterward.
@@ -117,7 +119,7 @@ export function Mvp({
 
             <div className="space-y-8 pb-4">
                 <div className="flex items-center justify-between">
-                    <span className="text-ee-gray text-2xl font-bold">
+                    <span className="text-2xl font-bold text-ee-gray">
                         Reflection
                     </span>
 
@@ -125,10 +127,8 @@ export function Mvp({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold"
-                            onClick={() => {
-                                /* TODO: handle final task completion */
-                            }}
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white"
+                            onClick={() => router.push("/mvp")}
                         >
                             Next Reflection
                         </Button>
@@ -136,7 +136,7 @@ export function Mvp({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
                             disabled={!canProgress}
                             onClick={handleNextTask}
                         >

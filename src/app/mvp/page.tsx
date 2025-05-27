@@ -35,7 +35,7 @@ export default async function Page() {
                     className="w-full"
                 >
                     <Card className="mb-6 flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200">
-                        <span className="w-fit text-3xl font-semibold text-ee-gray-dark">
+                        <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
                             Reflection {index + 1}
                         </span>
 

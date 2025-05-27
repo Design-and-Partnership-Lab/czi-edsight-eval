@@ -14,29 +14,34 @@ import {
     Reflection,
     ReflectionQuestion,
     ReflectionResponseTranscript,
+    SubcategoryBucket,
 } from "@prisma/client";
-import { Button } from "@tremor/react";
+import { Button, Title } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
 interface MvpProps {
     reflection: Reflection;
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
+    aiRationale: SubcategoryBucket[];
 }
 
 export function Mvp({
     reflection,
     reflectionQuestion,
     reflectionResponseTranscript,
+    aiRationale,
 }: MvpProps) {
     const { progress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
-    const [teacherEval, setTeacherEval] = useState<Category | null>(null);
+    const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
+    const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
     }, []);
+
     const handleNextTask = useCallback(() => {
         increment();
         setCanProgress(false);
@@ -46,16 +51,24 @@ export function Mvp({
         switch (progress) {
             case 0:
                 return (
-                    <AnnotationWrapper
-                        questionData={questionData}
-                        response=""
-                    >
-                        <TaskOne
-                            teacherEval={teacherEval}
-                            setTeacherEval={setTeacherEval}
-                            handleCanProgress={handleCanProgress}
-                        />
-                    </AnnotationWrapper>
+                    <div className="flex flex-col gap-y-8">
+                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                            Read the prompt and the student response. Annotate
+                            what stood out to you. Please note that you will not
+                            be able to revise your annotations afterward.
+                        </Title>
+
+                        <AnnotationWrapper
+                            questionData={questionData}
+                            response={null}
+                        >
+                            <TaskOne
+                                teacherEval={teacherEval}
+                                setTeacherEval={setTeacherEval}
+                                handleCanProgress={handleCanProgress}
+                            />
+                        </AnnotationWrapper>
+                    </div>
                 );
             case 1:
                 return (
@@ -77,9 +90,12 @@ export function Mvp({
                         response=""
                     >
                         <TaskThree
-                            teacherEval={teacherEval}
                             aiEval="Excelling"
+                            teacherEval={teacherEval}
                             handleCanProgress={handleCanProgress}
+                            aiRationale={aiRationale}
+                            teacherFeedback={teacherFeedback}
+                            setTeacherFeedback={setTeacherFeedback}
                         />
                     </AnnotationWrapper>
                 );
@@ -99,21 +115,34 @@ export function Mvp({
         <div className="mx-16 my-8 min-w-[1200px] space-y-8">
             <Progress />
 
-            <div className="space-y-8 pb-8">
+            <div className="space-y-8 pb-4">
                 <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-ee-gray">
+                    <span className="text-ee-gray text-2xl font-bold">
                         Reflection
                     </span>
 
-                    <Button
-                        icon={ArrowRightIcon}
-                        iconPosition="right"
-                        className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
-                        disabled={!canProgress}
-                        onClick={handleNextTask}
-                    >
-                        Next Activity
-                    </Button>
+                    {progress === 3 ? (
+                        <Button
+                            icon={ArrowRightIcon}
+                            iconPosition="right"
+                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold"
+                            onClick={() => {
+                                /* TODO: handle final task completion */
+                            }}
+                        >
+                            Next Reflection
+                        </Button>
+                    ) : (
+                        <Button
+                            icon={ArrowRightIcon}
+                            iconPosition="right"
+                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
+                            disabled={!canProgress}
+                            onClick={handleNextTask}
+                        >
+                            Next Activity
+                        </Button>
+                    )}
                 </div>
             </div>
 

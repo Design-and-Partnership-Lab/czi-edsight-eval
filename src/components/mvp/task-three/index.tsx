@@ -7,61 +7,40 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/tremor/Tabs";
-import { Text, TextInput, Title } from "@tremor/react";
+import { SubcategoryBucket } from "@prisma/client";
+import { Text, Textarea } from "@tremor/react";
 import { CircleIcon } from "lucide-react";
 
 interface TaskThreeProps {
     teacherEval: Category | null;
     aiEval: Category;
     handleCanProgress: (value: boolean) => void;
+    aiRationale: SubcategoryBucket[];
+    teacherFeedback: string | null;
+    setTeacherFeedback: (value: string) => void;
 }
 
-const tabs = [
+const TABS = [
+    "Openmindedness",
+    "Sources",
+    "Innovation",
+    "Materials",
     "Reflection",
-    "Analysis",
-    "Evidence",
-    "Reasoning",
-    "Communication",
 ];
-
-interface TabContentProps {
-    title: string;
-    content: string;
-}
-
-const tabData: Record<string, TabContentProps> = {
-    Reflection: {
-        title: "Reflection Skills",
-        content: "Content for reflection tab",
-    },
-    Analysis: {
-        title: "Analysis Skills",
-        content: "Content for analysis tab",
-    },
-    Evidence: {
-        title: "Evidence Skills",
-        content: "Content for evidence tab",
-    },
-    Reasoning: {
-        title: "Reasoning Skills",
-        content: "Content for reasoning tab",
-    },
-    Communication: {
-        title: "Communication Skills",
-        content: "Content for communication tab",
-    },
-};
 
 export function TaskThree({
     teacherEval,
     aiEval,
     handleCanProgress,
+    aiRationale,
+    teacherFeedback,
+    setTeacherFeedback,
 }: TaskThreeProps) {
-    const [activeTab, setActiveTab] = useState("Reflection");
+    const [activeTab, setActiveTab] = useState("Openmindedness");
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(
-        new Set(["Reflection"])
+        new Set(["Openmindedness"])
     );
-    const hasScrolledThroughTabs = visitedTabs.size === tabs.length;
+    const hasScrolledThroughTabs = visitedTabs.size === TABS.length;
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
@@ -72,8 +51,8 @@ export function TaskThree({
         });
     };
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    const handleInput = (value: string) => {
+        setTeacherFeedback(value);
         handleCanProgress(!!value.length);
     };
 
@@ -97,7 +76,7 @@ export function TaskThree({
                         variant="line"
                         className="mb-4"
                     >
-                        {tabs.map((tab) => (
+                        {TABS.map((tab) => (
                             <TabsTrigger
                                 key={tab}
                                 value={tab}
@@ -113,16 +92,32 @@ export function TaskThree({
                         ))}
                     </TabsList>
 
-                    {tabs.map((tab) => (
-                        <TabsContent
-                            key={tab}
-                            value={tab}
-                            className="min-h-[8rem]"
-                        >
-                            <Title>{tabData[tab].title}</Title>
-                            <Text>{tabData[tab].content}</Text>
-                        </TabsContent>
-                    ))}
+                    {TABS.map((tab) => {
+                        const rationale = aiRationale.find(
+                            (r) =>
+                                r.subcategory.toLowerCase() ===
+                                tab.toLowerCase()
+                        );
+
+                        return (
+                            <TabsContent
+                                key={tab}
+                                value={tab}
+                                className="min-h-[8rem] pl-8 text-gray-800"
+                            >
+                                {rationale ? (
+                                    <ul className="list-disc first-letter:uppercase">
+                                        <li>{rationale.rationale}</li>
+                                    </ul>
+                                ) : (
+                                    <p className="">
+                                        No rationale available for this
+                                        subcategory.
+                                    </p>
+                                )}
+                            </TabsContent>
+                        );
+                    })}
                 </Tabs>
 
                 <div>
@@ -133,14 +128,16 @@ export function TaskThree({
                         thoughts or manually type into the box below.
                     </Text>
 
-                    <TextInput
+                    <Textarea
                         placeholder={
                             hasScrolledThroughTabs
                                 ? "Input your response here..."
                                 : "You must read through all five sub-skills before you can respond to this question."
                         }
                         disabled={!hasScrolledThroughTabs}
-                        onChange={handleInput}
+                        value={teacherFeedback ?? ""}
+                        onValueChange={handleInput}
+                        className="min-h-24"
                     />
 
                     {/* <div className="mt-2 flex justify-end">

@@ -1,4 +1,4 @@
-import { InsightAccordion } from "@/components/mvp/task-four/insight-accordion";
+import { InsightAccordionAlign } from "@/components/mvp/task-four/insight-accordion-align";
 import InsightAccordionDiverged from "@/components/mvp/task-four/insight-accordion-diverge";
 import { Card, Title } from "@tremor/react";
 
@@ -42,33 +42,41 @@ export function TaskFour() {
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
+=======
+            <Card className="w-full space-y-4 rounded-2xl px-10 py-6">
+>>>>>>> 63a65a23907330dc0911bcb4a479e9332a9cef53
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights aligned with the AI Rationale.
                 </Title>
 
-                <InsightAccordion
+                <InsightAccordionAlign
                     header="You both agreed that the student demonstrated growth in their reflection skills."
-                    insights={[aligned[0], aligned[1]]}
+                    insights={aligned}
                 />
-                <InsightAccordion
+                <InsightAccordionAlign
                     header="You both noticed that the student struggled to convey how their applied their materials skill."
-                    insights={[aligned[0], aligned[1]]}
+                    insights={aligned}
                 />
             </div>
 
+<<<<<<< HEAD
             <div className="w-full space-y-10 rounded-2xl px-10 py-6 border border-neutral-300">
+=======
+            <Card className="w-full space-y-4 rounded-2xl px-10 py-6">
+>>>>>>> 63a65a23907330dc0911bcb4a479e9332a9cef53
                 <Title className="mb-4 text-center text-2xl font-semibold">
                     Here is where your insights diverged from the AI Rationale.
                 </Title>
 
                 <InsightAccordionDiverged
                     header="While the AI noted that the student demonstrated open-mindedness, you pointed out that the student was talking about other students instead."
-                    insights={[diverged[0]]}
+                    insights={diverged}
                 />
                 <InsightAccordionDiverged
                     header="Where the AI commented on the student’s ability to use sources effectively, you noted room for improvement."
-                    insights={[diverged[1]]}
+                    insights={diverged}
                 />
             </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import ProgressBar from "@/components/progress-bar/progress-bar";
+import ProgressBar from "@/components/progress/progress-bar";
 
 import { useProgress } from "./ProgressContext";
 

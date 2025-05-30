@@ -9,37 +9,27 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
     const { slug } = await params;
-
-    // ! FIX ME: The 3 round trips to the database are not efficient.
-    const reflection = await db.reflection.findFirst({
-        where: { id: slug },
-    });
-
-    if (!reflection) {
-        console.error("Reflection not found");
-        return <div>Error: Reflection not found</div>;
-    }
-
-    const reflectionQuestion = await db.reflectionQuestion.findFirst({
-        where: { reflectionId: reflection.id },
-    });
-
-    if (!reflectionQuestion) {
-        console.error("Reflection question not found");
-        return <div>Error: Reflection question not found</div>;
-    }
+    const id = slug;
 
     const reflectionResponseTranscript =
         await db.reflectionResponseTranscript.findFirst({
             where: {
-                reflectionId: reflection?.id,
-                questionId: reflectionQuestion?.id,
+                id: Number(id),
             },
         });
 
     if (!reflectionResponseTranscript) {
         console.error("Reflection response transcript not found");
         return <div>Error: Reflection response transcript not found</div>;
+    }
+
+    const reflectionQuestion = await db.reflectionQuestion.findFirst({
+        where: { id: reflectionResponseTranscript.questionId },
+    });
+
+    if (!reflectionQuestion) {
+        console.error("Reflection question not found");
+        return <div>Error: Reflection question not found</div>;
     }
 
     const aiRationale = await db.subcategoryBucket.findMany({
@@ -56,7 +46,6 @@ export default async function Page({ params }: PageProps) {
 
     return (
         <Mvp
-            reflection={reflection}
             reflectionQuestion={reflectionQuestion}
             reflectionResponseTranscript={reflectionResponseTranscript}
             aiRationale={aiRationale}

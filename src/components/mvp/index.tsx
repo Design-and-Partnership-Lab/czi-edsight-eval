@@ -11,8 +11,7 @@ import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
 import { useProgress } from "@/components/progress/ProgressContext";
 import QUESTIONS from "@/lib/questions";
-import {
-    Reflection,
+import type {
     ReflectionQuestion,
     ReflectionResponseTranscript,
     SubcategoryBucket,
@@ -21,14 +20,12 @@ import { Button, Title } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
 interface MvpProps {
-    reflection: Reflection;
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
     aiRationale: SubcategoryBucket[];
 }
 
 export function Mvp({
-    reflection,
     reflectionQuestion,
     reflectionResponseTranscript,
     aiRationale,
@@ -65,8 +62,9 @@ export function Mvp({
                             response={null}
                         >
                             <TaskOne
-                                teacherEval={teacherEval}
-                                setTeacherEval={setTeacherEval}
+                                transcript={
+                                    reflectionResponseTranscript.transcript
+                                }
                                 handleCanProgress={handleCanProgress}
                             />
                         </AnnotationWrapper>

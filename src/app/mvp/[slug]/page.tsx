@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     const aiRationale = await db.subcategoryBucket.findMany({
         where: {
             reflectionResponseId: reflectionResponseTranscript.id,
-            category: "CREATIVITY",
+            category: "CREATIVITY", // NB: hardcoded for mvp
         },
     });
 

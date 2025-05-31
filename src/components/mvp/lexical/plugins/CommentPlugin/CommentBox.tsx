@@ -124,7 +124,7 @@ export function CommentBox({
                 body.removeChild(container);
             };
         }
-    }, [selectionState.container, updateLocation]);
+    }, [selectionState.container, updateLocation, activeComment]);
 
     useEffect(() => {
         window.addEventListener("resize", updateLocation);

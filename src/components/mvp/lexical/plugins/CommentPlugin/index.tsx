@@ -785,6 +785,7 @@ export default function CommentPlugin({
         return new Map();
     }, []);
     const [activeAnchorKey, setActiveAnchorKey] = useState<NodeKey | null>();
+    const skipNextHighlight = useRef(false);
     const [activeIDs, setActiveIDs] = useState<Array<string>>([]);
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [showComments, setShowComments] = useState(false);
@@ -868,6 +869,7 @@ export default function CommentPlugin({
                     }
                 });
                 setShowCommentInput(false);
+                skipNextHighlight.current = true;
             }
             setActiveCommentId(null);
         },
@@ -875,6 +877,11 @@ export default function CommentPlugin({
     );
 
     useEffect(() => {
+        if (skipNextHighlight.current) {
+            skipNextHighlight.current = false;
+            return;
+        }
+
         const changedElems: Array<HTMLElement> = [];
         for (let i = 0; i < activeIDs.length; i++) {
             const id = activeIDs[i];

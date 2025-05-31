@@ -27,6 +27,7 @@ import {
 } from "react";
 import * as React from "react";
 import { CommentBox } from "@/components/mvp/lexical/plugins/CommentPlugin/CommentBox";
+import { useProgress } from "@/components/progress/ProgressContext";
 import {
     $createMarkNode,
     $getMarkIDs,
@@ -397,6 +398,7 @@ export default function CommentPlugin({
     isReadOnly,
 }: CommentPluginProps): JSX.Element {
     const [editor] = useLexicalComposerContext();
+    const { progress } = useProgress();
     // const commentStore = useMemo(() => new CommentStore(editor), [editor]);
 
     const comments = useCommentStore(commentStore);
@@ -622,9 +624,60 @@ export default function CommentPlugin({
         );
     }, [editor, markNodeMap]);
 
-    const activeComment = comments.find(
-        (comment) => comment.id === activeCommentId
-    );
+    useEffect(() => {
+        setActiveIDs([]);
+        setActiveCommentId(null);
+        setShowCommentInput(false);
+
+        // ! THIS IS A HACK
+        // Force immediate state update
+        setTimeout(() => {
+            setActiveIDs([]);
+            setActiveCommentId(null);
+            setShowCommentInput(false);
+        }, 0);
+
+        return () => {
+            setActiveIDs([]);
+            setActiveCommentId(null);
+            setShowCommentInput(false);
+        };
+    }, [progress]);
+
+    // ! This is pretty hacky code TBH
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            // Don't apply on task one (it breaks comment creation)
+            if (!isReadOnly) {
+                return;
+            }
+
+            // Check if click is outside the editor container
+            const editorContainer = document.querySelector(".editor-container");
+            const promptContainer = document.querySelector(".editor-shell");
+
+            if (
+                promptContainer &&
+                !promptContainer.contains(event.target as Node) &&
+                editorContainer &&
+                !editorContainer.contains(event.target as Node)
+            ) {
+                setShowCommentInput(false);
+                setActiveCommentId(null);
+                setActiveIDs([]);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const activeComment =
+        activeCommentId === null
+            ? null
+            : comments.find((comment) => comment.id === activeCommentId);
 
     return (
         <>

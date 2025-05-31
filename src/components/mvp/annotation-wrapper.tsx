@@ -20,7 +20,10 @@ export function AnnotationWrapper({
 
     return (
         <div className="grid grid-cols-6 border">
-            <div className="col-span-2 space-y-8 border-r p-10">
+            <div
+                className="col-span-2 space-y-8 border-r p-10"
+                id="prompt-annotation-container"
+            >
                 <div className="space-y-2">
                     <Title className="text-xl font-semibold text-ee-gray-dark">
                         Prompt ({code})

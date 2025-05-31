@@ -61,7 +61,7 @@ export default function Editor(): JSX.Element {
                     contentEditable={
                         <div className="editor-scroller">
                             <div
-                                className="editor"
+                                className="editor border border-red-500"
                                 ref={onRef}
                             >
                                 <ContentEditable placeholder={placeholder} />

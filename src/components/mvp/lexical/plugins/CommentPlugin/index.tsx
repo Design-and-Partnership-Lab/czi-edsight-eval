@@ -1008,10 +1008,6 @@ export default function CommentPlugin({
         );
     }, [editor, markNodeMap]);
 
-    const onAddComment = () => {
-        editor.dispatchCommand(INSERT_INLINE_COMMAND, undefined);
-    };
-
     return (
         <>
             {showCommentInput &&
@@ -1023,17 +1019,6 @@ export default function CommentPlugin({
                     />,
                     document.body
                 )}
-            {/* {activeAnchorKey !== null &&
-                activeAnchorKey !== undefined &&
-                !showCommentInput &&
-                createPortal(
-                    <AddCommentBox
-                        anchorKey={activeAnchorKey}
-                        editor={editor}
-                        onAddComment={onAddComment}
-                    />,
-                    document.body
-                )} */}
             {createPortal(
                 <Button
                     className={`CommentPlugin_ShowCommentsButton ${

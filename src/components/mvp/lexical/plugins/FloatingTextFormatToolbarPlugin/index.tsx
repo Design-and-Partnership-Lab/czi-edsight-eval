@@ -150,11 +150,10 @@ function TextFormatFloatingToolbar({
             setFloatingElemPosition(
                 rangeRect,
                 popupCharStylesEditorElem,
-                anchorElem,
-                isLink
+                anchorElem
             );
         }
-    }, [editor, anchorElem, isLink]);
+    }, [editor, anchorElem]);
 
     useEffect(() => {
         const scrollerElem = anchorElem.parentElement;

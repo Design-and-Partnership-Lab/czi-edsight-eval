@@ -43,7 +43,7 @@ export function Lexical({ text }: LexicalProps): JSX.Element {
         <LexicalComposer initialConfig={initialConfig}>
             <SharedHistoryContext>
                 <ToolbarContext>
-                    <div className="editor-shell m-8 mt-16 border-blue-500">
+                    <div className="editor-shell">
                         <Editor />
                     </div>
                 </ToolbarContext>

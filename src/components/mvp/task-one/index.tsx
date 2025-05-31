@@ -1,9 +1,7 @@
 "use client";
 
-import "@/app/annotation-lexical/index.css";
-
 import { useEffect } from "react";
-import AnnotateLexical from "@/app/annotation-lexical/AnnotateLexical";
+import { Lexical } from "@/components/mvp/lexical";
 
 interface TaskOneProps {
     transcript: string | null;
@@ -15,7 +13,5 @@ export function TaskOne({ transcript, handleCanProgress }: TaskOneProps) {
         handleCanProgress(true);
     }, [handleCanProgress]);
 
-    return (
-        <AnnotateLexical>{transcript ?? "No transcript found"}</AnnotateLexical>
-    );
+    return <Lexical text={transcript ?? "No transcript found"} />;
 }

@@ -97,9 +97,8 @@ const MvpContent = ({
     }, [increment]);
 
     const handleNextReflection = useCallback(() => {
-        setProgress(0);
         router.push("/mvp");
-    }, [setProgress, router]);
+    }, [router]);
 
     const renderTask = () => {
         switch (progress) {

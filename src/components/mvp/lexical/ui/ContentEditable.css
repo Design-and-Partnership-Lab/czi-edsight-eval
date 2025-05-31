@@ -28,9 +28,9 @@
     overflow: hidden;
     position: absolute;
     text-overflow: ellipsis;
-    top: 8px;
-    left: 46px;
-    right: 28px;
+    top: 10px;
+    left: 10px;
+    /* right: 28px; */
     user-select: none;
     white-space: nowrap;
     display: inline-block;
@@ -38,7 +38,7 @@
 }
 @media (max-width: 1025px) {
     .ContentEditable__placeholder {
-        left: 8px;
-        right: 8px;
+        /* left: 8px;
+        right: 8px; */
     }
 }

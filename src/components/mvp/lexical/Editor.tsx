@@ -8,6 +8,7 @@
 import type { JSX } from "react";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { CommentStore } from "@/components/mvp/lexical/commenting";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -18,7 +19,15 @@ import CommentPlugin from "./plugins/CommentPlugin";
 import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
 import ContentEditable from "./ui/ContentEditable";
 
-export default function Editor(): JSX.Element {
+interface EditorProps {
+    commentStore: CommentStore;
+    isReadOnly?: boolean;
+}
+
+export default function Editor({
+    commentStore,
+    isReadOnly,
+}: EditorProps): JSX.Element {
     const { historyState } = useSharedHistoryContext();
 
     const placeholder = "Enter some plain text...";
@@ -52,7 +61,11 @@ export default function Editor(): JSX.Element {
 
     return (
         <div className="editor-container plain-text">
-            <CommentPlugin />
+            <CommentPlugin
+                // editor={editor}
+                commentStore={commentStore}
+                isReadOnly={isReadOnly}
+            />
             <>
                 <HistoryPlugin externalHistoryState={historyState} />
 
@@ -70,7 +83,7 @@ export default function Editor(): JSX.Element {
                     ErrorBoundary={LexicalErrorBoundary}
                 />
 
-                {floatingAnchorElem && !isSmallWidthViewport && (
+                {floatingAnchorElem && !isSmallWidthViewport && !isReadOnly && (
                     <>
                         <FloatingTextFormatToolbarPlugin
                             anchorElem={floatingAnchorElem}

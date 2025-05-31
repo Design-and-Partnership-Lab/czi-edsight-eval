@@ -25,7 +25,7 @@ export function CommentBox({
     editor: LexicalEditor;
     activeComment: Thread;
     handleClose: () => void;
-    handleDelete: () => void;
+    handleDelete: (() => void) | null;
 }) {
     const boxRef = useRef<HTMLDivElement>(null);
     const selectionState = useMemo(
@@ -151,7 +151,8 @@ export function CommentBox({
                     Close
                 </Button>
                 <Button
-                    onClick={handleDelete}
+                    onClick={handleDelete ?? (() => {})}
+                    disabled={handleDelete === null}
                     className={cx(
                         "CommentPlugin_CommentInputBox_Button",
                         "!bg-red-500 !text-white"

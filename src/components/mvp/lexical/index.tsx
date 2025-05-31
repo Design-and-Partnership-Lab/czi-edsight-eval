@@ -1,53 +1,30 @@
 "use client";
 
-import { MarkNode } from "@lexical/mark";
-import {
-    InitialConfigType,
-    LexicalComposer,
-} from "@lexical/react/LexicalComposer";
-import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
+import { CommentStore } from "@/components/mvp/lexical/commenting";
 
 import { SharedHistoryContext } from "./context/SharedHistoryContext";
 import { ToolbarContext } from "./context/ToolbarContext";
 import Editor from "./Editor";
-import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
-
-function populateRichText(text: string) {
-    return () => {
-        const root = $getRoot();
-        if (root.getFirstChild() === null) {
-            const paragraph = $createParagraphNode();
-            paragraph.append($createTextNode(text));
-            root.append(paragraph);
-        }
-    };
-}
 
 interface LexicalProps {
-    text: string;
+    commentStore: CommentStore;
+    isReadOnly?: boolean;
 }
 
-export function Lexical({ text }: LexicalProps): JSX.Element {
-    const initialConfig = {
-        editorState: populateRichText(text),
-        namespace: "Annotation",
-        onError: (error: Error) => {
-            throw error;
-        },
-        nodes: [MarkNode],
-        theme: PlaygroundEditorTheme,
-        editable: false,
-    } satisfies InitialConfigType;
-
+export function Lexical({
+    commentStore,
+    isReadOnly,
+}: LexicalProps): JSX.Element {
     return (
-        <LexicalComposer initialConfig={initialConfig}>
-            <SharedHistoryContext>
-                <ToolbarContext>
-                    <div className="editor-shell">
-                        <Editor />
-                    </div>
-                </ToolbarContext>
-            </SharedHistoryContext>
-        </LexicalComposer>
+        <SharedHistoryContext>
+            <ToolbarContext>
+                <div className="editor-shell">
+                    <Editor
+                        commentStore={commentStore}
+                        isReadOnly={isReadOnly}
+                    />
+                </div>
+            </ToolbarContext>
+        </SharedHistoryContext>
     );
 }

@@ -2,16 +2,17 @@
 
 import { useEffect } from "react";
 import { Lexical } from "@/components/mvp/lexical";
+import type { CommentStore } from "@/components/mvp/lexical/commenting";
 
 interface TaskOneProps {
-    transcript: string | null;
+    commentStore: CommentStore;
     handleCanProgress: (value: boolean) => void;
 }
 
-export function TaskOne({ transcript, handleCanProgress }: TaskOneProps) {
+export function TaskOne({ commentStore, handleCanProgress }: TaskOneProps) {
     useEffect(() => {
         handleCanProgress(true);
     }, [handleCanProgress]);
 
-    return <Lexical text={transcript ?? "No transcript found"} />;
+    return <Lexical commentStore={commentStore} />;
 }

@@ -1,15 +1,19 @@
+import { Lexical } from "@/components/mvp/lexical";
+import { CommentStore } from "@/components/mvp/lexical/commenting";
 import QUESTIONS from "@/lib/questions";
 import { Text, Title } from "@tremor/react";
 
 interface AnnotationWrapperProps {
     questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
-    response: string | null;
+    commentStore: CommentStore;
     children: React.ReactNode;
+    isReadOnly?: boolean;
 }
 
 export function AnnotationWrapper({
     questionData,
-    response,
+    commentStore,
+    isReadOnly,
     children,
 }: AnnotationWrapperProps) {
     const { question, code } = questionData;
@@ -18,20 +22,21 @@ export function AnnotationWrapper({
         <div className="grid grid-cols-6 border">
             <div className="col-span-2 space-y-8 border-r p-10">
                 <div className="space-y-2">
-                    <Title className="text-ee-gray-dark text-xl font-semibold">
+                    <Title className="text-xl font-semibold text-ee-gray-dark">
                         Prompt ({code})
                     </Title>
                     <Text className="text-ee-gray-light">{question}</Text>
                 </div>
 
-                {response ? (
+                {isReadOnly ? (
                     <div className="space-y-2">
-                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                        <Title className="text-xl font-semibold text-ee-gray-dark">
                             Response
                         </Title>
-                        <Text className="text-ee-gray-light">
-                            [[ THE COMPONENT ]]
-                        </Text>
+                        <Lexical
+                            commentStore={commentStore}
+                            isReadOnly={isReadOnly}
+                        />
                     </div>
                 ) : null}
             </div>

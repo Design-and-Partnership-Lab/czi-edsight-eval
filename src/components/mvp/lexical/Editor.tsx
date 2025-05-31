@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
 import type { JSX } from "react";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -61,7 +60,7 @@ export default function Editor(): JSX.Element {
                     contentEditable={
                         <div className="editor-scroller">
                             <div
-                                className="editor border border-red-500"
+                                className="editor"
                                 ref={onRef}
                             >
                                 <ContentEditable placeholder={placeholder} />

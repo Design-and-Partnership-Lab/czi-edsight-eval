@@ -28,6 +28,7 @@ import {
     useState,
 } from "react";
 import * as React from "react";
+import { CommentBox } from "@/components/mvp/lexical/plugins/CommentPlugin/CommentBox";
 import {
     $createMarkNode,
     $getMarkIDs,
@@ -156,7 +157,7 @@ function EscapeHandlerPlugin({
     return null;
 }
 
-function PlainTextEditor({
+export function PlainTextEditor({
     className,
     autoFocus,
     onEscape,
@@ -540,7 +541,7 @@ function CommentsPanelListComment({
             </p>
             {!comment.deleted && (
                 <>
-                    <Button
+                    {/* <Button
                         onClick={() => {
                             showModal("Delete Comment", (onClose) => (
                                 <ShowDeleteCommentOrThreadDialog
@@ -554,7 +555,7 @@ function CommentsPanelListComment({
                         className="CommentPlugin_CommentsPanel_List_DeleteButton"
                     >
                         <i className="delete" />
-                    </Button>
+                    </Button> */}
                     {modal}
                 </>
             )}
@@ -698,13 +699,13 @@ function CommentsPanelList({
                                     />
                                 ))}
                             </ul>
-                            <div className="CommentPlugin_CommentsPanel_List_Thread_Editor">
+                            {/* <div className="CommentPlugin_CommentsPanel_List_Thread_Editor">
                                 <CommentsComposer
                                     submitAddComment={submitAddComment}
                                     thread={commentOrThread}
                                     placeholder="Reply to comment..."
                                 />
-                            </div>
+                            </div> */}
                         </li>
                     );
                 }
@@ -789,6 +790,8 @@ export default function CommentPlugin({
     const [showComments, setShowComments] = useState(false);
     const { yjsDocMap } = collabContext;
 
+    const [activeCommentId, setActiveCommentId] = useState<NodeKey | null>();
+
     useEffect(() => {
         if (providerFactory) {
             const provider = providerFactory("comments", yjsDocMap);
@@ -866,6 +869,7 @@ export default function CommentPlugin({
                 });
                 setShowCommentInput(false);
             }
+            setActiveCommentId(null);
         },
         [commentStore, editor]
     );
@@ -881,6 +885,7 @@ export default function CommentPlugin({
                     if (elem !== null) {
                         elem.classList.add("selected");
                         changedElems.push(elem);
+                        setActiveCommentId(id);
                         setShowComments(true);
                     }
                 }
@@ -891,6 +896,7 @@ export default function CommentPlugin({
                 const changedElem = changedElems[i];
                 changedElem.classList.remove("selected");
             }
+            setActiveCommentId(null);
         };
     }, [activeIDs, editor, markNodeMap]);
 
@@ -1008,6 +1014,10 @@ export default function CommentPlugin({
         );
     }, [editor, markNodeMap]);
 
+    const activeComment = comments.find(
+        (comment) => comment.id === activeCommentId
+    );
+
     return (
         <>
             {showCommentInput &&
@@ -1019,12 +1029,28 @@ export default function CommentPlugin({
                     />,
                     document.body
                 )}
-            {createPortal(
+
+            {activeComment &&
+                createPortal(
+                    <CommentBox
+                        editor={editor}
+                        handleClose={() => setActiveCommentId(null)}
+                        handleDelete={() =>
+                            deleteCommentOrThread(activeComment)
+                        }
+                        activeComment={activeComment as Thread}
+                    />,
+                    document.body
+                )}
+
+            {/* {createPortal(
                 <Button
                     className={`CommentPlugin_ShowCommentsButton ${
                         showComments ? "active" : ""
                     }`}
-                    onClick={() => setShowComments(!showComments)}
+                    onClick={() => 
+                        setShowComments(!showComments);
+                    }
                     title={showComments ? "Hide Comments" : "Show Comments"}
                 >
                     <i className="comments" />
@@ -1041,7 +1067,7 @@ export default function CommentPlugin({
                         markNodeMap={markNodeMap}
                     />,
                     document.body
-                )}
+                )} */}
         </>
     );
 }

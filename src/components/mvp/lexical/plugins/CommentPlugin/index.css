@@ -180,12 +180,12 @@ i.comments {
 
 .CommentPlugin_CommentsPanel {
     position: fixed;
-    right: 0;
+    left: 0;
     width: 300px;
     height: calc(100% - 88px);
     top: 88px;
     background-color: #fff;
-    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     animation: show-comments 0.2s ease;
     z-index: 25;
@@ -194,7 +194,7 @@ i.comments {
 @keyframes show-comments {
     0% {
         opacity: 0;
-        transform: translateX(300px);
+        transform: translateX(-300px);
     }
     100% {
         opacity: 1;
@@ -203,10 +203,9 @@ i.comments {
 }
 
 .CommentPlugin_CommentsPanel_Heading {
-    padding-left: 15px;
-    padding-top: 10px;
+    padding: 10px 15px;
     margin: 0;
-    height: 34px;
+    height: fit-content;
     border-bottom: 1px solid #eee;
     font-size: 20px;
     display: block;
@@ -411,8 +410,13 @@ i.send {
     right: 10px;
     width: 30px;
     height: 30px;
+    padding-left: 7.5px;
+    padding-right: 7.5px;
     background-color: transparent;
     opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .CommentPlugin_CommentsPanel_DeletedComment,
@@ -426,15 +430,13 @@ i.send {
 .CommentPlugin_CommentsPanel_List_DeleteButton:hover {
     background-color: transparent;
     opacity: 1;
-    filter: invert(45%) sepia(98%) saturate(2299%) hue-rotate(201deg)
-        brightness(100%) contrast(92%);
+    /* filter: invert(45%) sepia(98%) saturate(2299%) hue-rotate(201deg)
+        brightness(100%) contrast(92%); */
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton i.delete {
     background-size: contain;
     position: absolute;
-    left: 5px;
-    top: 5px;
     height: 15px;
     width: 15px;
     vertical-align: -10px;

@@ -1,7 +1,11 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
+import { CommentStore } from "@/components/mvp/lexical/commenting";
+import PlaygroundEditorTheme from "@/components/mvp/lexical/themes/PlaygroundEditorTheme";
+import { populateRichText } from "@/components/mvp/lexical/utils/populateRichText";
 import { Category } from "@/components/mvp/lib/utils";
 import { TaskFour } from "@/components/mvp/task-four";
 import { TaskOne } from "@/components/mvp/task-one";
@@ -10,8 +14,13 @@ import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
 import { useProgress } from "@/components/progress/ProgressContext";
 import QUESTIONS from "@/lib/questions";
+import { MarkNode } from "@lexical/mark";
 import {
-    Reflection,
+    InitialConfigType,
+    LexicalComposer,
+} from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import type {
     ReflectionQuestion,
     ReflectionResponseTranscript,
     SubcategoryBucket,
@@ -20,19 +29,59 @@ import { Button, Title } from "@tremor/react";
 import { ArrowRightIcon } from "lucide-react";
 
 interface MvpProps {
-    reflection: Reflection;
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
     aiRationale: SubcategoryBucket[];
 }
 
 export function Mvp({
-    reflection,
     reflectionQuestion,
     reflectionResponseTranscript,
     aiRationale,
 }: MvpProps) {
-    const { progress, increment } = useProgress();
+    const questionData = useMemo(
+        () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
+        [reflectionQuestion.question]
+    );
+
+    const transcript = reflectionResponseTranscript.transcript?.trim() ?? "";
+
+    const initialConfig = {
+        editorState: populateRichText(transcript),
+        namespace: "Annotation",
+        onError: (error: Error) => {
+            throw error;
+        },
+        nodes: [MarkNode],
+        theme: PlaygroundEditorTheme,
+        editable: false,
+    } satisfies InitialConfigType;
+
+    return (
+        <LexicalComposer initialConfig={initialConfig}>
+            <MvpContent
+                questionData={questionData}
+                reflectionResponseTranscript={reflectionResponseTranscript}
+                aiRationale={aiRationale}
+            />
+        </LexicalComposer>
+    );
+}
+
+const MvpContent = ({
+    questionData,
+    aiRationale,
+}: {
+    questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
+    reflectionResponseTranscript: ReflectionResponseTranscript;
+    aiRationale: SubcategoryBucket[];
+}) => {
+    const router = useRouter();
+
+    const [editor] = useLexicalComposerContext();
+    const commentStore = useMemo(() => new CommentStore(editor), [editor]);
+
+    const { progress, setProgress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
@@ -47,12 +96,16 @@ export function Mvp({
         setCanProgress(false);
     }, [increment]);
 
+    const handleNextReflection = useCallback(() => {
+        router.push("/mvp");
+    }, [router]);
+
     const renderTask = () => {
         switch (progress) {
             case 0:
                 return (
                     <div className="flex flex-col gap-y-8">
-                        <Title className="text-ee-gray-dark text-xl font-semibold">
+                        <Title className="text-xl font-semibold text-ee-gray-dark">
                             Read the prompt and the student response. Annotate
                             what stood out to you. Please note that you will not
                             be able to revise your annotations afterward.
@@ -60,11 +113,10 @@ export function Mvp({
 
                         <AnnotationWrapper
                             questionData={questionData}
-                            response={null}
+                            commentStore={commentStore}
                         >
                             <TaskOne
-                                teacherEval={teacherEval}
-                                setTeacherEval={setTeacherEval}
+                                commentStore={commentStore}
                                 handleCanProgress={handleCanProgress}
                             />
                         </AnnotationWrapper>
@@ -74,7 +126,8 @@ export function Mvp({
                 return (
                     <AnnotationWrapper
                         questionData={questionData}
-                        response=""
+                        commentStore={commentStore}
+                        isReadOnly={true}
                     >
                         <TaskTwo
                             teacherEval={teacherEval}
@@ -87,7 +140,8 @@ export function Mvp({
                 return (
                     <AnnotationWrapper
                         questionData={questionData}
-                        response=""
+                        commentStore={commentStore}
+                        isReadOnly={true}
                     >
                         <TaskThree
                             aiEval="Excelling"
@@ -106,18 +160,17 @@ export function Mvp({
         }
     };
 
-    const questionData = useMemo(
-        () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
-        [reflectionQuestion.question]
-    );
+    useEffect(() => {
+        setProgress(0);
+    }, [setProgress]);
 
     return (
-        <div className="mx-16 my-8 min-w-[1200px] space-y-8">
+        <div className="mx-16 my-8 min-w-fit space-y-8">
             <Progress />
 
             <div className="space-y-8 pb-4">
                 <div className="flex items-center justify-between">
-                    <span className="text-ee-gray text-2xl font-bold">
+                    <span className="text-2xl font-bold text-ee-gray">
                         Reflection
                     </span>
 
@@ -125,10 +178,8 @@ export function Mvp({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold"
-                            onClick={() => {
-                                /* TODO: handle final task completion */
-                            }}
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white"
+                            onClick={handleNextReflection}
                         >
                             Next Reflection
                         </Button>
@@ -136,7 +187,7 @@ export function Mvp({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="bg-primary-dark text-ee-white gap-x-2 rounded-full font-bold disabled:bg-gray-300"
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
                             disabled={!canProgress}
                             onClick={handleNextTask}
                         >
@@ -149,4 +200,4 @@ export function Mvp({
             {renderTask()}
         </div>
     );
-}
+};

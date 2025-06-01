@@ -4,6 +4,7 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 
 type ProgressContextType = {
     progress: number;
+    setProgress: (progress: number) => void;
     increment: () => void;
 };
 
@@ -25,7 +26,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     const increment = () => setProgress((p) => p + 1);
 
     return (
-        <ProgressContext.Provider value={{ progress, increment }}>
+        <ProgressContext.Provider value={{ progress, setProgress, increment }}>
             {children}
         </ProgressContext.Provider>
     );

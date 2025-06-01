@@ -121,11 +121,11 @@ export function TaskThree({
                 </Tabs>
 
                 <div>
-                    <Text className="text-ee-black mb-4 text-lg font-bold">
+                    <Text className="mb-4 text-lg font-bold text-ee-black">
                         Think about how your annotations compare and contrast
                         with the AI Rationale. What stood out to you? When you
-                        are ready, either press the Record button to voice your
-                        thoughts or manually type into the box below.
+                        are ready and have viewed all AI Rationale sections,
+                        please type into the box below.
                     </Text>
 
                     <Textarea

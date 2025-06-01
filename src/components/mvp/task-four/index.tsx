@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { ResponseType } from "@/app/api/chat/route";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Title } from "@tremor/react";
+import { Loader2Icon } from "lucide-react";
 
 export function TaskFour() {
     const [result, setResult] = useState<ResponseType>();
@@ -40,6 +40,9 @@ export function TaskFour() {
         fetchComparison();
     }, []);
 
+    const similarities = result?.comparisons[0]?.result?.similarities;
+    const differences = result?.comparisons[0]?.result?.differences;
+
     return (
         <div className="flex flex-col items-center justify-center gap-y-6 text-ee-black">
             <Title className="text-center text-3xl font-semibold">
@@ -51,9 +54,9 @@ export function TaskFour() {
                     Here is where your insights aligned with the AI Rationale.
                 </Title>
 
-                <div className="px-20 pb-4">
-                    {result?.comparisons[0]?.result?.similarities || (
-                        <Skeleton className="h-[20px] w-[100px] rounded-full" />
+                <div className="flex items-center justify-center px-20 pb-4">
+                    {similarities || (
+                        <Loader2Icon className="animate-spin text-ee-gray" />
                     )}
                 </div>
             </div>
@@ -63,9 +66,9 @@ export function TaskFour() {
                     Here is where your insights diverged from the AI Rationale.
                 </Title>
 
-                <div className="px-20 pb-4">
-                    {result?.comparisons[0]?.result?.differences || (
-                        <Skeleton className="h-[20px] w-[100px] rounded-full" />
+                <div className="flex items-center justify-center px-20 pb-4">
+                    {differences || (
+                        <Loader2Icon className="animate-spin text-ee-gray" />
                     )}
                 </div>
             </div>

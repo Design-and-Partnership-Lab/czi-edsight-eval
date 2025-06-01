@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { ResponseType } from '../api/chat/route';
 
 export default function SimpleApiTest() {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<string>('');
+  const [result, setResult] = useState<ResponseType>();
 
   const testApi = async () => {
     setIsLoading(true);
-    setResult('');
+    setResult(undefined);
     
     try {
       const testData = {
@@ -33,10 +34,9 @@ export default function SimpleApiTest() {
       const text = await response.text();
       console.log('Response text:', text);
       
-      setResult(text || 'No response text');
+      setResult(text ? JSON.parse(text) : undefined);
     } catch (error) {
       console.error('Error:', error);
-      setResult(`Error: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,7 @@ export default function SimpleApiTest() {
       {result && (
         <div className="mt-4 p-2 border rounded">
           <p className="font-bold">Result:</p>
-          <pre className="mt-2 bg-gray-100 p-2 overflow-auto">{result}</pre>
+          <pre className="mt-2 bg-gray-100 p-2 overflow-auto">{JSON.stringify(result.comparisons[0].result, null, 2)}</pre>
         </div>
       )}
     </div>

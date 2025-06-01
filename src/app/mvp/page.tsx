@@ -20,7 +20,7 @@ export default async function Page() {
     }
 
     return (
-        <div className="mx-auto my-8 flex w-fit min-w-[1000px] flex-col items-center justify-center space-y-8">
+        <div className="mx-auto my-8 flex w-fit min-w-[50%] flex-col items-center justify-center space-y-8">
             <Title className="w-full border-b-2 text-left text-4xl font-semibold text-ee-gray-dark">
                 Reflections to Evaluate
             </Title>

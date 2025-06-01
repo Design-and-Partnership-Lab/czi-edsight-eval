@@ -1,8 +1,11 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
+import { CommentStore } from "@/components/mvp/lexical/commenting";
+import PlaygroundEditorTheme from "@/components/mvp/lexical/themes/PlaygroundEditorTheme";
+import { populateRichText } from "@/components/mvp/lexical/utils/populateRichText";
 import { Category } from "@/components/mvp/lib/utils";
 import { TaskFour } from "@/components/mvp/task-four";
 import { TaskOne } from "@/components/mvp/task-one";
@@ -11,6 +14,12 @@ import { TaskTwo } from "@/components/mvp/task-two";
 import { Progress } from "@/components/progress/ProgressBar";
 import { useProgress } from "@/components/progress/ProgressContext";
 import QUESTIONS from "@/lib/questions";
+import { MarkNode } from "@lexical/mark";
+import {
+    InitialConfigType,
+    LexicalComposer,
+} from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import type {
     ReflectionQuestion,
     ReflectionResponseTranscript,
@@ -30,8 +39,49 @@ export function Mvp({
     reflectionResponseTranscript,
     aiRationale,
 }: MvpProps) {
-    const { progress, increment } = useProgress();
+    const questionData = useMemo(
+        () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
+        [reflectionQuestion.question]
+    );
+
+    const transcript = reflectionResponseTranscript.transcript?.trim() ?? "";
+
+    const initialConfig = {
+        editorState: populateRichText(transcript),
+        namespace: "Annotation",
+        onError: (error: Error) => {
+            throw error;
+        },
+        nodes: [MarkNode],
+        theme: PlaygroundEditorTheme,
+        editable: false,
+    } satisfies InitialConfigType;
+
+    return (
+        <LexicalComposer initialConfig={initialConfig}>
+            <MvpContent
+                questionData={questionData}
+                reflectionResponseTranscript={reflectionResponseTranscript}
+                aiRationale={aiRationale}
+            />
+        </LexicalComposer>
+    );
+}
+
+const MvpContent = ({
+    questionData,
+    aiRationale,
+}: {
+    questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
+    reflectionResponseTranscript: ReflectionResponseTranscript;
+    aiRationale: SubcategoryBucket[];
+}) => {
     const router = useRouter();
+
+    const [editor] = useLexicalComposerContext();
+    const commentStore = useMemo(() => new CommentStore(editor), [editor]);
+
+    const { progress, setProgress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
@@ -46,6 +96,10 @@ export function Mvp({
         setCanProgress(false);
     }, [increment]);
 
+    const handleNextReflection = useCallback(() => {
+        router.push("/mvp");
+    }, [router]);
+
     const renderTask = () => {
         switch (progress) {
             case 0:
@@ -59,12 +113,10 @@ export function Mvp({
 
                         <AnnotationWrapper
                             questionData={questionData}
-                            response={null}
+                            commentStore={commentStore}
                         >
                             <TaskOne
-                                transcript={
-                                    reflectionResponseTranscript.transcript
-                                }
+                                commentStore={commentStore}
                                 handleCanProgress={handleCanProgress}
                             />
                         </AnnotationWrapper>
@@ -74,7 +126,8 @@ export function Mvp({
                 return (
                     <AnnotationWrapper
                         questionData={questionData}
-                        response=""
+                        commentStore={commentStore}
+                        isReadOnly={true}
                     >
                         <TaskTwo
                             teacherEval={teacherEval}
@@ -87,7 +140,8 @@ export function Mvp({
                 return (
                     <AnnotationWrapper
                         questionData={questionData}
-                        response=""
+                        commentStore={commentStore}
+                        isReadOnly={true}
                     >
                         <TaskThree
                             aiEval="Excelling"
@@ -106,13 +160,12 @@ export function Mvp({
         }
     };
 
-    const questionData = useMemo(
-        () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
-        [reflectionQuestion.question]
-    );
+    useEffect(() => {
+        setProgress(0);
+    }, [setProgress]);
 
     return (
-        <div className="mx-16 my-8 min-w-[1200px] space-y-8">
+        <div className="mx-16 my-8 min-w-fit space-y-8">
             <Progress />
 
             <div className="space-y-8 pb-4">
@@ -126,7 +179,7 @@ export function Mvp({
                             icon={ArrowRightIcon}
                             iconPosition="right"
                             className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white"
-                            onClick={() => router.push("/mvp")}
+                            onClick={handleNextReflection}
                         >
                             Next Reflection
                         </Button>
@@ -147,4 +200,4 @@ export function Mvp({
             {renderTask()}
         </div>
     );
-}
+};

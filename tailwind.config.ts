@@ -110,6 +110,7 @@ const config: Config = {
             drawerSlideLeftAndFade:
                 "drawerSlideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
             drawerSlideRightAndFade: "drawerSlideRightAndFade 150ms ease-in",
+            spin: "spin 1s linear infinite",
         },
     },
     plugins: [require("@tailwindcss/forms")],

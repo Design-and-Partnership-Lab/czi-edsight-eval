@@ -20,9 +20,9 @@ export function useProgress() {
 }
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
-    const [progress, setProgress] = useState(3);
+    const [progress, setProgress] = useState(0);
 
-    const increment = () => setProgress(3);
+    const increment = () => setProgress((p) => p + 1);
 
     return (
         <ProgressContext.Provider value={{ progress, increment }}>

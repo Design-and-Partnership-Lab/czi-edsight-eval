@@ -110,6 +110,7 @@ const MvpContent = ({
 
     const handleNextReflection = useCallback(() => {
         router.push("/mvp");
+        router.refresh();
     }, [router]);
 
     useEffect(() => {

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getEvaluationData } from "@/actions/evaluation/action";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { Card, Title } from "@tremor/react";
-import { CheckIcon, XIcon } from "lucide-react";
+import { CheckIcon, CircleIcon } from "lucide-react";
 
 const REFLECTION_RESPONSE_TRANSCRIPT_IDS = [
     "30518",
@@ -61,7 +61,7 @@ export default async function Page() {
                         ) != null ? (
                             <CheckIcon className="text-green-500" />
                         ) : (
-                            <XIcon className="text-red-500" />
+                            <CircleIcon className="text-gray-400" />
                         )}
                     </Card>
                 </Link>

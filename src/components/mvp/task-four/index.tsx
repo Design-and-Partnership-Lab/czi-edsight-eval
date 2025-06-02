@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
 
-export function TaskFour() {
-    const [result, setResult] = useState<ResponseType>();
-
+export function TaskFour({
+    result,
+    setResult,
+}: {
+    result: ResponseType | undefined;
+    setResult: (result: ResponseType | undefined) => void;
+}) {
     useEffect(() => {
         const fetchComparison = async () => {
             try {

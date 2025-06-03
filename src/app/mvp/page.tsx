@@ -55,7 +55,7 @@ export default async function Page() {
                         className="w-full"
                     >
                         <Card
-                            className={`flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200 ${reflection_eval_status ? "cursor-default" : ""}`}
+                            className={`flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200 ${reflection_eval_status ? "cursor-default hover:bg-gray-100" : ""}`}
                         >
                             <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
                                 Reflection {index + 1}

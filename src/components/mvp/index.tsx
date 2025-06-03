@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { setEvaluationData } from "@/actions/evaluation/action";
+import { ResponseType } from "@/app/api/chat/route";
 import { AnnotationWrapper } from "@/components/mvp/annotation-wrapper";
-import { CommentStore } from "@/components/mvp/lexical/commenting";
+import { Comments, CommentStore } from "@/components/mvp/lexical/commenting";
 import PlaygroundEditorTheme from "@/components/mvp/lexical/themes/PlaygroundEditorTheme";
 import { populateRichText } from "@/components/mvp/lexical/utils/populateRichText";
 import { Category } from "@/components/mvp/lib/utils";
@@ -32,12 +34,14 @@ interface MvpProps {
     reflectionQuestion: ReflectionQuestion;
     reflectionResponseTranscript: ReflectionResponseTranscript;
     aiRationale: SubcategoryBucket[];
+    teacherEmail: string;
 }
 
 export function Mvp({
     reflectionQuestion,
     reflectionResponseTranscript,
     aiRationale,
+    teacherEmail,
 }: MvpProps) {
     const questionData = useMemo(
         () => QUESTIONS[reflectionQuestion.question as keyof typeof QUESTIONS],
@@ -63,6 +67,8 @@ export function Mvp({
                 questionData={questionData}
                 reflectionResponseTranscript={reflectionResponseTranscript}
                 aiRationale={aiRationale}
+                reflectionResponseId={reflectionResponseTranscript.id}
+                teacherEmail={teacherEmail}
             />
         </LexicalComposer>
     );
@@ -71,10 +77,14 @@ export function Mvp({
 const MvpContent = ({
     questionData,
     aiRationale,
+    reflectionResponseId,
+    teacherEmail,
 }: {
     questionData: (typeof QUESTIONS)[keyof typeof QUESTIONS];
     reflectionResponseTranscript: ReflectionResponseTranscript;
     aiRationale: SubcategoryBucket[];
+    reflectionResponseId: number;
+    teacherEmail: string;
 }) => {
     const router = useRouter();
 
@@ -84,8 +94,10 @@ const MvpContent = ({
     const { progress, setProgress, increment } = useProgress();
 
     const [canProgress, setCanProgress] = useState(false);
+    const [annotation, setAnnotation] = useState<Comments>([]); // Task One
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
     const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
+    const [result, setResult] = useState<ResponseType>(); // Task Four
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
@@ -98,7 +110,34 @@ const MvpContent = ({
 
     const handleNextReflection = useCallback(() => {
         router.push("/mvp");
+        router.refresh();
     }, [router]);
+
+    useEffect(() => {
+        if (progress == 2) {
+            setAnnotation(commentStore.getComments());
+        }
+
+        if (result && progress === 3) {
+            setEvaluationData(
+                reflectionResponseId,
+                teacherEmail,
+                annotation,
+                teacherEval,
+                teacherFeedback ?? "",
+                result
+            );
+        }
+    }, [
+        result,
+        progress,
+        commentStore,
+        reflectionResponseId,
+        teacherEmail,
+        teacherEval,
+        teacherFeedback,
+        annotation,
+    ]);
 
     const renderTask = () => {
         switch (progress) {
@@ -154,7 +193,12 @@ const MvpContent = ({
                     </AnnotationWrapper>
                 );
             case 3:
-                return <TaskFour />;
+                return (
+                    <TaskFour
+                        result={result}
+                        setResult={setResult}
+                    />
+                );
             default:
                 return null;
         }

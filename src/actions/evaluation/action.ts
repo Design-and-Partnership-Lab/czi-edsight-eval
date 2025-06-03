@@ -9,18 +9,8 @@ const prisma = new PrismaClient();
 
 export async function getEvaluationData(email: string) {
     try {
-        const teacher = await prisma.teacher.findFirst({
-            where: { email: email },
-            select: { id: true },
-        });
-
-        if (!teacher) {
-            console.error("Teacher not found for email:", email);
-            return { error: "Teacher not found" };
-        }
-
         const evaluation = await prisma.teacher_annotations.findMany({
-            where: { teacher_user_id: teacher.id },
+            where: { teacher_email: email },
             select: { id: true, reflection_response_id: true },
         });
 
@@ -49,20 +39,10 @@ export async function setEvaluationData(
     comparison: ResponseType
 ) {
     try {
-        const teacher = await prisma.teacher.findFirst({
-            where: { email: teacherEmail },
-            select: { id: true },
-        });
-
-        if (!teacher) {
-            console.error("Teacher not found for email:", teacherEmail);
-            return { error: "Teacher not found" };
-        }
-
         const evaluation = await prisma.teacher_annotations.create({
             data: {
                 reflection_response_id: reflectionResponseId,
-                teacher_user_id: teacher.id,
+                teacher_email: teacherEmail,
                 annotation: JSON.stringify(annotation),
                 epe_category: teacherEval,
                 comparison_comments: comparisonComments,

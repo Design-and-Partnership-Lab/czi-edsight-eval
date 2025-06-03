@@ -489,7 +489,7 @@ model ltiRequests {
 model teacher_annotations {
   id                     Int       @id @default(autoincrement())
   reflection_response_id Int
-  teacher_user_id        Int
+  teacher_email          String    @db.VarChar(64)
   annotation             Json?
   epe_category           String?   @db.VarChar(64)
   comparison_comments    String?   @db.Text
@@ -497,7 +497,6 @@ model teacher_annotations {
   comparison             Json?
 
   @@index([reflection_response_id], map: "reflection_response_id")
-  @@index([teacher_user_id], map: "teacher_user_id")
 }
 
 enum CategoryBucket_category {

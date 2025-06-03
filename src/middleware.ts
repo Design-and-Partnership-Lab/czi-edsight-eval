@@ -1,5 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+// NB: This was changed from the default (/sign-in) to /log-in
+// Both routes exist, but log-in is the custom one
 const isPublicRoute = createRouteMatcher(["/log-in(.*)", "/sign-up(.*)"]);
 
 export default clerkMiddleware(async (auth, request) => {

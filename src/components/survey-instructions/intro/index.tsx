@@ -27,13 +27,13 @@ export default function IntroInstructions({
 
                 <div className="text-m mb-16 space-y-6 leading-relaxed text-gray-700">
                     <p>
-                        In this survey, you'll be assessing a student's written
-                        reflection and compare your evaluation with AI-generated
-                        feedback. This process will give you a chance to reflect
-                        on your perspective, consider how it aligns or diverges
-                        from the AI's, and share valuable insights that support
-                        the development of more thoughtful, teacher-informed AI
-                        tools.
+                        In this survey, you&apos;ll be assessing a
+                        student&apos;s written reflection and compare your
+                        evaluation with AI-generated feedback. This process will
+                        give you a chance to reflect on your perspective,
+                        consider how it aligns or diverges from the AI&apos;s,
+                        and share valuable insights that support the development
+                        of more thoughtful, teacher-informed AI tools.
                     </p>
                     <p>
                         The next few pages will walk you through each activity.

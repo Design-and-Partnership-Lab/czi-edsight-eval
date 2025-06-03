@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Task3Instructions({
     incrementProgress,
 }: {
@@ -33,26 +35,28 @@ export default function Task3Instructions({
                     </div>
                 </div>
                 <p className="text-m mb-6 leading-relaxed text-gray-700">
-                    You will compare your own evaluation with the Al's
+                    You will compare your own evaluation with the AI&apos;s
                     evaluation. You will see which EPE category you chose and
                     which one the Al selected, followed by detailed Al rationale
                     across five sub-skills. Carefully read through all five
-                    sub-skill tabs to understand the Al's reasoning.
+                    sub-skill tabs to understand the AI&apos;s reasoning.
                 </p>
                 <p className="text-m mb-6 leading-relaxed text-gray-700">
                     Once you have reviewed everything, reflect on how your
-                    annotations and judgments compare or contrast with the Al's.
-                    What stood out to you? When you are ready, either press the
-                    Record button to voice your thoughts or type your response
-                    manually into the provided box. Please note that you must
-                    read through all five sub-skills before you can respond.
-                    After completing this step, the Next Activity button will
-                    become clickable so you can proceed.
+                    annotations and judgments compare or contrast with the
+                    AI&apos;s. What stood out to you? When you are ready, either
+                    press the Record button to voice your thoughts or type your
+                    response manually into the provided box. Please note that
+                    you must read through all five sub-skills before you can
+                    respond. After completing this step, the Next Activity
+                    button will become clickable so you can proceed.
                 </p>
                 <div className="flex items-center justify-center">
-                    <img
+                    <Image
                         src="/instruction-images/task3.png"
                         alt="Task 3 Screenshot"
+                        width={600}
+                        height={400}
                         className="max-h-full w-1/2 max-w-full rounded-md object-contain"
                     />
                 </div>

@@ -117,7 +117,7 @@ const MvpContent = ({
         if (progress == 2) {
             setAnnotation(commentStore.getComments());
         }
-    }, [progress]);
+    }, [commentStore, progress]);
 
     const renderTask = () => {
         switch (progress) {

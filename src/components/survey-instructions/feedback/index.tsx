@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function FeedbackInstructions({
     incrementProgress,
 }: {
@@ -36,23 +38,25 @@ export default function FeedbackInstructions({
                 <p className="text-m mb-6 leading-relaxed text-gray-700">
                     In this section, you will review a comparison summary
                     showing where your insights aligned with or diverged from
-                    the Al's rationale. At the top, you'll see areas of
-                    agreement — places where both you and the Al highlighted
-                    similar strengths or challenges in the student's work. Below
-                    that, you'll see areas of disagreement — where your
-                    interpretation differed from the Al's evaluation.
+                    the AI&apos;s rationale. At the top, you&apos;ll see areas
+                    of agreement — places where both you and the Al highlighted
+                    similar strengths or challenges in the student&apos;s work.
+                    Below that, you&apos;ll see areas of disagreement — where
+                    your interpretation differed from the AI&apos;s evaluation.
                 </p>
                 <p className="text-m mb-6 leading-relaxed text-gray-700">
                     Carefully read through these summaries to reflect on your
-                    own evaluation process and how it compared with the Al's
-                    reasoning. Once you have reviewed both sections, the Next
-                    Reflection button will become clickable, allowing you to
-                    continue to the next student reflection.
+                    own evaluation process and how it compared with the
+                    AI&apos;s reasoning. Once you have reviewed both sections,
+                    the Next Reflection button will become clickable, allowing
+                    you to continue to the next student reflection.
                 </p>
                 <div className="flex items-center justify-center">
-                    <img
+                    <Image
                         src="/instruction-images/feedback.png"
                         alt="Feedback Screenshot"
+                        width={600}
+                        height={400}
                         className="max-h-full w-1/2 max-w-full rounded-md object-contain"
                     />
                 </div>

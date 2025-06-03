@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Task1Instructions({
     incrementProgress,
 }: {
@@ -33,25 +35,27 @@ export default function Task1Instructions({
                     </div>
                 </div>
                 <p className="text-m mb-6 leading-relaxed text-gray-700">
-                    You will read a prompt followed by a student's written
+                    You will read a prompt followed by a student&apos;s written
                     response. Your task is to carefully review the response and
                     highlight parts that stand out to you — this could include
                     sections you find important, interesting, or particularly
                     well-phrased, as well as areas that raise questions or seem
-                    unclear. Once you click the "Start Annotating" button, you
-                    will be able to highlight directly on the text. Please note
-                    that you will not be able to revise or undo your highlights
-                    once they are made, so take your time reading through the
-                    response before beginning. When you are finished selecting
-                    your highlights, click "Stop Annotating" to save your
-                    selections and move on. Once the activity is complete, the
-                    Next Activity button will become clickable, allowing you to
-                    move forward in the survey.
+                    unclear. Once you click the &quot;Start Annotating&quot;
+                    button, you will be able to highlight directly on the text.
+                    Please note that you will not be able to revise or undo your
+                    highlights once they are made, so take your time reading
+                    through the response before beginning. When you are finished
+                    selecting your highlights, click &quot;Stop Annotating&quot;
+                    to save your selections and move on. Once the activity is
+                    complete, the Next Activity button will become clickable,
+                    allowing you to move forward in the survey.
                 </p>
                 <div className="flex items-center justify-center">
-                    <img
+                    <Image
                         src="/instruction-images/task1.png"
                         alt="Task 1 Screenshot"
+                        width={600}
+                        height={400}
                         className="max-h-full w-1/2 max-w-full rounded-md object-contain"
                     />
                 </div>

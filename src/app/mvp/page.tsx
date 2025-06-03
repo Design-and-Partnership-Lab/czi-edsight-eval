@@ -44,28 +44,32 @@ export default async function Page() {
                 Reflections to Evaluate
             </Title>
 
-            {REFLECTION_RESPONSE_TRANSCRIPT_IDS.map((id, index) => (
-                <Link
-                    href={`/mvp/${id}`}
-                    key={id}
-                    className="w-full"
-                >
-                    <Card className="flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200">
-                        <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
-                            Reflection {index + 1}
-                        </span>
+            {REFLECTION_RESPONSE_TRANSCRIPT_IDS.map((id, index) => {
+                const reflection_eval_status = completed_evaluation.find(
+                    (item) => item.reflection_response_id.toString() === id
+                );
+                return (
+                    <Link
+                        href={reflection_eval_status ? "" : `/mvp/${id}`}
+                        key={id}
+                        className="w-full"
+                    >
+                        <Card
+                            className={`flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200 ${reflection_eval_status ? "cursor-default" : ""}`}
+                        >
+                            <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
+                                Reflection {index + 1}
+                            </span>
 
-                        {completed_evaluation.find(
-                            (item) =>
-                                item.reflection_response_id.toString() === id
-                        ) != null ? (
-                            <CheckIcon className="text-green-500" />
-                        ) : (
-                            <CircleIcon className="text-gray-400" />
-                        )}
-                    </Card>
-                </Link>
-            ))}
+                            {reflection_eval_status != null ? (
+                                <CheckIcon className="text-green-500" />
+                            ) : (
+                                <CircleIcon className="text-gray-400" />
+                            )}
+                        </Card>
+                    </Link>
+                );
+            })}
         </div>
     );
 }

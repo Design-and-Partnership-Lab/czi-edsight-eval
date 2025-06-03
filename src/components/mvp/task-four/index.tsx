@@ -8,9 +8,11 @@ import { Loader2Icon } from "lucide-react";
 export function TaskFour({
     result,
     setResult,
+    setEval,
 }: {
     result: ResponseType | undefined;
     setResult: (result: ResponseType | undefined) => void;
+    setEval: (res: ResponseType | undefined) => Promise<void>;
 }) {
     useEffect(() => {
         const fetchComparison = async () => {
@@ -36,6 +38,7 @@ export function TaskFour({
 
                 const data = await response.json();
                 setResult(data);
+                setEval(data);
             } catch (error) {
                 console.error("Error:", error);
             }

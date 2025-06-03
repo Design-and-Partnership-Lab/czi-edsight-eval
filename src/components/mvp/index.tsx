@@ -117,27 +117,7 @@ const MvpContent = ({
         if (progress == 2) {
             setAnnotation(commentStore.getComments());
         }
-
-        if (result && progress === 3) {
-            setEvaluationData(
-                reflectionResponseId,
-                teacherEmail,
-                annotation,
-                teacherEval,
-                teacherFeedback ?? "",
-                result
-            );
-        }
-    }, [
-        result,
-        progress,
-        commentStore,
-        reflectionResponseId,
-        teacherEmail,
-        teacherEval,
-        teacherFeedback,
-        annotation,
-    ]);
+    }, [progress]);
 
     const renderTask = () => {
         switch (progress) {
@@ -197,6 +177,18 @@ const MvpContent = ({
                     <TaskFour
                         result={result}
                         setResult={setResult}
+                        setEval={async (res: ResponseType | undefined) => {
+                            if (res) {
+                                setEvaluationData(
+                                    reflectionResponseId,
+                                    teacherEmail,
+                                    annotation,
+                                    teacherEval,
+                                    teacherFeedback ?? "",
+                                    res
+                                );
+                            }
+                        }}
                     />
                 );
             default:

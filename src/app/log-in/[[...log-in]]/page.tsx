@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { SignUp } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs";
 
-export default function SignUpPage() {
+export default function LogInPage() {
     return (
         <>
             <Head>
-                <title>Signup - SkillSight Evaluations</title>
+                <title>Login - SkillSight Evaluations</title>
             </Head>
             <div className="flex min-h-screen items-center justify-center bg-white">
                 <div className="space-y-6 text-center">
@@ -18,7 +18,7 @@ export default function SignUpPage() {
                         </h1>
                     </div>
                     <div className="flex justify-center">
-                        <SignUp
+                        <SignIn
                             appearance={{
                                 elements: {
                                     card: "shadow-none border-none p-0",

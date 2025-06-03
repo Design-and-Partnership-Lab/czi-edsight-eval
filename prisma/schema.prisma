@@ -137,6 +137,7 @@ model Reflection {
   createdAt            DateTime  @default(now())
   deletedAt            DateTime?
   externalAssignmentId String?
+  externalClassId      Int?
 
   @@index([courseId], map: "courseId")
   @@index([teacherEmail], map: "teacherEmail")
@@ -483,6 +484,19 @@ model ltiRequests {
   @@index([oauth_nonce], map: "oauth_nonce")
   @@index([reflection_id], map: "reflection_id")
   @@index([resource_link_id], map: "resource_link_id")
+}
+
+model teacher_annotations {
+  id                     Int       @id @default(autoincrement())
+  reflection_response_id Int
+  teacher_email          String    @db.VarChar(64)
+  annotation             Json?
+  epe_category           String?   @db.VarChar(64)
+  comparison_comments    String?   @db.Text
+  created_at             DateTime? @db.Timestamp(0)
+  comparison             Json?
+
+  @@index([reflection_response_id], map: "reflection_response_id")
 }
 
 enum CategoryBucket_category {

@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
 import { Mvp } from "@/components/mvp";
 import { db } from "@/db";
+import { currentUser } from "@clerk/nextjs/server";
 
 interface PageProps {
     params: Promise<{
@@ -10,6 +12,14 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
     const { slug } = await params;
     const id = slug;
+
+    const user = await currentUser();
+    const email = user?.emailAddresses[0]?.emailAddress;
+
+    if (!email) {
+        console.error("No email found for user");
+        redirect("/log-in");
+    }
 
     const reflectionResponseTranscript =
         await db.reflectionResponseTranscript.findFirst({
@@ -49,6 +59,7 @@ export default async function Page({ params }: PageProps) {
             reflectionQuestion={reflectionQuestion}
             reflectionResponseTranscript={reflectionResponseTranscript}
             aiRationale={aiRationale}
+            teacherEmail={email}
         />
     );
 }

@@ -14,5 +14,12 @@ export function TaskOne({ commentStore, handleCanProgress }: TaskOneProps) {
         handleCanProgress(true);
     }, [handleCanProgress]);
 
-    return <Lexical commentStore={commentStore} />;
+    return (
+        <div className="flex flex-col items-center justify-center">
+            <Lexical commentStore={commentStore} />
+            <span className="mt-4 text-sm text-neutral-500">
+                Highlight the text with your cursor to start annotating.
+            </span>
+        </div>
+    );
 }

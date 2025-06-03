@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { getEvaluationData } from "@/actions/evaluation/action";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Card, Title } from "@tremor/react";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, CircleIcon } from "lucide-react";
 
 const REFLECTION_RESPONSE_TRANSCRIPT_IDS = [
     "30518",
@@ -16,7 +17,25 @@ export default async function Page() {
     const { userId } = await auth();
 
     if (!userId) {
-        redirect("/sign-in");
+        redirect("/log-in");
+    }
+
+    const user = await currentUser();
+    const email = user?.emailAddresses[0]?.emailAddress;
+
+    if (!email) {
+        console.error("No email found for user");
+        redirect("/log-in");
+    }
+
+    const completed_evaluation = await getEvaluationData(email);
+
+    if (!completed_evaluation || "error" in completed_evaluation) {
+        console.error(
+            "Error fetching evaluation data: ",
+            completed_evaluation.error
+        );
+        return <div>Error loading evaluation data.</div>;
     }
 
     return (
@@ -25,22 +44,32 @@ export default async function Page() {
                 Reflections to Evaluate
             </Title>
 
-            {REFLECTION_RESPONSE_TRANSCRIPT_IDS.map((id, index) => (
-                <Link
-                    href={`/mvp/${id}`}
-                    key={id}
-                    className="w-full"
-                >
-                    <Card className="flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200">
-                        <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
-                            Reflection {index + 1}
-                        </span>
+            {REFLECTION_RESPONSE_TRANSCRIPT_IDS.map((id, index) => {
+                const reflection_eval_status = completed_evaluation.find(
+                    (item) => item.reflection_response_id.toString() === id
+                );
+                return (
+                    <Link
+                        href={reflection_eval_status ? "" : `/mvp/${id}`}
+                        key={id}
+                        className="w-full"
+                    >
+                        <Card
+                            className={`flex cursor-pointer flex-row items-center justify-between rounded-md bg-gray-100 drop-shadow-md transition-colors hover:bg-gray-200 ${reflection_eval_status ? "cursor-default hover:bg-gray-100" : ""}`}
+                        >
+                            <span className="w-fit text-2xl font-semibold text-ee-gray-dark">
+                                Reflection {index + 1}
+                            </span>
 
-                        {/* TODO: Add an x icon if not complete */}
-                        <CheckIcon className="text-green-500" />
-                    </Card>
-                </Link>
-            ))}
+                            {reflection_eval_status != null ? (
+                                <CheckIcon className="text-green-500" />
+                            ) : (
+                                <CircleIcon className="text-gray-400" />
+                            )}
+                        </Card>
+                    </Link>
+                );
+            })}
         </div>
     );
 }

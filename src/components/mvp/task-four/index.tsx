@@ -1,13 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
 
-export function TaskFour() {
-    const [result, setResult] = useState<ResponseType>();
-
+export function TaskFour({
+    result,
+    setResult,
+    setEval,
+}: {
+    result: ResponseType | undefined;
+    setResult: (result: ResponseType | undefined) => void;
+    setEval: (res: ResponseType | undefined) => Promise<void>;
+}) {
     useEffect(() => {
         const fetchComparison = async () => {
             try {
@@ -32,13 +38,14 @@ export function TaskFour() {
 
                 const data = await response.json();
                 setResult(data);
+                await setEval(data);
             } catch (error) {
                 console.error("Error:", error);
             }
         };
 
         fetchComparison();
-    }, []);
+    }, [setEval, setResult]);
 
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;
@@ -46,7 +53,7 @@ export function TaskFour() {
     return (
         <div className="flex flex-col items-center justify-center gap-y-6 text-ee-black">
             <Title className="text-center text-3xl font-semibold">
-                Let's compare your insights to the AI Rationale!
+                Let&apos;s compare your insights to the AI Rationale!
             </Title>
 
             <div className="w-full space-y-10 rounded-2xl border border-neutral-300 bg-neutral-100 px-10 py-6">

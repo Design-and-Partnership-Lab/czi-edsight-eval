@@ -7,6 +7,9 @@ export function cx(...args: ClassValue[]) {
     return twMerge(clsx(...args));
 }
 
+// Add cn alias for shadcn/ui compatibility
+export const cn = cx;
+
 // Tremor Raw focusInput [v0.0.1]
 
 export const focusInput = [

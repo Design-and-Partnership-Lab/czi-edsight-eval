@@ -17,7 +17,7 @@ export default async function Page() {
     const { userId } = await auth();
 
     if (!userId) {
-        redirect("/sign-in");
+        redirect("/log-in");
     }
 
     const user = await currentUser();
@@ -25,7 +25,7 @@ export default async function Page() {
 
     if (!email) {
         console.error("No email found for user");
-        redirect("/sign-in");
+        redirect("/log-in");
     }
 
     const completed_evaluation = await getEvaluationData(email);

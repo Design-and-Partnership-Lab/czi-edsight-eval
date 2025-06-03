@@ -18,7 +18,7 @@ export default async function Page({ params }: PageProps) {
 
     if (!email) {
         console.error("No email found for user");
-        redirect("/sign-in");
+        redirect("/log-in");
     }
 
     const reflectionResponseTranscript =

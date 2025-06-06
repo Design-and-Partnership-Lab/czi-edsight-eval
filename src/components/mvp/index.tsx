@@ -109,6 +109,11 @@ const MvpContent = ({
     }, [increment]);
 
     const handleNextReflection = useCallback(() => {
+        setAnnotation([]);
+        setTeacherEval(null);
+        setTeacherFeedback(null);
+        setResult(undefined);
+
         router.push("/mvp");
         router.refresh();
     }, [router]);

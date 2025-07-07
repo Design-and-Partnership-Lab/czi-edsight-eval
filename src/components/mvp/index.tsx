@@ -120,9 +120,13 @@ const MvpContent = ({
 
     useEffect(() => {
         if (progress == 2) {
-            setAnnotation(commentStore.getComments());
+            const comments = commentStore.getComments()
+            if(comments.length > 0)
+                setAnnotation(comments);
         }
     }, [commentStore, progress]);
+
+    const teacherAnnotations = annotation.flatMap((item) => item.type === "comment" ? [item.content] : item.comments.map((comment) => comment.content)).join(". ");
 
     const renderTask = () => {
         switch (progress) {
@@ -182,6 +186,8 @@ const MvpContent = ({
                     <TaskFour
                         result={result}
                         setResult={setResult}
+                        aiRationale={aiRationale}
+                        teacherAnnotations={ teacherAnnotations ?? ""}
                         setEval={async (res: ResponseType | undefined) => {
                             if (res) {
                                 setEvaluationData(

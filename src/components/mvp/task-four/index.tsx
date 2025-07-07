@@ -1,29 +1,40 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
+import { SubcategoryBucket } from "@prisma/client";
+
+
 
 export function TaskFour({
     result,
     setResult,
     setEval,
+    aiRationale,
+    teacherAnnotations,
 }: {
     result: ResponseType | undefined;
     setResult: (result: ResponseType | undefined) => void;
     setEval: (res: ResponseType | undefined) => Promise<void>;
+    aiRationale: SubcategoryBucket[];
+    teacherAnnotations: string;
 }) {
+    const runOnce = useRef(false);
+
     useEffect(() => {
+        if(runOnce.current) return;
+        runOnce.current = true;
         const fetchComparison = async () => {
             try {
                 const testData = {
                     statementPairs: [
                         {
-                            statementA:
-                                "I can see that the student clearly mentioned that opportunities where they could improve on this assignment in the future.",
-                            statementB:
-                                "The student mentioned identifying areas for improvement such as 'creating an outline first and using more color.'",
+                            statementA: teacherAnnotations,
+                                //"I can see that the student clearly mentioned that opportunities where they could improve on this assignment in the future.",
+                            statementB: aiRationale,
+                                //"The student mentioned identifying areas for improvement such as 'creating an outline first and using more color.'",
                         },
                     ],
                 };
@@ -45,7 +56,7 @@ export function TaskFour({
         };
 
         fetchComparison();
-    }, [setEval, setResult]);
+    }, []);
 
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;

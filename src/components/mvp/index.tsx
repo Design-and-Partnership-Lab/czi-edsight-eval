@@ -168,6 +168,7 @@ const MvpContent = ({
                         isReadOnly={true}
                     >
                         <TaskThree
+                            reflectionResponseId={reflectionResponseId}
                             aiEval="Excelling"
                             teacherEval={teacherEval}
                             handleCanProgress={handleCanProgress}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type Category } from "@/components/mvp/lib/utils";
 import { Summary } from "@/components/mvp/task-three/summary";
 import {
@@ -19,6 +19,7 @@ interface TaskThreeProps {
     aiRationale: SubcategoryBucket[];
     teacherFeedback: string | null;
     setTeacherFeedback: (value: string) => void;
+    setAiReflectionRationale: (value: string) => void;
 }
 
 const TABS = [
@@ -307,12 +308,20 @@ export function TaskThree({
     aiRationale,
     teacherFeedback,
     setTeacherFeedback,
+    setAiReflectionRationale,
 }: TaskThreeProps) {
     const [activeTab, setActiveTab] = useState("Openmindedness");
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(
         new Set(["Openmindedness"])
     );
+
     const hasScrolledThroughTabs = visitedTabs.size === TABS.length;
+    
+    useEffect(() => {
+        const combinedAiRationales = Object.values(allReflections[reflectionResponseId]).flatMap(category => category.rationale).join(" ")
+        setAiReflectionRationale(combinedAiRationales)
+    }, [reflectionResponseId])
+
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);

@@ -97,6 +97,7 @@ const MvpContent = ({
     const [annotation, setAnnotation] = useState<Comments>([]); // Task One
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
     const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
+    const [aiReflectionRationale, setAiReflectionRationale] = useState<string>(""); // For Task Four
     const [result, setResult] = useState<ResponseType>(); // Task Four
 
     const handleCanProgress = useCallback((value: boolean) => {
@@ -179,6 +180,7 @@ const MvpContent = ({
                             aiRationale={aiRationale}
                             teacherFeedback={teacherFeedback}
                             setTeacherFeedback={setTeacherFeedback}
+                            setAiReflectionRationale = {setAiReflectionRationale}
                         />
                     </AnnotationWrapper>
                 );
@@ -187,8 +189,9 @@ const MvpContent = ({
                     <TaskFour
                         result={result}
                         setResult={setResult}
-                        aiRationale={aiRationale}
                         teacherAnnotations={ teacherAnnotations ?? ""}
+                        aiReflectionRationale = {aiReflectionRationale}
+                        reflectionResponseId = {reflectionResponseId}
                         setEval={async (res: ResponseType | undefined) => {
                             if (res) {
                                 setEvaluationData(

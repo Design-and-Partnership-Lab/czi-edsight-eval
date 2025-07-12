@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
-import { SubcategoryBucket } from "@prisma/client";
 
 
 
@@ -12,20 +11,24 @@ export function TaskFour({
     result,
     setResult,
     setEval,
-    aiRationale,
+    aiReflectionRationale,
     teacherAnnotations,
+    reflectionResponseId,
 }: {
     result: ResponseType | undefined;
     setResult: (result: ResponseType | undefined) => void;
     setEval: (res: ResponseType | undefined) => Promise<void>;
-    aiRationale: SubcategoryBucket[];
+    aiReflectionRationale: string;
     teacherAnnotations: string;
+    reflectionResponseId: number;
 }) {
-    const runOnce = useRef(false);
+    //const runOnce = useRef(false);
 
     useEffect(() => {
-        if(runOnce.current) return;
-        runOnce.current = true;
+        //if(runOnce.current) return;
+        //runOnce.current = true;
+        if(!teacherAnnotations || !aiReflectionRationale) return;
+        const abortController = new AbortController()
         const fetchComparison = async () => {
             try {
                 const testData = {
@@ -33,7 +36,7 @@ export function TaskFour({
                         {
                             statementA: teacherAnnotations,
                                 //"I can see that the student clearly mentioned that opportunities where they could improve on this assignment in the future.",
-                            statementB: aiRationale,
+                            statementB: aiReflectionRationale,
                                 //"The student mentioned identifying areas for improvement such as 'creating an outline first and using more color.'",
                         },
                     ],
@@ -45,18 +48,24 @@ export function TaskFour({
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(testData),
+                    signal: abortController.signal,
                 });
 
                 const data = await response.json();
-                setResult(data);
-                await setEval(data);
+                if(!abortController.signal.aborted) {
+                    setResult(data);
+                    await setEval(data);
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
         };
 
         fetchComparison();
-    }, []);
+        return() => {
+            abortController.abort()
+        }
+    }, [reflectionResponseId]);
 
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;

@@ -32,7 +32,7 @@ export type ResponseType = z.infer<typeof responseSchema>;
 export async function POST(req: Request) {
     const { statementPairs } = await req.json();
 
-    const result = streamObject({
+    const result = await streamObject({
         model: openai("gpt-4o"),
         schema: responseSchema,
         prompt: `You are analyzing feedback statements about student work from an educational perspective. Compare the following pairs of statements and focus on the underlying educational insights, learning outcomes, and pedagogical observations rather than surface-level differences.

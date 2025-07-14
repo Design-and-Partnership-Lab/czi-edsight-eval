@@ -375,11 +375,12 @@ export function TaskThree({
 
                     {TABS.map((tab) => {
                         let bulletPoints: string[] = [];
-
+                        let bucket: string = "";
                         if (reflectionResponseId) {
                             // Use the rationale from allReflections and split each string at ', '
-                            bulletPoints = allReflections[reflectionResponseId][tab as keyof Reflection].rationale;
-                
+                            const reflection = allReflections[reflectionResponseId][tab as keyof Reflection];
+                            bulletPoints = reflection.rationale
+                            bucket = reflection.bucket
                         } else {
                             // Default: use aiRationale as before
                             const rationale = aiRationale.find(
@@ -397,11 +398,16 @@ export function TaskThree({
                                 className="min-h-[8rem] pl-8 text-gray-800"
                             >
                                 {bulletPoints.length > 0 ? (
+                                    <div>
                                     <ul className="list-disc first-letter:uppercase">
                                         {bulletPoints.map((point, idx) => (
                                             <li key={idx}>{point}</li>
                                         ))}
                                     </ul>
+                                        <span className="inline-block m-4 -ml-8 rounded-full border border-[#0EA4E8] text-[#0EA4E8] px-2 py-3">
+                                            {bucket}
+                                        </span>
+                                    </div>
                                 ) : (
                                     <p className="">
                                         No rationale available for this subcategory.

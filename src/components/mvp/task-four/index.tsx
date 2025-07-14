@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
-
 
 
 export function TaskFour({
@@ -22,11 +21,8 @@ export function TaskFour({
     teacherAnnotations: string;
     reflectionResponseId: number;
 }) {
-    //const runOnce = useRef(false);
-
     useEffect(() => {
-        //if(runOnce.current) return;
-        //runOnce.current = true;
+        //Should empty annotations be allowed through?
         if(!teacherAnnotations || !aiReflectionRationale) return;
         const abortController = new AbortController()
         const fetchComparison = async () => {
@@ -35,9 +31,7 @@ export function TaskFour({
                     statementPairs: [
                         {
                             statementA: teacherAnnotations,
-                                //"I can see that the student clearly mentioned that opportunities where they could improve on this assignment in the future.",
                             statementB: aiReflectionRationale,
-                                //"The student mentioned identifying areas for improvement such as 'creating an outline first and using more color.'",
                         },
                     ],
                 };
@@ -52,6 +46,7 @@ export function TaskFour({
                 });
 
                 const data = await response.json();
+
                 if(!abortController.signal.aborted) {
                     setResult(data);
                     await setEval(data);
@@ -66,7 +61,7 @@ export function TaskFour({
             abortController.abort()
         }
     }, [reflectionResponseId]);
-
+    //console.log("result" , result)
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;
 

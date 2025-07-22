@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { streamObject } from "ai";
+import { generateObject } from "ai";
 import { z } from "zod";
 
 export const maxDuration = 30;
@@ -32,9 +32,10 @@ export type ResponseType = z.infer<typeof responseSchema>;
 export async function POST(req: Request) {
     const { statementPairs } = await req.json();
 
-    const result = await streamObject({
+    const result = await generateObject({
         model: openai("gpt-4o"),
         schema: responseSchema,
+        mode: 'json',
         prompt: `You are analyzing feedback statements about student work from an educational perspective. Compare the following pairs of statements and focus on the underlying educational insights, learning outcomes, and pedagogical observations rather than surface-level differences.
     The first statement is from a human teacher, and the second statement is from an AI model. Your task is to identify key similarities and differences in their observations.
     ${statementPairs
@@ -67,5 +68,10 @@ export async function POST(req: Request) {
     `,
     });
 
-    return result.toTextStreamResponse();
+
+    return new Response(JSON.stringify(result.object), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
 }

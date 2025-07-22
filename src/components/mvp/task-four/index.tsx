@@ -23,7 +23,10 @@ export function TaskFour({
 }) {
     useEffect(() => {
         //Should empty annotations be allowed through?
-        if(!teacherAnnotations || !aiReflectionRationale) return;
+        if(teacherAnnotations.trim().length == 0 || aiReflectionRationale.trim().length == 0) {
+            return;
+        }
+
         const abortController = new AbortController()
         const fetchComparison = async () => {
             try {
@@ -44,9 +47,9 @@ export function TaskFour({
                     body: JSON.stringify(testData),
                     signal: abortController.signal,
                 });
-
+                
                 const data = await response.json();
-
+                    
                 if(!abortController.signal.aborted) {
                     setResult(data);
                     await setEval(data);
@@ -61,7 +64,6 @@ export function TaskFour({
             abortController.abort()
         }
     }, [reflectionResponseId]);
-    //console.log("result" , result)
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;
 

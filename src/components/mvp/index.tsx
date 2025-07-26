@@ -99,6 +99,7 @@ const MvpContent = ({
     const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
     const [aiReflectionRationale, setAiReflectionRationale] = useState<string>(""); // For Task Four
     const [result, setResult] = useState<ResponseType>(); // Task Four
+    const [loadingComparisons, setLoadingComparisons] = useState(true) // For Task Four
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
@@ -192,6 +193,7 @@ const MvpContent = ({
                         teacherAnnotations={ teacherAnnotations ?? ""}
                         aiReflectionRationale = {aiReflectionRationale}
                         reflectionResponseId = {reflectionResponseId}
+                        setLoadingComparisons = {setLoadingComparisons}
                         setEval={async (res: ResponseType | undefined) => {
                             if (res) {
                                 setEvaluationData(
@@ -229,7 +231,8 @@ const MvpContent = ({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white"
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
+                            disabled={loadingComparisons}
                             onClick={handleNextReflection}
                         >
                             Next Reflection

@@ -13,6 +13,7 @@ export function TaskFour({
     aiReflectionRationale,
     teacherAnnotations,
     reflectionResponseId,
+    setLoadingComparisons,
 }: {
     result: ResponseType | undefined;
     setResult: (result: ResponseType | undefined) => void;
@@ -20,16 +21,18 @@ export function TaskFour({
     aiReflectionRationale: string;
     teacherAnnotations: string;
     reflectionResponseId: number;
+    setLoadingComparisons: (loading: boolean) => void;
 }) {
     useEffect(() => {
         //Should empty annotations be allowed through?
-        if(teacherAnnotations.trim().length == 0 || aiReflectionRationale.trim().length == 0) {
-            return;
-        }
+        // if(teacherAnnotations.trim().length == 0 || aiReflectionRationale.trim().length == 0) {
+        //     return;
+        // }
 
         const abortController = new AbortController()
         const fetchComparison = async () => {
             try {
+                setLoadingComparisons(true);
                 const testData = {
                     statementPairs: [
                         {
@@ -64,8 +67,15 @@ export function TaskFour({
             abortController.abort()
         }
     }, [reflectionResponseId]);
+
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;
+    
+    useEffect(() => {
+        if(similarities && differences) {
+            setLoadingComparisons(false)
+        }
+    }, [similarities, differences, setLoadingComparisons])
 
     return (
         <div className="flex flex-col items-center justify-center gap-y-6 text-ee-black">
@@ -80,7 +90,10 @@ export function TaskFour({
 
                 <div className="flex items-center justify-center px-20 pb-4">
                     {similarities || (
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                        <p>Loading comparisons, please wait...</p>
                         <Loader2Icon className="animate-spin text-ee-gray" />
+                        </div>
                     )}
                 </div>
             </div>
@@ -92,7 +105,10 @@ export function TaskFour({
 
                 <div className="flex items-center justify-center px-20 pb-4">
                     {differences || (
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                        <p>Loading comparisons, please wait...</p>
                         <Loader2Icon className="animate-spin text-ee-gray" />
+                        </div>                    
                     )}
                 </div>
             </div>

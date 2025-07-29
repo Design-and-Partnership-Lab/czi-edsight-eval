@@ -11,8 +11,20 @@ interface TaskOneProps {
 
 export function TaskOne({ commentStore, handleCanProgress }: TaskOneProps) {
     useEffect(() => {
-        handleCanProgress(true);
-    }, [handleCanProgress]);
+        const checkComments = () => {
+            const comments = commentStore.getComments();
+            if (Array.isArray(comments) && comments.length > 0) {
+                handleCanProgress(true);
+            } else {
+                handleCanProgress(false);
+            }
+        };
+        checkComments();
+        const unsubscribe = commentStore.registerOnChange(checkComments);
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
+    }, [commentStore, handleCanProgress]);
 
     return (
         <div className="flex flex-col items-center justify-center">

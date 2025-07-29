@@ -43,7 +43,8 @@ export default function Task1Instructions({
                     unclear. Once you click the &quot;Start Annotating&quot;
                     button, you will be able to highlight directly on the text.
                     Please note that you will not be able to revise or undo your
-                    highlights once they are made, so take your time reading
+                    highlights once they are made and to continue a section
+                    must be highlighted, so take your time reading
                     through the response before beginning. When you are finished
                     selecting your highlights, click &quot;Stop Annotating&quot;
                     to save your selections and move on. Once the activity is

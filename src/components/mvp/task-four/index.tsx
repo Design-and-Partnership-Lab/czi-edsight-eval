@@ -24,11 +24,6 @@ export function TaskFour({
     setLoadingComparisons: (loading: boolean) => void;
 }) {
     useEffect(() => {
-        //Should empty annotations be allowed through?
-        // if(teacherAnnotations.trim().length == 0 || aiReflectionRationale.trim().length == 0) {
-        //     return;
-        // }
-
         const abortController = new AbortController()
         const fetchComparison = async () => {
             try {

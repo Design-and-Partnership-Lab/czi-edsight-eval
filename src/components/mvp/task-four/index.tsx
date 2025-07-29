@@ -5,25 +5,34 @@ import { ResponseType } from "@/app/api/chat/route";
 import { Title } from "@tremor/react";
 import { Loader2Icon } from "lucide-react";
 
+
 export function TaskFour({
     result,
     setResult,
     setEval,
+    aiReflectionRationale,
+    teacherAnnotations,
+    reflectionResponseId,
+    setLoadingComparisons,
 }: {
     result: ResponseType | undefined;
     setResult: (result: ResponseType | undefined) => void;
     setEval: (res: ResponseType | undefined) => Promise<void>;
+    aiReflectionRationale: string;
+    teacherAnnotations: string;
+    reflectionResponseId: number;
+    setLoadingComparisons: (loading: boolean) => void;
 }) {
     useEffect(() => {
+        const abortController = new AbortController()
         const fetchComparison = async () => {
             try {
+                setLoadingComparisons(true);
                 const testData = {
                     statementPairs: [
                         {
-                            statementA:
-                                "I can see that the student clearly mentioned that opportunities where they could improve on this assignment in the future.",
-                            statementB:
-                                "The student mentioned identifying areas for improvement such as 'creating an outline first and using more color.'",
+                            statementA: teacherAnnotations,
+                            statementB: aiReflectionRationale,
                         },
                     ],
                 };
@@ -34,21 +43,34 @@ export function TaskFour({
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(testData),
+                    signal: abortController.signal,
                 });
-
+                
                 const data = await response.json();
-                setResult(data);
-                await setEval(data);
+                    
+                if(!abortController.signal.aborted) {
+                    setResult(data);
+                    await setEval(data);
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
         };
 
         fetchComparison();
-    }, [setEval, setResult]);
+        return() => {
+            abortController.abort()
+        }
+    }, [reflectionResponseId]);
 
     const similarities = result?.comparisons[0]?.result?.similarities;
     const differences = result?.comparisons[0]?.result?.differences;
+    
+    useEffect(() => {
+        if(similarities && differences) {
+            setLoadingComparisons(false)
+        }
+    }, [similarities, differences, setLoadingComparisons])
 
     return (
         <div className="flex flex-col items-center justify-center gap-y-6 text-ee-black">
@@ -63,7 +85,10 @@ export function TaskFour({
 
                 <div className="flex items-center justify-center px-20 pb-4">
                     {similarities || (
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                        <p>Loading comparisons, please wait...</p>
                         <Loader2Icon className="animate-spin text-ee-gray" />
+                        </div>
                     )}
                 </div>
             </div>
@@ -75,7 +100,10 @@ export function TaskFour({
 
                 <div className="flex items-center justify-center px-20 pb-4">
                     {differences || (
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                        <p>Loading comparisons, please wait...</p>
                         <Loader2Icon className="animate-spin text-ee-gray" />
+                        </div>                    
                     )}
                 </div>
             </div>

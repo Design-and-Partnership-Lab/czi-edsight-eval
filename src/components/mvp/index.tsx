@@ -97,7 +97,9 @@ const MvpContent = ({
     const [annotation, setAnnotation] = useState<Comments>([]); // Task One
     const [teacherEval, setTeacherEval] = useState<Category | null>(null); // Task Two
     const [teacherFeedback, setTeacherFeedback] = useState<string | null>(null); // Task Three
+    const [aiReflectionRationale, setAiReflectionRationale] = useState<string>(""); // For Task Four
     const [result, setResult] = useState<ResponseType>(); // Task Four
+    const [loadingComparisons, setLoadingComparisons] = useState(true) // For Task Four
 
     const handleCanProgress = useCallback((value: boolean) => {
         setCanProgress(value);
@@ -120,9 +122,13 @@ const MvpContent = ({
 
     useEffect(() => {
         if (progress == 2) {
-            setAnnotation(commentStore.getComments());
+            const comments = commentStore.getComments()
+            if(comments.length > 0)
+                setAnnotation(comments);
         }
     }, [commentStore, progress]);
+
+    const teacherAnnotations = annotation.flatMap((item) => item.type === "comment" ? [item.content] : item.comments.map((comment) => comment.content)).join(". ");
 
     const renderTask = () => {
         switch (progress) {
@@ -168,12 +174,14 @@ const MvpContent = ({
                         isReadOnly={true}
                     >
                         <TaskThree
+                            reflectionResponseId={reflectionResponseId}
                             aiEval="Excelling"
                             teacherEval={teacherEval}
                             handleCanProgress={handleCanProgress}
                             aiRationale={aiRationale}
                             teacherFeedback={teacherFeedback}
                             setTeacherFeedback={setTeacherFeedback}
+                            setAiReflectionRationale = {setAiReflectionRationale}
                         />
                     </AnnotationWrapper>
                 );
@@ -182,6 +190,10 @@ const MvpContent = ({
                     <TaskFour
                         result={result}
                         setResult={setResult}
+                        teacherAnnotations={ teacherAnnotations ?? ""}
+                        aiReflectionRationale = {aiReflectionRationale}
+                        reflectionResponseId = {reflectionResponseId}
+                        setLoadingComparisons = {setLoadingComparisons}
                         setEval={async (res: ResponseType | undefined) => {
                             if (res) {
                                 setEvaluationData(
@@ -219,7 +231,8 @@ const MvpContent = ({
                         <Button
                             icon={ArrowRightIcon}
                             iconPosition="right"
-                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white"
+                            className="gap-x-2 rounded-full bg-primary-dark font-bold text-ee-white disabled:bg-gray-300"
+                            disabled={loadingComparisons}
                             onClick={handleNextReflection}
                         >
                             Next Reflection

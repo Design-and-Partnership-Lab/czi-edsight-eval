@@ -57,7 +57,7 @@ export default function Task1Instructions({
                         alt="Task 1 Screenshot"
                         width={600}
                         height={400}
-                        className="max-h-full w-1/2 max-w-full rounded-md object-contain"
+                        className="max-h-full w-3/4 max-w-full rounded-md object-contain"
                     />
                 </div>
             </div>

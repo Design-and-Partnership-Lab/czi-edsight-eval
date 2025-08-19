@@ -672,7 +672,7 @@ export default function CommentPlugin({
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [isReadOnly]);
 
     const activeComment =
         activeCommentId === null

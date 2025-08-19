@@ -29,7 +29,7 @@ export function TaskFour() {
     return (
         <div className="text-ee-black flex flex-col items-center justify-center gap-y-6">
             <Title className="text-center text-3xl font-semibold">
-                Let's compare your insights to the AI Rationale!
+                Let&apos;s compare your insights to the AI Rationale!
             </Title>
 
             <div className="mb-8 flex justify-center gap-6 text-base text-gray-700">

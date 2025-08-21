@@ -27,7 +27,6 @@ import {
 } from "react";
 import * as React from "react";
 import { CommentBox } from "@/components/mvp/lexical/plugins/CommentPlugin/CommentBox";
-import { useProgress } from "@/components/progress/ProgressContext";
 import {
     $createMarkNode,
     $getMarkIDs,
@@ -398,7 +397,7 @@ export default function CommentPlugin({
     isReadOnly,
 }: CommentPluginProps): JSX.Element {
     const [editor] = useLexicalComposerContext();
-    const { progress } = useProgress();
+    
     // const commentStore = useMemo(() => new CommentStore(editor), [editor]);
 
     const comments = useCommentStore(commentStore);
@@ -642,7 +641,7 @@ export default function CommentPlugin({
             setActiveCommentId(null);
             setShowCommentInput(false);
         };
-    }, [progress]);
+    }, []);
 
     // ! This is pretty hacky code TBH
     useEffect(() => {

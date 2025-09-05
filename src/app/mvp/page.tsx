@@ -30,12 +30,22 @@ export default async function Page() {
 
     const completed_evaluation = await getEvaluationData(email);
 
+
+
     if (!completed_evaluation || "error" in completed_evaluation) {
         console.error(
             "Error fetching evaluation data: ",
             completed_evaluation.error
         );
         return <div>Error loading evaluation data.</div>;
+    }
+
+    const allCompleted = REFLECTION_RESPONSE_TRANSCRIPT_IDS.every(id => 
+        completed_evaluation.some(item => item.reflection_response_id.toString() === id)
+      );
+    
+    if (allCompleted) {
+        redirect("/thank-you");
     }
 
     return (

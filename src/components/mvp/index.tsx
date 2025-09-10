@@ -129,6 +129,10 @@ const MvpContent = ({
     }, [commentStore, progress]);
 
     const teacherAnnotations = annotation.flatMap((item) => item.type === "comment" ? [item.content] : item.comments.map((comment) => comment.content)).join(". ");
+    const [showInstructions, setShowInstructions] = useState(false)
+    const toggleInstructions = () => {
+        setShowInstructions(!showInstructions)
+    }
 
     const renderTask = () => {
         switch (progress) {
@@ -140,7 +144,26 @@ const MvpContent = ({
                             what stood out to you. Please note that you will not
                             be able to revise your annotations afterward.
                         </Title>
-
+                        <button className="-mt-6 border" onClick={toggleInstructions}> {showInstructions ? "Click to Hide Instructions" : "Click to Show Detailed Instructions"}</button>
+                        {showInstructions && (
+                        <p className="text-m mb-6 leading-relaxed text-gray-700">
+                            You will read a prompt followed by a student&apos;s written
+                            response. Your task is to carefully review the response and
+                            highlight parts that stand out to you — this could include
+                            sections you find important, interesting, or particularly
+                            well-phrased, as well as areas that raise questions or seem
+                            unclear. Once you click the &quot;Start Annotating&quot;
+                            button, you will be able to highlight directly on the text.
+                            Please note that you will not be able to revise or undo your
+                            highlights once they are made and to continue a section
+                            must be highlighted, so take your time reading
+                            through the response before beginning. When you are finished
+                            selecting your highlights, click &quot;Stop Annotating&quot;
+                            to save your selections and move on. Once the activity is
+                            complete, the Next Activity button will become clickable,
+                            allowing you to move forward in the survey.
+                        </p>
+                        )}
                         <AnnotationWrapper
                             questionData={questionData}
                             commentStore={commentStore}
